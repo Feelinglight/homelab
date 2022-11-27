@@ -1,0 +1,17 @@
+- name: Install Nginx
+  become: true
+  apt: name=nginx update_cache=yes
+
+#- name: Make Nginx conf dir
+  #become: true
+  #file:
+    #path: /etc/nginx/http.d
+    #state: directory
+
+#- name: Copy Nginx config
+  #become: true
+  #copy: src=files/nginx.conf dest=/etc/nginx/http.d/default.conf
+
+- name: Restart Nginx
+  become: true
+  service: name=nginx state=restarted
