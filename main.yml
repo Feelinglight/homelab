@@ -2,26 +2,29 @@
 
 - name: Set up http and git servers
   hosts: home_server
-  roles:
-    - http_server
-    # - git_server
-
-- name: Set up sites
-  hosts: home_server
   vars:
     - server_data_dir: "/home_server"
-    - sites:
-        - {"name": "s1", "path": "~/develop/hugo/multisite/sites/s1/public", "domain": "s1.home"}
-        - {"name": "s2", "path": "~/develop/hugo/multisite/sites/s2/public", "domain": "s2.home"}
+    - git_srv_domain: "git.home"
+  roles:
+    # - http_server
+    - git_server
 
-  tasks:
-    - name: Set up sites
-      ansible.builtin.include_role:
-        name: site
-      vars:
-        site_info: "{{ item }}"
-      with_items:
-        - "{{ sites }}"
+# - name: Set up sites
+#   hosts: home_server
+#   vars:
+#     - server_data_dir: "/home_server"
+#     - sites:
+#         - {"name": "s1", "path": "~/develop/hugo/multisite/sites/s1/public", "domain": "s1.home"}
+#         - {"name": "s2", "path": "~/develop/hugo/multisite/sites/s2/public", "domain": "s2.home"}
+
+#   tasks:
+#     - name: Set up sites
+#       ansible.builtin.include_role:
+#         name: site
+#       vars:
+#         site_info: "{{ item }}"
+#       with_items:
+#         - "{{ sites }}"
 
 # - name: Set up git repositories
 #   hosts: home_server

@@ -11,19 +11,19 @@
     src: files/rsync_sudo
     dest: /etc/sudoers.d/rsync_sudo
 
-- name: "Copy site ({{ site_info.name }})"
+- name: Copy site ({{ site_info.name }})
   synchronize:
     src: "{{ site_info.path }}/"
     dest: "{{ sites_dir }}/{{ site_info.domain }}/"
     rsync_path: "sudo rsync"
 
-- name: "Make Nginx config ({{ site_info.name }})"
+- name: Make Nginx config ({{ site_info.name }})
   become: true
   template:
     src: nginx_site.j2
     dest: "/etc/nginx/sites-available/{{ site_info.domain }}"
 
-- name: "Enable site ({{ site_info.name }})"
+- name: Enable site ({{ site_info.name }})
   become: true
   file:
     src: "/etc/nginx/sites-available/{{ site_info.domain }}"
@@ -32,4 +32,6 @@
 
 - name: Restart Nginx
   become: true
-  service: name=nginx state=restarted
+  service:
+    name: nginx
+    state: restarted

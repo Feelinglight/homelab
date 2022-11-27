@@ -1,35 +1,39 @@
-- name: Make sites folder
+- name: Install packages
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - git
+      - fcgiwrap
+      - apache2-utils
+      - python3-passlib
+    # update_cache: true
+
+- name: Make repositories folder
   become: true
   file:
-    path: "{{ sites_dir }}"
+    path: "{{ repos_dir }}"
+    owner: www-data
+    group: www-data
     state: directory
 
-# rsync с sudo по другому не работает
-- name: Allow sudo nopasswd
-  become: true
-  copy:
-    src: files/rsync_sudo
-    dest: /etc/sudoers.d/rsync_sudo
-
-- name: "Copy site ({{ site_info.name }})"
-  synchronize:
-    src: "{{ site_info.path }}/"
-    dest: "{{ sites_dir }}/{{ site_info.domain }}/"
-    rsync_path: "sudo rsync"
-
-- name: "Make Nginx config ({{ site_info.name }})"
+- name: Make Nginx config ({{ git_srv_domain }})
   become: true
   template:
-    src: nginx_site.j2
-    dest: "/etc/nginx/sites-available/{{ site_info.domain }}"
+    src: nginx_git.j2
+    dest: "/etc/nginx/sites-available/{{ git_srv_domain }}"
 
-- name: "Enable site ({{ site_info.name }})"
+- name: Create git user
   become: true
-  file:
-    src: "/etc/nginx/sites-available/{{ site_info.domain }}"
-    dest: "/etc/nginx/sites-enabled/{{ site_info.domain }}"
-    state: link
+  community.general.htpasswd:
+    path: /etc/nginx/.gitpasswd
+    name: git
+    password: 123
+    owner: root
+    group: www-data
+
 
 - name: Restart Nginx
   become: true
-  service: name=nginx state=restarted
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
