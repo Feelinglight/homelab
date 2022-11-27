@@ -1,17 +1,43 @@
 ---
-- hosts: home_server
+
+- name: Set up http and git servers
+  hosts: home_server
+  roles:
+    - http_server
+    # - git_server
+
+- name: Set up sites
+  hosts: home_server
   vars:
     - server_data_dir: "/home_server"
     - sites:
-      - {"name": "s1", "path": "~/develop/hugo/multisite/sites/s1/public", "domain": "s1.home"}
-      - {"name": "s2", "path": "~/develop/hugo/multisite/sites/s2/public", "domain": "s2.home"}
+        - {"name": "s1", "path": "~/develop/hugo/multisite/sites/s1/public", "domain": "s1.home"}
+        - {"name": "s2", "path": "~/develop/hugo/multisite/sites/s2/public", "domain": "s2.home"}
+
   tasks:
-    - include_role:
+    - name: Set up sites
+      ansible.builtin.include_role:
         name: site
       vars:
         site_info: "{{ item }}"
       with_items:
         - "{{ sites }}"
-  #roles:
-    #- http_server
-    #- git_server
+
+# - name: Set up git repositories
+#   hosts: home_server
+#   vars:
+#     - server_data_dir: "/home_server"
+#     - git_repos:
+#         - {"name": "cookbook_site", "working_copy": ""}
+#         - {"name": "orm_model", "working_copy": "~/develop/ORM_model"}
+
+#     # - git_hooks_repo: {"name": "docs_site", "path": "~/develop/hugo/multisite/sites/s2/public", "domain": "s2.home"}
+
+#   tasks:
+#     - name: Set up git repositories
+#       ansible.builtin.include_role:
+#         name: git_remote_repo
+#       vars:
+#         site_info: "{{ item }}"
+#       with_items:
+#         - "{{ git_repos }}"
