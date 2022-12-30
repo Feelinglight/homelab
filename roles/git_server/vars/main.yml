@@ -1,4 +1,0 @@
----
-
-repos_dir: "{{ server_data_dir }}/git"
-

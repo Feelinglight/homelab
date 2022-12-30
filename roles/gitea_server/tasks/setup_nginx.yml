@@ -1,0 +1,18 @@
+- name: Make Nginx config ({{ gitea_domain }})
+  become: true
+  template:
+    src: nginx_git.j2
+    dest: "/etc/nginx/sites-available/{{ gitea_domain }}"
+
+- name: Enable site ({{ gitea_domain }})
+  become: true
+  file:
+    src: "/etc/nginx/sites-available/{{ gitea_domain }}"
+    dest: "/etc/nginx/sites-enabled/{{ gitea_domain }}"
+    state: link
+
+- name: Restart Nginx
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

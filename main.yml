@@ -4,10 +4,10 @@
   hosts: home_server
   vars:
     - server_data_dir: "/home_server"
-    - git_srv_domain: "git.home"
+    - gitea_domain: "git.local"
   roles:
-    # - http_server
-    - git_server
+    - http_server
+    - gitea_server
 
 # - name: Set up sites
 #   hosts: home_server
