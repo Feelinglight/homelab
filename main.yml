@@ -6,7 +6,6 @@
     - server_data_dir: "/home_server"
     - gitea_domain: "git.local"
   roles:
-    - http_server
     - gitea_server
 
 # - name: Set up sites

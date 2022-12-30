@@ -1,0 +1,13 @@
+argument_specs:
+  main:
+    short_description: Настраивает сервис Gitea
+    options:
+      gitea_domain:
+        type: "str"
+        default: git.local
+        description: "Доменное имя, на котором должен располагаться Gitea"
+
+      server_data_dir:
+        type: "str"
+        required: true
+        description: "Папка, в которой будет создана папка gitea, где Gitea будет хранить данные."
