@@ -1,0 +1,4 @@
+
+jenkins_dir: "{{ server_data_dir }}/jenkins"
+
+jenkins_data_dir: "{{ jenkins_dir }}/data"

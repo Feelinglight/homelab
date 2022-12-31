@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  gitea:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: unless-stopped
+    volumes:
+      - {{ jenkins_data_dir }}:/var/jenkins_home
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8080:8080"
+      - "50000:50000"

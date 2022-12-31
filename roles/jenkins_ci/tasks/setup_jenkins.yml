@@ -1,0 +1,20 @@
+- name: Make Jenkins folder
+  become: true
+  file:
+    path: "{{ jenkins_data_dir }}"
+    state: directory
+
+- name: Make Jenkins docker-compose
+  become: true
+  template:
+    src: docker-compose.yml
+    dest: "{{ jenkins_dir }}/docker-compose.yml"
+
+- name: Start Jenkins docker-compose
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ jenkins_dir }}"
+  register: output
+
+- ansible.builtin.debug:
+    var: output

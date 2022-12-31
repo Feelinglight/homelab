@@ -1,7 +1,7 @@
 - name: Make Nginx config ({{ gitea_domain }})
   become: true
   template:
-    src: nginx_git.j2
+    src: nginx.j2
     dest: "/etc/nginx/sites-available/{{ gitea_domain }}"
 
 - name: Enable site ({{ gitea_domain }})

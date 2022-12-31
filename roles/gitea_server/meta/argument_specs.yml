@@ -5,7 +5,7 @@ argument_specs:
       gitea_domain:
         type: "str"
         default: git.local
-        description: "Доменное имя, на котором должен располагаться Gitea"
+        description: "Доменное имя, на котором будет располагаться Gitea"
 
       server_data_dir:
         type: "str"

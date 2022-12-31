@@ -5,8 +5,10 @@
   vars:
     - server_data_dir: "/home_server"
     - gitea_domain: "git.local"
+    - jenkins_domain: "jenkins.local"
   roles:
-    - gitea_server
+    - jenkins_ci
+    # - gitea_server
 
 # - name: Set up sites
 #   hosts: home_server

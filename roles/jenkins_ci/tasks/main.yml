@@ -1,0 +1,14 @@
+- name: Install packages
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    pkg:
+      - docker.io
+      - docker
+      - docker-compose
+
+- name: Setup Jenkins
+  import_tasks: setup_jenkins.yml
+
+- name: Setup Nginx
+  import_tasks: setup_nginx.yml
