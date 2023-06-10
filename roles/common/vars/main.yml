@@ -1,5 +1,1 @@
 ---
-
-tools_tuning_repository: "https://github.com/Feelinglight/tools_tuning/"
-tools_tuning_clone_folder: "~/zsh_tmp"
-zsh_install_script_path: "linux/zsh/setup.sh"
