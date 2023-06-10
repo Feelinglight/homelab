@@ -1,0 +1,26 @@
+# - name: Install packages
+#   become: true
+#   ansible.builtin.apt:
+#     update_cache: true
+#     pkg:
+#       - git
+#       - docker.io
+#       - docker
+#       - docker-compose
+#       - neovim
+
+# - name: Allow sudo without password
+#   become: true
+#   ansible.builtin.template:
+#     src: nopasswd
+#     dest: /etc/sudoers.d
+
+# - name: Allow docker without sudo
+#   become: true
+#   ansible.builtin.user:
+#     name: "{{ inventory_hostname }}"
+#     groups: docker
+#     append: yes
+
+- name: Install oh-my-zsh
+  import_tasks: oh-my-zsh.yml

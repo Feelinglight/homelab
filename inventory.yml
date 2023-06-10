@@ -1,0 +1,6 @@
+all:
+  hosts:
+    homelab:
+      ansible_host: 192.168.122.143
+      ansible_ssh_user: homelab
+      ansible_become_password: 123

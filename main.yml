@@ -1,13 +1,23 @@
 ---
 
-- name: Set up http and git servers
-  hosts: home_server
+- name: Set up VM
+  hosts: homelab
   vars:
     - server_data_dir: "/home_server"
     - gitea_domain: "git.local"
     - jenkins_domain: "jenkins.local"
   roles:
-    - jenkins_ci
+    - common
+    # - gitea_server
+
+# - name: Set up http and git servers
+  # hosts: home_server
+  # vars:
+    # - server_data_dir: "/home_server"
+    # - gitea_domain: "git.local"
+    # - jenkins_domain: "jenkins.local"
+  # roles:
+    # - jenkins_ci
     # - gitea_server
 
 # - name: Set up sites
