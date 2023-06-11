@@ -1,0 +1,37 @@
+- name: Create git user
+  become: true
+  ansible.builtin.user:
+    name: git
+    password: '!'
+
+- name: Allow docker exec for git user (files/gitea-shell)
+  become: true
+  ansible.builtin.user:
+    name: git
+    groups: docker
+    append: yes
+
+- name: Copy gitea-shell for ssh access
+  become: true
+  ansible.builtin.copy:
+    src: gitea-shell.sh
+    dest: /usr/local/bin/gitea-shell.sh
+    mode: 0755
+
+- name: Change git user shell to gitea-shell
+  become: true
+  ansible.builtin.user:
+    name: git
+    shell: /usr/local/bin/gitea-shell.sh
+
+- name: Setup git user ssh authorization
+  become: true
+  ansible.builtin.copy:
+    src: gitea_ssh.conf
+    dest: /etc/ssh/sshd_config.d/gitea_ssh.conf
+
+- name: Restart sshd
+  become: true
+  ansible.builtin.service:
+    name: sshd
+    state: restarted

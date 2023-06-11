@@ -3,11 +3,11 @@
 - name: Set up VM
   hosts: homelab
   vars:
-    - server_data_dir: "/home_server"
-    - gitea_domain: "git.local"
-    - jenkins_domain: "jenkins.local"
+    - gitea_dir: "/home/homelab/services"
+    - gitea_domain: "gitea.local"
   roles:
     - common
+    - gitea
     # - gitea_server
 
 # - name: Set up http and git servers

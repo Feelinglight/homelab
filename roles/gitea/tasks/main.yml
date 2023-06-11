@@ -7,15 +7,13 @@
       - docker.io
       - docker
       - docker-compose
-
-- name: Make git user
-  import_tasks: git_user.yml
+      - openssh-server
 
 - name: Setup Gitea
   import_tasks: setup_gitea.yml
 
-- name: Redirect ssh for gitea
-  import_tasks: gitea_redirect_ssh.yml
+- name: Setups ssh redirect for gitea
+  import_tasks: setup_ssh.yml
 
-- name: Setup Nginx
-  import_tasks: setup_nginx.yml
+# - name: Setup Nginx
+#   import_tasks: setup_nginx.yml

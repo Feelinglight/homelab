@@ -1,0 +1,23 @@
+argument_specs:
+  main:
+    short_description: Настраивает сервис Gitea
+    options:
+      gitea_dir:
+        type: "str"
+        required: true
+        description: "Папка, в которой будет создана папка gitea, где Gitea будет хранить данные."
+
+      gitea_domain:
+        type: "str"
+        default: gitea.local
+        description: "Доменное имя, на котором будет располагаться Gitea"
+
+      gitea_http_port:
+        type: "int"
+        default: 3000
+        description: "Порт web-интерфейса Gitea"
+
+      gitea_ssh_port:
+        type: "int"
+        default: 2222
+        description: "Порт, на котором Gitea будет принимать ssh соединения"

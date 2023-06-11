@@ -1,6 +1,5 @@
 - name: Make gitea folders
-  become: true
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
   loop:
@@ -8,15 +7,13 @@
     - "{{ gitea_conf_dir }}"
 
 - name: Make gitea config
-  become: true
   template:
     src: app.ini
-    dest: "{{ gitea_conf_file }}"
+    dest: "{{ gitea_conf_dir }}/app.ini"
     force: no
 
 - name: Make gitea docker-compose
-  become: true
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml
     dest: "{{ gitea_dir }}/docker-compose.yml"
 
@@ -24,7 +21,3 @@
   become: true
   community.docker.docker_compose:
     project_src: "{{ gitea_dir }}"
-  register: output
-
-- ansible.builtin.debug:
-    var: output

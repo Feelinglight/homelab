@@ -1,0 +1,14 @@
+version: "2"
+
+services:
+  gitea:
+    container_name: gitea
+    image: gitea/gitea:1.19.3-rootless
+    restart: always
+    volumes:
+      - "{{ gitea_data_dir }}:/var/lib/gitea"
+      - "{{ gitea_conf_dir }}:/etc/gitea"
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "{{ gitea_http_port }}:3000"

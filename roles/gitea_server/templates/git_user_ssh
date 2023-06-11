@@ -1,3 +1,0 @@
-Match User git
-  AuthorizedKeysCommandUser git
-  AuthorizedKeysCommand /usr/bin/ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 {{ gitea_ssh_redirect_bin }} keys -e git -u %u -t %t -k %k
