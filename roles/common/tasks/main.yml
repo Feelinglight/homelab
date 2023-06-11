@@ -8,6 +8,7 @@
       - docker
       - docker-compose
       - neovim
+      - avahi-daemon
 
 - name: Allow sudo without password
   become: true

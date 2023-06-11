@@ -10,9 +10,11 @@ ip a
 sudo reboot
 ```
 
-На основном хосте:
+# Подготовка основного хоста
 
 ```sh
+sudo apt install -y python3-pip avahi-daemon
+
 python3 -m pip install ansible
 ansible-galaxy install gantsign.oh-my-zsh
 ```
