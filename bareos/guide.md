@@ -1,0 +1,79 @@
+# Bareos
+
+## Установка
+
+- Скачать скрипт **add_bareos_repositories.sh** [отсюда](https://download.bareos.org/current)
+  (выбрать нужный дистрибутив)
+
+  The add_bareos_repositories.sh script will:
+
+  - Create a Bareos signature key file /etc/apt/keyrings/bareos-*.gpg.
+  - Create the Bareos repository configuration file /etc/apt/sources.list.d/bareos.sources
+  - This file refers to the Bareos repository on the download server and to the local /etc/apt/keyrings/bareos-*.gpg file.
+  - If authentication credentials are required (https://download.bareos.com) they are stored in the file /etc/apt/auth.conf.d/download_bareos_com.conf.
+
+- Необходимые пакеты:
+
+  - Director: bareos-director, bareos-database-postgresql
+  - Storage Daemon: bareos-storage
+  - webui: bareos-webui
+
+    Because php-fpm support is not automatically added to Apache2 on Debian like platforms,
+    you have to issue those commands to enable it. Replace php8.1-fpm by the version you have
+    installed.
+
+    Debian, Ubuntu enabling php8-fpm support on Apache2 example:
+
+    ```bash
+    a2enmod proxy_fcgi setenvif
+    a2enconf php8.1-fpm
+    systemctl reload apache2
+    ```
+
+  - On a client: bareos-filedaemon, bareos-traymonitor
+  - On a Backup Administration system: bareos-bconsole
+    (to have an interactive console to the Bareos Director)
+  - Пакет bareos - всё в одном
+
+- Поднять postgres
+
+- Выполнить для postgres
+
+  ```bash
+  su postgres -c /usr/lib/bareos/scripts/create_bareos_database
+  su postgres -c /usr/lib/bareos/scripts/make_bareos_tables
+  su postgres -c /usr/lib/bareos/scripts/grant_bareos_privileges
+  ```
+
+- Запуск демонов:
+
+  ```bash
+  systemctl enable --now bareos-dir
+  systemctl enable --now bareos-sd
+  systemctl enable --now bareos-fd
+  ```
+
+  Please remark, the Bareos Daemons need to have access to the TCP ports 9101-9103.
+
+
+## Настройка
+
+- Определения
+
+  A backup job generally consists of a FileSet, a Client, a Schedule for one or several levels or
+  times of backups, a Pool.
+
+  Another way of looking at it is the FileSet is what to backup; the Client is who to backup;
+  the Schedule defines when, and the Pool defines where (i.e. what Volume).
+
+- Проверка валидности бэкапов:
+
+  ```bash
+  su bareos -s /bin/sh -c "/usr/sbin/bareos-dir -t"
+  su bareos -s /bin/sh -c "/usr/sbin/bareos-sd -t"
+  bareos-fd -t
+  bconsole -t
+  bareos-tray-monitor -t
+  ```
+
+
