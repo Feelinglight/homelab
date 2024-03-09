@@ -76,4 +76,382 @@
   bareos-tray-monitor -t
   ```
 
+## Конфигурация
+
+### Director
+
+
+#### Job
+
+- Accurate
+
+  In accurate mode, the File daemon knowns exactly which files were present after the last backup.
+  So it is able to handle deleted or renamed files.
+
+- Allow duplicate jobs
+
+- Bootstrap (путь)
+
+- Backup Format
+
+  Tar
+
+- Enabled
+
+- Full/Inc/Diff Pool
+
+- Max Run Sched Time
+
+- File Set
+
+- Job Defs
+
+- Job To Verify
+
+- Level
+
+- ??? Max Concurrent Copies
+
+- Max Full Interval
+
+- Maximum Concurrent Jobs
+
+- Messages
+
+- Pool
+
+- ??? Prune Files (client)
+- ??? Prune Jobs (client)
+- ??? Prune Volumes (pool)
+
+- ??? Regex Where
+
+- Rerun Failed Levels
+
+- Run After Failed Job
+- Run After Job
+- Run Before Job
+- Run Script
+
+- Purge Migration Job
+
+- Schedule
+
+- Storage (Pool)
+
+- Type
+
+- Write Bootstrap
+
+- Пример
+
+  ```
+  Job {
+    Name = "Minou"
+    Type = Backup
+    Level = Incremental
+    Client = Minou
+    FileSet="Minou Full Set"
+    Storage = DLTDrive
+    Pool = Default
+    Schedule = "MinouWeeklyCycle"
+    Messages = Standard
+  }
+  ```
+
+
+#### Schedule
+
+- Enabled
+
+- Name
+
+- Run
+
+  The first of every month:
+
+  ```bash
+  Schedule {
+    Name = "First"
+    Run = Level=Full on 1 at 2:05
+    Run = Level=Incremental on 2-31 at 2:05
+  }
+  ```
+
+  Every 10 minutes:
+
+  ```bash
+  Schedule {
+    Name = "TenMinutes"
+    Run = Level=Full hourly at 0:05
+    Run = Level=Full hourly at 0:15
+    Run = Level=Full hourly at 0:25
+    Run = Level=Full hourly at 0:35
+    Run = Level=Full hourly at 0:45
+    Run = Level=Full hourly at 0:55
+  }
+  ```
+
+
+#### FileSet
+
+Trailing слэши нужно добавлять в конце после значений File для папок, когда включены wildcards.
+В противном случае не надо.
+
+С помощью команды estimate можно посмотреть какие файлы будут включены в FileSet
+
+- Enable VSS
+
+- Exclude
+
+  ```bash
+  FileSet {
+    Name = "MyFileSet"
+    Include {
+      Options {
+        Signature = XXH128
+      }
+      File = /home
+      Exclude Dir Containing = .nobackup
+    }
+  }
+  ```
+
+- Include
+
+  - Options
+
+    - Sparse
+
+      ```bash
+      Include {
+        Options {
+          Signature = XXH128
+          Sparse = yes
+        }
+        File = /dev/hd6
+      }
+      ```
+
+    - Compression
+
+      GZIP - сильное сжатие, медленный
+      LZ4HC - как GZIP
+      LZ4 - быстрый
+
+    - Signature
+
+      XXH128
+
+    - Wild
+
+      Команда bwild для проверки регулярок
+
+    - Wild Dir
+    - Wild File
+
+    - Exclude
+
+    - Ignore case
+
+      Почему то написано что на винде почти всегда оно нужно в yes
+
+    - Shadowing
+
+      Отключает дублирование бэкапа при пересечении правил
+
+
+
+- Name
+
+
+#### Client
+
+- Address (FD Address)
+
+- Enable
+
+- Password (FD Password)
+
+- File Retention
+
+- Hard Quota
+
+- Maximum Concurrent Jobs
+
+- Name
+
+- Soft Quota
+
+
+#### Storage
+
+- Address (SD Address)
+
+- Collect Statistics
+
+- Device
+
+- Enable
+
+- Maximum Concurrent Jobs
+
+- Media Type (File)
+
+  Написано что они должны быть разные (или что то типа того).
+
+  Подробнее тут https://docs.bareos.org/TasksAndConcepts/VolumeManagement.html#diskchapter
+
+- Name
+
+- Password (SD Password)
+
+- Port (SD Port)
+
+
+#### Pool
+
+- Action On Purge
+
+- File Retention
+
+- Job Retention
+
+- Label Format
+
+- Maximum Volume Bytes
+
+- Maximum Volumes
+
+- Name
+
+- Next Pool
+
+- Storage
+
+- Volume Retention
+
+
+#### Catalog
+
+- Address (DB Address)
+
+- Name
+
+- Password (DB Password)
+
+- DB User
+
+- DB Name
+
+
+### Storage Daemon
+
+#### Storage
+
+- Absolute Job Timeout
+
+- Messages
+
+- Name
+
+- SD Address
+
+#### Director
+
+- Name
+
+- Password
+
+#### Device
+
+- Archive Device
+
+  directory
+
+  Для каждой папки свой Device
+
+- Device Type
+
+  File
+
+- Drive Crypto Enabled
+
+- Media Type
+
+  Вроде должен быть уникальным для каждой папки
+
+- Mount Command
+
+- Mount Point
+
+- Name
+
+- Query Crypto Status
+
+- Random Access
+
+- Removable Media
+
+- Requires Mount
+
+- Unmount Command
+
+- Volume Capacity
+
+
+### File Daemon
+
+#### Client
+
+- Absolute Job Timeout
+
+- FD Address
+
+- Name
+
+- Pki Cipher
+
+
+#### Director
+
+- Name
+
+- Password
+
+
+#### Message
+
+...
+
+
+### Message
+
+- Append
+
+- Catalog
+
+- Director
+
+- Mail
+
+- Mail Command
+
+
+## Детали работы
+
+Решение о включении файла в инкремент принимается по st_mtime и st_ctime.
+
+Удаленные файлы будут восстанавливаться, пока не будет сделан следующий полный бэкап.
+
+Без Accurate mode перемещения папок не будут учитываться при инкрементах (файлы в перемещенных
+папках не меняют st_mtime и st_ctime).
+
+
+
+
+
+
+
+
 
