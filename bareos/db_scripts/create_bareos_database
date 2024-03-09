@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# BAREOS® - Backup Archiving REcovery Open Sourced
+#
+# Copyright (C) 2000-2011 Free Software Foundation Europe e.V.
+# Copyright (C) 2013-2023 Bareos GmbH & Co. KG
+#
+# This program is Free Software; you can redistribute it and/or
+# modify it under the terms of version three of the GNU Affero General Public
+# License as published by the Free Software Foundation and included
+# in the file LICENSE.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+# This routine makes the appropriately configured Bareos database.
+#
+set -e
+set -u
+
+# avoid misleading PostgreSQL warning 'could not change directory to ...'
+cd /
+
+#
+# Source the Bareos config functions.
+#
+. "/usr/lib/bareos/scripts"/bareos-config-lib.sh
+
+db_name="${db_name:-$(get_database_name bareos)}"
+export PGOPTIONS='--client-min-messages=warning' 
+
+if [ $# -gt 0 ]; then
+  handle_database_scripts_command_line_parameter $*
+fi
+# Below this line no external or additional parameters are supported.
+info "Creating database '${db_name}'"
+
+# use SQL_ASCII to be able to put any filename into
+# the database even those created with unusual character sets
+retval=0
+psql -f - -d template1 << END-OF-DATA || retval=$?
+\set ON_ERROR_STOP on
+CREATE DATABASE ${db_name} ENCODING 'SQL_ASCII' LC_COLLATE 'C' LC_CTYPE 'C' TEMPLATE template0;
+ALTER DATABASE ${db_name} SET datestyle TO 'ISO, YMD';
+END-OF-DATA
+
+QUERY="SELECT pg_catalog.pg_encoding_to_char(d.encoding) as encoding \
+ FROM pg_catalog.pg_database d WHERE d.datname='${db_name}';"
+
+if [ "$(psql --tuples-only --no-align --command="${QUERY}")" = "SQL_ASCII" ]
+then
+    info "Database encoding OK"
+else
+    warn " "
+    warn "Database encoding not conform. Do not use this database"
+    warn " "
+    retval=2
+fi
+
+if [ ${retval} -eq 0 ]; then
+   info "Creation of database '${db_name}' succeeded."
+else
+   error "Creation of database '${db_name}' failed."
+fi
+
+exit ${retval}

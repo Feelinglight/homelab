@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# BAREOS® - Backup Archiving REcovery Open Sourced
+#
+# Copyright (C) 2000-2011 Free Software Foundation Europe e.V.
+# Copyright (C) 2013-2023 Bareos GmbH & Co. KG
+#
+# This program is Free Software; you can redistribute it and/or
+# modify it under the terms of version three of the GNU Affero General Public
+# License as published by the Free Software Foundation and included
+# in the file LICENSE.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+# This routine makes the appropriately configured Bareos tables.
+#
+set -e
+set -u
+
+# avoid misleading PostgreSQL warning 'could not change directory to ...'
+cd /
+
+#
+# Source the Bareos config functions.
+#
+. "/usr/lib/bareos/scripts"/bareos-config-lib.sh
+
+db_name="${db_name:-$(get_database_name bareos)}"
+db_user="${db_user:-$(get_database_user bareos)}"
+bareos_sql_ddl="$(get_database_ddl_dir)"
+temp_sql_schema="/tmp/creates.sql.$$"
+
+if [ $# -gt 0 ]; then
+  handle_database_scripts_command_line_parameter $*
+fi
+# Below this line no additional parameters is allowed in command ($*)
+info "Making ${db_name} tables"
+
+sql_definitions="${bareos_sql_ddl}/creates/postgresql.sql"
+
+if [ -n "${sql_definitions}" ]; then
+   if [ ! -f "${sql_definitions}" ]; then
+      error "Unable to open database table definitions in file ${sql_definitions}"
+      exit 1
+   fi
+   if ! get_translated_sql_file "${sql_definitions}" > "${temp_sql_schema}"
+   then
+        error "Failed to translate SQL definitions in ${sql_definitions}"
+        exit 1
+   fi
+fi
+
+retval=0
+PAGER="" PGOPTIONS="--client-min-messages=warning" psql -f "${temp_sql_schema}" -d "${db_name}" || retval=$?
+if [ $retval -eq 0 ]; then
+   info "Creation ${db_name} tables succeeded."
+else
+   error "Creation ${db_name} tables failed."
+fi
+rm -f "${temp_sql_schema}"
+
+exit ${retval}

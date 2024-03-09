@@ -25,6 +25,11 @@ RUN apt-get install -y bareos-database-postgresql \
 
 EXPOSE 9101
 
+COPY director-entrypoint.sh /director-entrypoint.sh
+RUN chmod u+x /director-entrypoint.sh
+
+ENTRYPOINT ["/director-entrypoint.sh"]
+
 # CMD ["/usr/sbin/bareos-dir", "-u", "bareos", "-f"]
 CMD ["/usr/sbin/bareos-dir", "-f"]
 
@@ -37,6 +42,11 @@ RUN apt-get install -y bareos-storage
 
 EXPOSE 9103
 
+COPY sd-entrypoint.sh /sd-entrypoint.sh
+RUN chmod u+x /sd-entrypoint.sh
+
+ENTRYPOINT ["/sd-entrypoint.sh"]
+
 CMD ["/usr/sbin/bareos-sd", "-f"]
 
 
@@ -48,6 +58,11 @@ RUN apt-get install -y bareos-webui
 
 EXPOSE 80
 
+COPY webui-entrypoint.sh /webui-entrypoint.sh
+RUN chmod u+x /director-entrypoint.sh
+
+ENTRYPOINT ["/webui-entrypoint.sh"]
+
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
 
@@ -58,6 +73,11 @@ FROM bareos-base as bareos-fd
 RUN apt-get install -y bareos-filedaemon
 
 EXPOSE 9102
+
+COPY fd-entrypoint.sh /fd-entrypoint.sh
+RUN chmod u+x /fd-entrypoint.sh
+
+ENTRYPOINT ["/fd-entrypoint.sh"]
 
 CMD ["/usr/sbin/bareos-fd", "-f"]
 
