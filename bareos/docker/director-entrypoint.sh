@@ -1,14 +1,14 @@
-# Удалить /etc/bareos
-# Скопировать примонтированные конфиги в /etc/bareos
-# Заменить переменные окружения
+#!/usr/bin/env bash
+
+/make_bareos_config.sh /etc_bareos
 
 export PGHOST=${BAREOS__DB_HOST}
 export PGUSER=${DB_ADMIN_USER}
 export PGPASSWORD=${DB_ADMIN_PASSWORD}
 
-[[ -z "${FORCE_DB_INIT}" ]] && FORCE_DB_INIT='false'
+[[ -z "${DB_INIT}" ]] && DB_INIT='false'
 
-if [ ! -f /etc/bareos/bareos-db.control ] || [ "${FORCE_DB_INIT}" == 'true' ] ; then
+if [ "${DB_INIT}" == 'true' ] ; then
   echo "Bareos DB init"
   echo "Bareos DB init: Create user ${BAREOS__DB_NAME}"
   psql -c "create user ${BAREOS__DB_NAME} with createdb createrole login;"

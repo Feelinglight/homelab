@@ -14,6 +14,8 @@ RUN curl -Ls $ADD_BAREOS_REPO_URL -o $ADD_BAREOS_REPO_PATH && \
   bash $ADD_BAREOS_REPO_PATH && \
   apt-get update
 
+COPY make_bareos_config.sh /make_bareos_config.sh
+
 
 # --------------- bareos-dir ---------------
 
