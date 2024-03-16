@@ -32,7 +32,6 @@ RUN chmod u+x /director-entrypoint.sh
 
 ENTRYPOINT ["/director-entrypoint.sh"]
 
-# CMD ["/usr/sbin/bareos-dir", "-u", "bareos", "-f"]
 CMD ["/usr/sbin/bareos-dir", "-f"]
 
 

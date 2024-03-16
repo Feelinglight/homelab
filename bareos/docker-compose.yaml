@@ -31,16 +31,16 @@ services:
       postgres-db:
         condition: service_healthy
 
-  # bareos-sd:
-  #   container_name: bareos-sd
-  #   image: bar-sd
-  #   ports:
-  #     - 9103:9103
-  #   volumes:
-  #     - ./etc/sd:/etc/bareos
-  #     # - <BAREOS_BKP_VOLUME_PATH>:/var/lib/bareos/storage
-  #   environment:
-  #     - BAREOS_SD_PASSWORD=admin
+  bareos-sd:
+    container_name: bareos-sd
+    image: bar-sd
+    ports:
+      - 9103:9103
+    volumes:
+      - ./services/bareos/config/etc_probe/sd:/etc_bareos:ro
+    environment:
+      - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
+      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
 
   # bareos-fd:
   #   container_name: bareos-fd
@@ -60,7 +60,6 @@ services:
       - 9100:9100
     environment:
       - BAREOS__DIRECTOR_HOST=bareos-dir
-      - BAREOS__WEBUI_CONSOLE_PASSWORD=${BAREOS__WEBUI_CONSOLE_PASSWORD}
     volumes:
       - ./services/bareos/config/nginx/default:/etc/nginx/sites-enabled/default
       - ./services/bareos/config/etc_probe/webui:/etc_bareos:ro
