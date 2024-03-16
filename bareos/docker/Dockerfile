@@ -36,6 +36,23 @@ ENTRYPOINT ["/director-entrypoint.sh"]
 CMD ["/usr/sbin/bareos-dir", "-f"]
 
 
+# --------------- bareos-webui ---------------
+
+FROM bareos-base as bareos-webui
+
+RUN apt-get install -y bareos-webui \
+                       nginx
+
+EXPOSE 80
+
+COPY webui-entrypoint.sh /webui-entrypoint.sh
+RUN chmod u+x /webui-entrypoint.sh
+
+ENTRYPOINT ["/webui-entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
+
+
 # --------------- bareos-sd ---------------
 
 FROM bareos-base as bareos-sd
@@ -50,22 +67,6 @@ RUN chmod u+x /sd-entrypoint.sh
 ENTRYPOINT ["/sd-entrypoint.sh"]
 
 CMD ["/usr/sbin/bareos-sd", "-f"]
-
-
-# --------------- bareos-webui ---------------
-
-FROM bareos-base as bareos-webui
-
-RUN apt-get install -y bareos-webui
-
-EXPOSE 80
-
-COPY webui-entrypoint.sh /webui-entrypoint.sh
-RUN chmod u+x /director-entrypoint.sh
-
-ENTRYPOINT ["/webui-entrypoint.sh"]
-
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
 
 # --------------- bareos-fd ---------------

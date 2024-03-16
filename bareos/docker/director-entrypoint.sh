@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-/make_bareos_config.sh /etc_bareos
+/make_bareos_config.sh /etc_bareos /etc/bareos
 
 export PGHOST=${BAREOS__DB_HOST}
-export PGUSER=${DB_ADMIN_USER}
-export PGPASSWORD=${DB_ADMIN_PASSWORD}
+export PGUSER=${POSTGRES_ADMIN_USER}
+export PGPASSWORD=${POSTGRES_ADMIN_PASSWORD}
 
 [[ -z "${DB_INIT}" ]] && DB_INIT='false'
 

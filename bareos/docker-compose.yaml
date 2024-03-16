@@ -1,61 +1,80 @@
 version: '3'
 services:
+
   bareos-dir:
     container_name: bareos-dir
     image: bar-dir
-    command: /bin/bash
+    environment:
+      - DB_INIT=true
+      ###
+      - BAREOS__DB_HOST=${POSTGRES_HOST}
+      - BAREOS__DB_PORT=${POSTGRES_PORT}
+      - BAREOS__DB_NAME=bareos
+      - BAREOS__DB_USER=bareos
+      - BAREOS__DB_PASSWORD=${BAREOS__DB_PASSWORD}
+      ###
+      - POSTGRES_ADMIN_USER=${POSTGRES_ADMIN_USER}
+      - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+      ###
+      - BAREOS__DIRECTOR_PASSWORD=${BAREOS__DIRECTOR_PASSWORD}
+      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+      - BAREOS__WEBUI_CONSOLE_PASSWORD=${BAREOS__WEBUI_CONSOLE_PASSWORD}
+      ###
+      - BAREOS__SD_ADDRESS=bareos-sd
+      - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
+      ###
+      - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
+      ###
     volumes:
-      - ./etc_probe/dir:/etc_bareos:ro
-      # - <BAREOS_DATA_PATH>:/var/lib/bareos #required for MyCatalog backup
-    # environment:
-      # - DB_INIT=true
-      # - DB_UPDATE=false
+      - ./services/bareos/config/etc_probe/dir:/etc_bareos:ro
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
 
-  bareos-sd:
-    container_name: bareos-sd
-    image: bar-sd
-    ports:
-      - 9103:9103
-    volumes:
-      - ./etc/sd:/etc/bareos
-      # - <BAREOS_BKP_VOLUME_PATH>:/var/lib/bareos/storage
-    environment:
-      - BAREOS_SD_PASSWORD=admin
+  # bareos-sd:
+  #   container_name: bareos-sd
+  #   image: bar-sd
+  #   ports:
+  #     - 9103:9103
+  #   volumes:
+  #     - ./etc/sd:/etc/bareos
+  #     # - <BAREOS_BKP_VOLUME_PATH>:/var/lib/bareos/storage
+  #   environment:
+  #     - BAREOS_SD_PASSWORD=admin
 
-  bareos-fd:
-    container_name: bareos-fd
-    image: bar-fd
-    volumes:
-      - ./etc/fd:/etc/bareos
-      # - <BAREOS_CONF_PATH>:/etc/bareos
-      # - <BAREOS_DATA_PATH>:/var/lib/bareos-director #required for MyCatalog backup
-    environment:
-      - BAREOS_FD_PASSWORD=admin
-      - FORCE_ROOT=false
+  # bareos-fd:
+  #   container_name: bareos-fd
+  #   image: bar-fd
+  #   volumes:
+  #     - ./etc/fd:/etc/bareos
+  #     # - <BAREOS_CONF_PATH>:/etc/bareos
+  #     # - <BAREOS_DATA_PATH>:/var/lib/bareos-director #required for MyCatalog backup
+  #   environment:
+  #     - BAREOS_FD_PASSWORD=admin
+  #     - FORCE_ROOT=false
 
   bareos-webui:
     container_name: bareos-webui
     image: bar-web
     ports:
-      - 8080:80
+      - 9100:9100
     environment:
-      - BAREOS_DIR_HOST=bareos-dir
-      - SERVER_STATS=yes #optional enable apache server statistics
+      - BAREOS__DIRECTOR_HOST=bareos-dir
+      - BAREOS__WEBUI_CONSOLE_PASSWORD=${BAREOS__WEBUI_CONSOLE_PASSWORD}
     volumes:
-      - ./etc/web:/etc/bareos
-      # - <BAREOS_CONF_PATH>:/etc/bareos-webui
+      - ./services/bareos/config/nginx/default:/etc/nginx/sites-enabled/default
+      - ./services/bareos/config/etc_probe/webui:/etc_bareos:ro
 
   postgres-db:
     container_name: postgres-db
     image: postgres:16
-    # volumes:
-      # - <DB_DATA_PATH>:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=${POSTGRES_ADMIN_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
       # - POSTGRES_INITDB_ARGS=--encoding=SQL_ASCII
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1s
 
   # smtpd:
   #   container_name: smtpd

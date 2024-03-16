@@ -2,17 +2,18 @@
 
 set -e
 
-if [[ $# -eq 0 ]] ; then
-    echo 'Error: bareos configs folder is not specified'
+if [ $# -lt 2 ]; then
+    echo 'Error: bareos configs folders are not specified'
     exit 1
 fi
 
-bareos_configs_folder="$1"
+template_configs_folder="$1"
+bareos_configs_folder="$2"
 
-rm -rf /etc/bareos/*
-cp -r "$bareos_configs_folder/." /etc/bareos
+rm -rf "$bareos_configs_folder"/*
+cp -r "$template_configs_folder/"* "$bareos_configs_folder"
 
-find /etc/bareos -type f | while read -r file; do
+find "$bareos_configs_folder" -type f | while read -r file; do
     echo "File $file:"
     for var in $(printenv | grep "^BAREOS__"); do
         var_name=$(echo "$var" | cut -d= -f1)

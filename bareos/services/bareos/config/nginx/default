@@ -1,0 +1,32 @@
+
+server {
+        listen       9100;
+        # server_name  localhost;
+        root         /usr/share/bareos-webui/public/;
+        error_log    /dev/stderr;
+        access_log   /dev/stdout;
+
+        location / {
+                index index.php;
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ .php$ {
+                include snippets/fastcgi-php.conf;
+
+                # php5-cgi alone:
+                # pass the PHP
+                # scripts to FastCGI server
+                # listening on 127.0.0.1:9000
+                # fastcgi_pass 127.0.0.1:9000;
+
+                # php5-fpm:
+                fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+
+                # APPLICATION_ENV:  set to 'development' or 'production'
+                # fastcgi_param APPLICATION_ENV development;
+                fastcgi_param APPLICATION_ENV production;
+
+        }
+
+}
