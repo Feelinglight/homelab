@@ -5,6 +5,8 @@ services:
     container_name: bareos-dir
     image: bar-dir
     environment:
+      - TZ=Asia/Yekaterinburg
+      ###
       - DB_INIT=true
       ###
       - BAREOS__DB_HOST=${POSTGRES_HOST}
@@ -43,6 +45,7 @@ services:
     volumes:
       - ./services/bareos/config/etc_probe/sd:/etc_bareos:ro
     environment:
+      - TZ=Asia/Yekaterinburg
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
 
@@ -50,9 +53,11 @@ services:
     container_name: bareos-fd
     image: bar-fd
     volumes:
+      - ./bareos_tmp/bareos_test:/bareos_test
       - ./services/bareos/config/etc_probe/fd:/etc_bareos:ro
     environment:
-      # - BAREOS__FD_DOCKER_NAME=${BAREOS__FD_DOCKER_NAME}
+      - TZ=Asia/Yekaterinburg
+      ###
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
       - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
 
@@ -62,6 +67,8 @@ services:
     ports:
       - 9100:9100
     environment:
+      - TZ=Asia/Yekaterinburg
+      ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
       - ./services/bareos/config/nginx/default:/etc/nginx/sites-enabled/default
@@ -71,6 +78,8 @@ services:
     container_name: postgres-db
     image: postgres:16
     environment:
+      - TZ=Asia/Yekaterinburg
+      ###
       - POSTGRES_USER=${POSTGRES_ADMIN_USER}
       - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
     healthcheck:
@@ -80,3 +89,4 @@ services:
   # smtpd:
   #   container_name: smtpd
   #   image: namshi/smtp
+
