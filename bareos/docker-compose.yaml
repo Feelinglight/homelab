@@ -23,6 +23,10 @@ services:
       - BAREOS__SD_ADDRESS=bareos-sd
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       ###
+      - BAREOS__FD_DOCKER_ADDRESS=${BAREOS__FD_DOCKER_ADDRESS}
+      - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+
+      - BAREOS__FD_DMITRY_ADDRESS=${BAREOS__FD_DMITRY_ADDRESS}
       - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
       ###
     volumes:
@@ -42,16 +46,15 @@ services:
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
 
-  # bareos-fd:
-  #   container_name: bareos-fd
-  #   image: bar-fd
-  #   volumes:
-  #     - ./etc/fd:/etc/bareos
-  #     # - <BAREOS_CONF_PATH>:/etc/bareos
-  #     # - <BAREOS_DATA_PATH>:/var/lib/bareos-director #required for MyCatalog backup
-  #   environment:
-  #     - BAREOS_FD_PASSWORD=admin
-  #     - FORCE_ROOT=false
+  bareos-fd:
+    container_name: bareos-fd
+    image: bar-fd
+    volumes:
+      - ./services/bareos/config/etc_probe/fd:/etc_bareos:ro
+    environment:
+      # - BAREOS__FD_DOCKER_NAME=${BAREOS__FD_DOCKER_NAME}
+      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+      - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
 
   bareos-webui:
     container_name: bareos-webui
@@ -70,7 +73,6 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_ADMIN_USER}
       - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
-      # - POSTGRES_INITDB_ARGS=--encoding=SQL_ASCII
     healthcheck:
       test: pg_isready -U postgres
       interval: 1s
