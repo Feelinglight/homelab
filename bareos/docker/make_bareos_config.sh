@@ -14,7 +14,7 @@ rm -rf "$bareos_configs_folder"/*
 cp -r "$template_configs_folder/"* "$bareos_configs_folder"
 
 find "$bareos_configs_folder" -type f | while read -r file; do
-    echo "File $file:"
+    # echo "File $file:"
     for var in $(printenv | grep "^BAREOS__"); do
         var_name=$(echo "$var" | cut -d= -f1)
         var_value=$(echo "$var" | cut -d= -f2-)

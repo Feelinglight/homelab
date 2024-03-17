@@ -32,6 +32,7 @@ services:
       - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
       ###
     volumes:
+      - ./bareos_tmp/backups/bootstraps:/backups/bootstraps
       - ./services/bareos/config/etc_probe/dir:/etc_bareos:ro
     depends_on:
       postgres-db:
@@ -43,6 +44,7 @@ services:
     ports:
       - 9103:9103
     volumes:
+      - ./bareos_tmp/backups:/backups
       - ./services/bareos/config/etc_probe/sd:/etc_bareos:ro
     environment:
       - TZ=Asia/Yekaterinburg
@@ -53,7 +55,7 @@ services:
     container_name: bareos-fd
     image: bar-fd
     volumes:
-      - ./bareos_tmp/bareos_test:/bareos_test
+      - ./bareos_tmp/test_data:/test_data
       - ./services/bareos/config/etc_probe/fd:/etc_bareos:ro
     environment:
       - TZ=Asia/Yekaterinburg

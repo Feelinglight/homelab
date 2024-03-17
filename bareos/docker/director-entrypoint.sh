@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-/make_bareos_config.sh /etc_bareos /etc/bareos
+/scripts/make_bareos_config.sh /etc_bareos /etc/bareos
 
 export PGHOST=${BAREOS__DB_HOST}
 export PGUSER=${POSTGRES_ADMIN_USER}
