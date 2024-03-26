@@ -97,7 +97,7 @@ class Job:
         return f'---------> Job(jobid="{self.jobid}", sched_time="{self.sched_time}", ' \
                f'level="{self.level}", ' \
                f'volumes = [\n' \
-               f'{volumes_str}\n]'
+               f'{volumes_str}\n])'
 
 
 def get_storage_device_name(storage):
@@ -158,8 +158,10 @@ def remove_expired_volumes(level: str, storage: str, job: str, dry_run: bool):
         for j in jobs:
             log_info(j)
 
-    if not dry_run:
-        pass
+    if dry_run:
+        log_info("Скрипт запущен в режиме dry run. Тома не будут удалены")
+    else:
+        log_info("Удаление лишних томов...")
 
 
 def main():
@@ -167,7 +169,7 @@ def main():
     parser.add_argument("-l", "--level", help="Specify the level", required=True)
     parser.add_argument("-s", "--storage", help="Specify the storage", required=True)
     parser.add_argument("-j", "--job", help="Specify the job", required=True)
-    parser.add_argument("-d", "--dry-run", action='store_true')
+    parser.add_argument("-d", "--dry-run", help="Dry run", action='store_true')
 
     args = parser.parse_args()
 
@@ -199,5 +201,4 @@ if __name__ == "__main__":
         main()
     finally:
         log_info(f'Удаление лишних цепочек завершено-----------------------------')
-
 

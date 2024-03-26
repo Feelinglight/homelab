@@ -34,7 +34,8 @@ services:
     volumes:
       - ./bareos_tmp/backups/bootstraps:/backups/bootstraps
       - ./services/bareos/config/etc_bareos/dir:/etc_bareos:ro
-      - ./services/bareos/config/scripts/remove_expired_volumes.py:/usr/local/bin/remove_expired_volumes.py
+      # - ./services/bareos/config/scripts/remove_expired_volumes.py:/usr/local/bin/remove_expired_volumes.py
+      - ./services/bareos/config/scripts:/usr/local/bin/
     depends_on:
       postgres-db:
         condition: service_healthy
