@@ -3,13 +3,13 @@ import json
 
 @dataclass(kw_only=True)
 class Volume:
-    mediaid: str
+    mediaid: int
     name: str
 
 
 @dataclass(kw_only=True)
 class Job:
-    jobid: str
+    jobid: int
     sched_time: str
     level: str
     volumes: list[Volume]
@@ -17,7 +17,7 @@ class Job:
     def __str__(self):
         volumes_str = '\n'.join([f'├─ {vol}' if (idx != len(self.volumes) - 1) else f'└─ {vol}'
                                  for idx, vol in enumerate(self.volumes)])
-        return f'---------> Job(jobid="{self.jobid}", sched_time="{self.sched_time}", ' \
+        return f'---> Job(jobid="{self.jobid}", sched_time="{self.sched_time}", ' \
                f'level="{self.level}", ' \
                f'volumes = [\n' \
                f'{volumes_str}\n])'
@@ -28,30 +28,44 @@ def load_json(file):
         return json.load(f)['result'][file]
 
 
+def find_chains(jobs: list[Job]) -> list[list[Job]]:
+    """
+    Ищет в отсортированном списке job цепочки бэкапов Full-Increment
+    Возвращает цепочки, отсортированные по времени
+    """
+    assert sorted(jobs, key=lambda j: j.sched_time) == jobs, \
+        f"Полученные из bareos job-ы не отсортированы: {jobs}"
+
+    chains: list[list[Job]] = []
+    if len(jobs) != 0:
+        for j in jobs:
+            if j.level == "F":
+                chains.append([j])
+            else:
+                chains[-1].append(j)
+
+    return chains
+
+
 def main():
-    volumes_json = load_json('volumes')
-    jobsmedia_json = load_json('jobmedia')
     jobs_json = load_json('jobs')
 
-    volumes = {}
-    for vol in volumes_json:
-        volumes[vol['mediaid']] = vol
-
-    jobs = {}
+    jobs: dict[int, dict[str, str]] = {}
     for j in jobs_json:
-        jobs[j['jobid']] = j
+        jobs[int(j['jobid'])] = j
 
-    volumes_jobs: dict[str, list[str]] = {}
-    jobs_with_vols = {}
+    jobsmedia_json = load_json('jobmedia')
+    volumes_jobs: dict[int, list[int]] = {}
+    jobs_with_vols: dict[int, Job] = {}
     for jm in jobsmedia_json:
-        jm_jobid = jm['jobid']
-        jm_job = jobs[jm_jobid]
+        jm_jobid: int = int(jm['jobid'])
+        jm_job: dict[str, str] = jobs[jm_jobid]
 
         if jm_jobid not in jobs_with_vols:
-            jobs_with_vols[jm_jobid] = Job(jobid=jm_jobid, level=jm_job['level'],
+           jobs_with_vols[jm_jobid] = Job(jobid=jm_jobid, level=jm_job['level'],
                                            sched_time=jm_job['schedtime'], volumes=[])
 
-        jm_mediaid = jm['mediaid']
+        jm_mediaid = int(jm['mediaid'])
         jm_volumename = jm['volumename']
 
         if jm_mediaid not in volumes_jobs:
@@ -70,9 +84,16 @@ def main():
         job.volumes.sort(key=lambda v: v.mediaid)
     jobs_list.sort(key=lambda j: j.jobid)
 
-    for job in jobs_list:
-        print(job)
 
+    chains = find_chains(jobs_list)
+    for idx, jobs_chain in enumerate(chains, start=1):
+        print(f"---------> Chain №{idx}:")
+        for job in jobs_chain:
+            print(job)
+    #     for j in jobs_chain:
+    #         print(j)
+    #         # job_vols = [v.name for v in j.volumes]
+    #         # print(f'{j.jobid} ({j.level}): {job_vols}')
 
 
 
