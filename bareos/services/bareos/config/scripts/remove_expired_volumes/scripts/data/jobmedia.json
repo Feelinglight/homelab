@@ -1,0 +1,116 @@
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "jobmedia": [
+      {
+        "jobmediaid": "2",
+        "jobid": "1",
+        "mediaid": "1",
+        "volumename": "Vol-Full-1-DockerLinuxJob.2024-03-27_20.23.18_02-0",
+        "firstindex": "1",
+        "lastindex": "5",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "283",
+        "endblock": "99615002"
+      },
+      {
+        "jobmediaid": "4",
+        "jobid": "1",
+        "mediaid": "2",
+        "volumename": "Vol-Full-1-DockerLinuxJob.2024-03-27_20.23.18_02-1",
+        "firstindex": "5",
+        "lastindex": "5",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "283",
+        "endblock": "99615002"
+      },
+      {
+        "jobmediaid": "6",
+        "jobid": "1",
+        "mediaid": "3",
+        "volumename": "Vol-Full-1-DockerLinuxJob.2024-03-27_20.23.18_02-2",
+        "firstindex": "5",
+        "lastindex": "22",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "283",
+        "endblock": "26936264"
+      },
+      {
+        "jobmediaid": "8",
+        "jobid": "2",
+        "mediaid": "4",
+        "volumename": "Vol-Incremental-2-DockerLinuxJob.2024-03-27_20.24.00_18-3",
+        "firstindex": "1",
+        "lastindex": "2",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "290",
+        "endblock": "1054"
+      },
+      {
+        "jobmediaid": "10",
+        "jobid": "3",
+        "mediaid": "5",
+        "volumename": "Vol-Incremental-3-DockerLinuxJob.2024-03-27_20.25.00_32-4",
+        "firstindex": "1",
+        "lastindex": "2",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "290",
+        "endblock": "1054"
+      },
+      {
+        "jobmediaid": "12",
+        "jobid": "4",
+        "mediaid": "6",
+        "volumename": "Vol-Incremental-4-DockerLinuxJob.2024-03-27_20.26.00_33-5",
+        "firstindex": "1",
+        "lastindex": "2",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "290",
+        "endblock": "1054"
+      },
+      {
+        "jobmediaid": "14",
+        "jobid": "5",
+        "mediaid": "7",
+        "volumename": "Vol-Full-5-DockerLinuxJob.2024-03-27_20.27.00_40-6",
+        "firstindex": "1",
+        "lastindex": "6",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "283",
+        "endblock": "99615002"
+      },
+      {
+        "jobmediaid": "16",
+        "jobid": "5",
+        "mediaid": "8",
+        "volumename": "Vol-Full-5-DockerLinuxJob.2024-03-27_20.27.00_40-7",
+        "firstindex": "6",
+        "lastindex": "6",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "283",
+        "endblock": "99615002"
+      },
+      {
+        "jobmediaid": "18",
+        "jobid": "5",
+        "mediaid": "9",
+        "volumename": "Vol-Full-5-DockerLinuxJob.2024-03-27_20.27.00_40-8",
+        "firstindex": "6",
+        "lastindex": "26",
+        "startfile": "0",
+        "endfile": "0",
+        "startblock": "283",
+        "endblock": "26937160"
+      }
+    ]
+  }
+}
