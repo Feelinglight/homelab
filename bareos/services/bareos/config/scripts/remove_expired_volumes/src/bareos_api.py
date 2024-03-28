@@ -1,3 +1,4 @@
+from pathlib import Path
 import subprocess
 import json
 import re
@@ -87,7 +88,7 @@ def get_storage_device_name(storage):
     return storage_devices[0]
 
 
-def get_device_folder(storage, device):
+def get_volumes_folder(storage, device) -> Path:
     storage_status_command = f'status storage={storage}"'
     stdout, _ = run_subproccess(storage_status_command)
     result = re.search(rf'Device \"{device}\" \((.*)\)', stdout)
@@ -95,5 +96,25 @@ def get_device_folder(storage, device):
         raise ValueError(
             f'Error: Не удалось найти Archive Device в выводе команды "{storage_status_command}"'
         )
-    return result.group(1)
+    return Path(result.group(1))
 
+
+def delete_jobs(job_ids: list[int]) -> bool:
+    job_ids_str: str = ','.join(map(str, job_ids))
+    delete_result = run_bconsole_command(f'delete job jobid={job_ids_str}')
+    if 'error' in delete_result:
+        log_error(f'Не удалось удалить job-ы с id = "{job_ids_str}"')
+        log_error(delete_result['error'])
+        return False
+    else:
+        return True
+
+
+def delete_volume(volume_name: str, pool: str) -> bool:
+    delete_result = run_bconsole_command(f'delete volume={volume_name} pool={pool}')
+    if 'error' in delete_result:
+        log_error(f'Не удалось удалить volume с именем = "{volume_name}" (pool = "{pool}")')
+        log_error(delete_result['error'])
+        return False
+    else:
+        return True
