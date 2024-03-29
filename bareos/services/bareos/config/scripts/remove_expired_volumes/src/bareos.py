@@ -117,7 +117,7 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
             jobs_to_delete.append(j)
 
             job_level = "Full" if j.level == "F" else "Incremental"
-            bsr_path = volumes_folder / f'{j.unique_id}-{j.jobid}-{job_level}.bsr'
+            bsr_path = volumes_folder / f'{j.unique_id}-{j.jobid}-0-{job_level}.bsr'
             if bsr_path.is_file():
                 files_to_delete.append(bsr_path)
             else:
@@ -133,29 +133,29 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
                     log_error(f'Файл тома "{volume_path} "'
                                 f'(jobid = {j.jobid}, mediaid={v.mediaid}) не найден')
 
-
     if not print_only:
-        error = False
-        log_info("Удаление лишних томов...")
-        for path in files_to_delete:
-            try:
-                path.unlink()
-            except FileNotFoundError as err:
-                log_error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
+        if job_chains:
+            error = False
+            log_info("Удаление лишних томов...")
+            for path in files_to_delete:
+                try:
+                    path.unlink()
+                except FileNotFoundError as err:
+                    log_error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
+                    error = True
+
+            job_delete_success = delete_jobs([j.jobid for j in jobs_to_delete])
+            if not job_delete_success:
                 error = True
 
-        job_delete_success = delete_jobs([j.jobid for j in jobs_to_delete])
-        if not job_delete_success:
-            error = True
+            for v in volumes_to_delete:
+                volume_delete_success = delete_volume(v.name, volumes_pool)
+                if not volume_delete_success:
+                    error = True
 
-        for v in volumes_to_delete:
-            volume_delete_success = delete_volume(v.name, volumes_pool)
-            if not volume_delete_success:
-                error = True
-
-        if error:
-            log_error('При удалении томов возникли ошибки')
-            exit(1)
+            if error:
+                log_error('При удалении томов возникли ошибки')
+                exit(1)
     else:
         log_info("Скрипт запущен в режиме dry run. Тома не будут удалены")
 

@@ -10,6 +10,7 @@ from src.bareos import delete_all_chains_except_last, extract_chains
 def remove_expired_volumes(level: str, storage: str, pool: str, job: str, dry_run: bool):
     if level != 'Full':
         log_info(f'При бэкапе с уровнем {level} тома не очищаются')
+        # dry_run = True
         return
 
     device = get_storage_device_name(storage)
@@ -57,7 +58,7 @@ def main():
         log_error("Pool (-p) - пустая строка")
         exit(1)
 
-    remove_expired_volumes(level, storage, job, pool, dry_run)
+    remove_expired_volumes(level=level, storage=storage, pool=pool, job=job, dry_run=dry_run)
 
 
 if __name__ == "__main__":
