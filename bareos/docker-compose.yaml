@@ -7,7 +7,10 @@ services:
     environment:
       - TZ=Asia/Yekaterinburg
       ###
+      # Нужно только при первом запуске
       - DB_INIT=true
+      # Нужно только при обновлении bareos
+      # - DB_UPDATE=true
       ###
       - BAREOS__DB_HOST=${POSTGRES_HOST}
       - BAREOS__DB_PORT=${POSTGRES_PORT}
@@ -32,10 +35,9 @@ services:
       - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
       ###
     volumes:
-      - ./bareos_tmp/backups:/backups
-      - ./services/bareos/config/etc_bareos/dir:/etc_bareos:ro
-      # - ./services/bareos/config/scripts/remove_expired_volumes.py:/usr/local/bin/remove_expired_volumes.py
-      - ./services/bareos/config/scripts:/usr/local/bin/
+      - ${PWD}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
+      - ${PWD}/services/bareos/data/backups:/backups
+      - ${PWD}/services/bareos/config/scripts:/usr/local/bin/
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -45,25 +47,26 @@ services:
     image: bar-sd
     ports:
       - 9103:9103
-    volumes:
-      - ./bareos_tmp/backups:/backups
-      - ./services/bareos/config/etc_bareos/sd:/etc_bareos:ro
     environment:
       - TZ=Asia/Yekaterinburg
+      ###
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+    volumes:
+      - ${PWD}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
+      - ${PWD}/services/bareos/data/backups:/backups
 
   bareos-fd:
     container_name: bareos-fd
     image: bar-fd
-    volumes:
-      - ./bareos_tmp/test_data:/test_data
-      - ./services/bareos/config/etc_bareos/fd:/etc_bareos:ro
     environment:
       - TZ=Asia/Yekaterinburg
       ###
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
       - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+    volumes:
+      - ${PWD}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
+      - ${PWD}/services/bareos/data/docker-fd-data:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
@@ -75,8 +78,8 @@ services:
       ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
-      - ./services/bareos/config/etc_nginx/default:/etc/nginx/sites-enabled/default
-      - ./services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+      - ${PWD}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+      - ${PWD}/services/bareos/config/etc_nginx/default:/etc/nginx/sites-enabled/default
 
   postgres-db:
     container_name: postgres-db

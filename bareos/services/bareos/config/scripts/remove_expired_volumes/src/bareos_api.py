@@ -94,7 +94,8 @@ def get_volumes_folder(storage, device) -> Path:
     result = re.search(rf'Device \"{device}\" \((.*)\)', stdout)
     if result is None:
         raise ValueError(
-            f'Error: Не удалось найти Archive Device в выводе команды "{storage_status_command}"'
+            f'Error: Не удалось найти Archive Device в выводе команды "{storage_status_command}"\n'
+            f'Возможно нет связи с Storage Daemon'
         )
     return Path(result.group(1))
 
