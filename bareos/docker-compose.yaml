@@ -3,7 +3,7 @@ services:
 
   bareos-dir:
     container_name: bareos-dir
-    image: bar-dir
+    image: bareos-dir
     environment:
       - TZ=Asia/Yekaterinburg
       ###
@@ -44,7 +44,7 @@ services:
 
   bareos-sd:
     container_name: bareos-sd
-    image: bar-sd
+    image: bareos-sd
     ports:
       - 9103:9103
     environment:
@@ -58,7 +58,7 @@ services:
 
   bareos-fd:
     container_name: bareos-fd
-    image: bar-fd
+    image: bareos-fd
     environment:
       - TZ=Asia/Yekaterinburg
       ###
@@ -70,7 +70,7 @@ services:
 
   bareos-webui:
     container_name: bareos-webui
-    image: bar-web
+    image: bareos-web
     ports:
       - 9100:9100
     environment:

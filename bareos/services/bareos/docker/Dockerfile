@@ -40,7 +40,7 @@ CMD ["/usr/sbin/bareos-dir", "-f"]
 
 FROM bareos-base as bareos-webui
 
-RUN apg-get update && apt-get install -y bareos-webui \
+RUN apt-get update && apt-get install -y bareos-webui \
                                          nginx
 
 EXPOSE 9100

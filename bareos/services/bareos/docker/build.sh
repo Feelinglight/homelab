@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# docker build --no-cache -t bar-dir --target bareos-dir .
-docker build -t bar-dir --target bareos-dir .
-docker build -t bar-web --target bareos-webui .
-docker build -t bar-sd --target bareos-sd .
-docker build -t bar-fd --target bareos-fd .
+# NOCACHE="--no-cache"
+NOCACHE=
+
+docker build ${NOCACHE} -t bareos-dir --target bareos-dir .
+docker build ${NOCACHE} -t bareos-web --target bareos-webui .
+docker build ${NOCACHE} -t bareos-sd --target bareos-sd .
+docker build ${NOCACHE} -t bareos-fd --target bareos-fd .
 
 docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 
