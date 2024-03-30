@@ -79,7 +79,6 @@ services:
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
       - ${PWD}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
-      - ${PWD}/services/bareos/config/etc_nginx/default:/etc/nginx/sites-enabled/default
 
   postgres-db:
     container_name: postgres-db

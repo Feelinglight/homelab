@@ -12,8 +12,8 @@ RUN apt-get update && \
 
 RUN curl -Ls $ADD_BAREOS_REPO_URL -o $ADD_BAREOS_REPO_PATH && \
   chmod +x $ADD_BAREOS_REPO_PATH && \
-  bash $ADD_BAREOS_REPO_PATH && \
-  apt-get update
+  bash $ADD_BAREOS_REPO_PATH
+  
 
 COPY make_bareos_config.sh /scripts/make_bareos_config.sh
 
@@ -22,9 +22,9 @@ COPY make_bareos_config.sh /scripts/make_bareos_config.sh
 
 FROM bareos-base as bareos-dir
 
-RUN apt-get install -y bareos-database-postgresql \
-                       bareos-director \
-                       bareos-bconsole
+RUN apt-get update && apt-get install -y bareos-database-postgresql \
+                                         bareos-director \
+                                         bareos-bconsole
 
 EXPOSE 9101
 
@@ -40,11 +40,12 @@ CMD ["/usr/sbin/bareos-dir", "-f"]
 
 FROM bareos-base as bareos-webui
 
-RUN apt-get install -y bareos-webui \
-                       nginx
+RUN apg-get update && apt-get install -y bareos-webui \
+                                         nginx
 
-EXPOSE 80
+EXPOSE 9100
 
+COPY etc_nginx/default /etc/nginx/sites-enabled/default
 COPY webui-entrypoint.sh /scripts/webui-entrypoint.sh
 RUN chmod u+x /scripts/webui-entrypoint.sh
 
@@ -57,7 +58,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 FROM bareos-base as bareos-sd
 
-RUN apt-get install -y bareos-storage
+RUN apt-get update && apt-get install -y bareos-storage
 
 EXPOSE 9103
 
@@ -73,7 +74,7 @@ CMD ["/usr/sbin/bareos-sd", "-f"]
 
 FROM bareos-base as bareos-fd
 
-RUN apt-get install -y bareos-filedaemon
+RUN apt-get update && apt-get install -y bareos-filedaemon
 
 EXPOSE 9102
 
