@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
 from pathlib import Path
-import os
 
 from src.utils import log_info, log_warning, log_error
 from src.bareos_api import delete_jobs, delete_volume
@@ -19,6 +18,7 @@ class Job:
     unique_id: str
     sched_time: str
     level: str
+    # Заменить на succeded, потому что failed сейчас это не правильно
     failed: bool
     volumes: list[Volume]
 
@@ -56,43 +56,36 @@ def _find_job_chains(jobs: list[Job]) -> list[list[Job]]:
     return chains
 
 
-def extract_chains(jobs_json: list[dict[str, str]], jobmedia_json: list[dict[str, str]]) -> \
+def extract_chains(jobs_json: list[dict[str, str]], jobmedias_json: list[dict[str, str]]) -> \
         list[list[Job]]:
-    jobs: dict[int, dict[str, str]] = {}
-    for j in jobs_json:
-        jobs[int(j['jobid'])] = j
+    jobs: list[Job] = []
+    for job_json in jobs_json:
+        jobid = job_json['jobid']
+        # Найти все jobmedia для jobid
+        jobmedias: list[dict[str, str]] = []
+        for jm in jobmedias_json:
+            if jm['jobid'] == jobid:
+                jobmedias.append(jm)
 
-    volumes_jobs: dict[int, list[int]] = {}
-    jobs_with_vols: dict[int, Job] = {}
-    for jm in jobmedia_json:
-        jm_jobid: int = int(jm['jobid'])
-        jm_job: dict[str, str] = jobs[jm_jobid]
+        # Создать Job, Volumes
+        job_volumes: list[Volume] = []
+        for jm in jobmedias:
+            job_volumes.append(Volume(mediaid=int(jm['mediaid']), name=jm['volumename']))
+        job_volumes.sort(key=lambda v: v.mediaid)
 
-        jm_mediaid = int(jm['mediaid'])
-        jm_volumename = jm['volumename']
+        # https://docs.bareos.org/Appendix/CatalogTables.html#index-3
+        job_failed = False if job_json['jobstatus'] in ('T', 'e') else True
+        jobs.append(
+            Job(jobid=int(jobid), unique_id=job_json['job'], level=job_json['level'],
+                sched_time=job_json['schedtime'], failed=job_failed, volumes=job_volumes)
+        )
+    jobs.sort(key=lambda j: j.jobid)
 
-        if jm_mediaid not in volumes_jobs:
-            volumes_jobs[jm_mediaid] = []
-        volumes_jobs[jm_mediaid].append(jm_jobid)
+    # TODO: Добавить проверку, что в одном томе записана только одна job
+    # raise ValueError(f'Error: В томе "{jm_volumename}" mediaid = "{jm_mediaid}" '
+                     # f'записано несколько job (jobids = {volumes_jobs[jm_mediaid]})')
 
-        if len(volumes_jobs[jm_mediaid]) > 1:
-            raise ValueError(f'Error: В томе "{jm_volumename}" mediaid = "{jm_mediaid}" '
-                             f'записано несколько job (jobids = {volumes_jobs[jm_mediaid]})')
-
-        if jm_jobid not in jobs_with_vols:
-            job_failed = True if jm_job['jobstatus'] == 'f' else False
-            jobs_with_vols[jm_jobid] = Job(
-                jobid=jm_jobid, unique_id=jm_job['job'], level=jm_job['level'],
-                sched_time=jm_job['schedtime'], failed=job_failed, volumes=[]
-            )
-        jobs_with_vols[jm_jobid].volumes.append(Volume(mediaid=jm_mediaid, name=jm_volumename))
-
-    jobs_list = list(jobs_with_vols.values())
-    for job in jobs_list:
-        job.volumes.sort(key=lambda v: v.mediaid)
-    jobs_list.sort(key=lambda j: j.jobid)
-
-    chains = _find_job_chains(jobs_list)
+    chains = _find_job_chains(jobs)
     for idx, jobs_chain in enumerate(chains, start=1):
         job_status = 'failed' if jobs_chain[0].failed else 'successed'
         log_info(f"Цепочка №{idx} ({job_status}):")
@@ -118,7 +111,7 @@ def _separate_chains_to_remove(job_chains: list[list[Job]]) -> \
 
         if not chain[0].failed:
             success_chain_idx = len(job_chains) - idx - 1
-            log_info(f'Последняя успешная цепочка - {success_chain_idx + 1}')
+            log_info(f'Последняя успешная цепочка - №{success_chain_idx + 1}')
             break
 
     return job_chains[success_chain_idx:], job_chains[:success_chain_idx]
@@ -173,7 +166,7 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
              f"{[[(j.jobid, j.level) for j in chain] for chain in chains_to_remove]}")
 
     if len(job_chains) != 0:
-        assert len(chains_to_leave) == 1, f'{len(chains_to_leave)} != 1'
+        assert len(chains_to_leave) > 0, f'{len(chains_to_leave)} == 0'
         assert chains_to_leave[0][0].level == 'F', str(chains_to_leave[0][0])
         assert not chains_to_leave[0][0].failed, str(chains_to_leave[0][0])
         assert len(chains_to_leave) + len(chains_to_remove) == len(job_chains), \
@@ -199,7 +192,6 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
 
         for path in files_to_delete:
             try:
-                log_info(f'Удаление файла {path}')
                 path.unlink()
             except FileNotFoundError as err:
                 log_error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
