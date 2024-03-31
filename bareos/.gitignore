@@ -1,7 +1,0 @@
-bareos_tmp/
-
-services/bareos/data/docker-fd-data/*
-!services/bareos/data/docker-fd-data/test-file
-
-services/bareos/data/backups
-

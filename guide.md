@@ -3,6 +3,14 @@
 - На роутере присвоить адрес dns серверу pihole
 - Настроить роутер безопаснее (пароли wifi и админки)
 
+# Сервер
+
+Настроить статический ip и DNS (он не должен входить в пул динамических адресов dhcp сервера)
+
+Отключить suspend:
+
+- Работает: https://askubuntu.com/questions/15520/how-can-i-tell-ubuntu-to-do-nothing-when-i-close-my-laptop-lid
+- Не пробовал: https://askubuntu.com/questions/473037/how-to-permanently-disable-sleep-suspend
 
 # pihole
 

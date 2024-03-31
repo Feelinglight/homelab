@@ -1,94 +1,98 @@
 version: '3'
 services:
+
   bareos-dir:
     container_name: bareos-dir
-    image: barcus/bareos-director:latest #latest director-pgsql based on ubuntu
-    # volumes:
-      # - <BAREOS_CONF_PATH>:/etc/bareos
-      # - <BAREOS_DATA_PATH>:/var/lib/bareos #required for MyCatalog backup
+    image: bareos-dir
     environment:
+      - TZ=Asia/Yekaterinburg
+      ###
+      # Нужно только при первом запуске
       - DB_INIT=true
-      - DB_UPDATE=false
-      - DB_HOST=bareos-db
-      - DB_PORT=5432
-      - DB_NAME=bareos
-      - DB_USER=bareos
-      - DB_PASSWORD=${DB_PASSWORD} # defined in .env file
-      - DB_ADMIN_USER=${DB_ADMIN_USER} # defined in .env file
-      - DB_ADMIN_PASSWORD=${DB_ADMIN_PASSWORD} # defined in .env file
-      - BAREOS_FD_HOST=bareos-fd
-      - BAREOS_FD_PASSWORD=${BAREOS_FD_PASSWORD} # defined in .env file
-      - BAREOS_SD_HOST=bareos-sd
-      - BAREOS_SD_PASSWORD=${BAREOS_SD_PASSWORD} # defined in .env file
-      - BAREOS_WEBUI_PASSWORD=${BAREOS_WEBUI_PASSWORD} # defined in .env file
-      - SMTP_HOST=smtpd
-      - SENDER_MAIL=your-sender@mail.address #optional
-      - ADMIN_MAIL=your@mail.address # Change me!
-      # Optional you can get backup notification via Slack or Telegram
-      # - WEBHOOK_NOTIFICATION=true # true or false if set to true email notification gets disabled
-      # - WEBHOOK_TYPE=slack # choose slack or telegram
-      # - WEBHOOK_URL= # set the slack or telegram URL
-      # - WEBHOOK_CHAT_ID= # for telegram only set the <chat_id>
+      # Нужно только при обновлении bareos
+      # - DB_UPDATE=true
+      ###
+      - BAREOS__DB_HOST=${POSTGRES_HOST}
+      - BAREOS__DB_PORT=${POSTGRES_PORT}
+      - BAREOS__DB_NAME=bareos
+      - BAREOS__DB_USER=bareos
+      - BAREOS__DB_PASSWORD=${BAREOS__DB_PASSWORD}
+      ###
+      - POSTGRES_ADMIN_USER=${POSTGRES_ADMIN_USER}
+      - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+      ###
+      - BAREOS__DIRECTOR_PASSWORD=${BAREOS__DIRECTOR_PASSWORD}
+      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+      - BAREOS__WEBUI_CONSOLE_PASSWORD=${BAREOS__WEBUI_CONSOLE_PASSWORD}
+      ###
+      - BAREOS__SD_ADDRESS=bareos-sd
+      - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
+      ###
+      - BAREOS__FD_DOCKER_ADDRESS=${BAREOS__FD_DOCKER_ADDRESS}
+      - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+
+      - BAREOS__FD_DMITRY_ADDRESS=${BAREOS__FD_DMITRY_ADDRESS}
+      - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
+      ###
+    volumes:
+      - ${PWD}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
+      - ${PWD}/services/bareos/data/backups:/backups
+      - ${PWD}/services/bareos/config/scripts:/usr/local/bin/
     depends_on:
-      - bareos-db
+      postgres-db:
+        condition: service_healthy
 
   bareos-sd:
     container_name: bareos-sd
-    image: barcus/bareos-storage:latest
+    image: bareos-sd
     ports:
       - 9103:9103
-    # volumes:
-      # - <BAREOS_CONF_PATH>:/etc/bareos
-      # - <BAREOS_BKP_VOLUME_PATH>:/var/lib/bareos/storage
     environment:
-      - BAREOS_SD_PASSWORD=${BAREOS_SD_PASSWORD} # defined in .env file
+      - TZ=Asia/Yekaterinburg
+      ###
+      - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
+      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+    volumes:
+      - ${PWD}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
+      - ${PWD}/services/bareos/data/backups:/backups
 
   bareos-fd:
     container_name: bareos-fd
-    image: barcus/bareos-client:latest
-    # volumes:
-      # - <BAREOS_CONF_PATH>:/etc/bareos
-      # - <BAREOS_DATA_PATH>:/var/lib/bareos-director #required for MyCatalog backup
+    image: bareos-fd
     environment:
-      - BAREOS_FD_PASSWORD=${BAREOS_FD_PASSWORD} # defined in .env file
-      - FORCE_ROOT=false
+      - TZ=Asia/Yekaterinburg
+      ###
+      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+      - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+    volumes:
+      - ${PWD}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
+      - ${PWD}/services/bareos/data/docker-fd-data:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
-    image: barcus/bareos-webui:latest
+    image: bareos-web
     ports:
-      - 8080:80
+      - 9100:9100
     environment:
-      - BAREOS_DIR_HOST=bareos-dir
-      - SERVER_STATS=yes #optional enable apache server statistics
-    # volumes:
-      # - <BAREOS_CONF_PATH>:/etc/bareos-webui
+      - TZ=Asia/Yekaterinburg
+      ###
+      - BAREOS__DIRECTOR_HOST=bareos-dir
+    volumes:
+      - ${PWD}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
 
-  #bareos-db:
-  #  image: mysql:5.6
-  #  volumes:
-  #    - <DB_DATA_PATH>:/var/lib/mysql
-  #  environment:
-  #    - MYSQL_ROOT_PASSWORD=${DB_ADMIN_PASSWORD} # defined in .env file
-
-  bareos-db:
-    container_name: bareos-db
-    image: postgres:12
-    # volumes:
-      # - <DB_DATA_PATH>:/var/lib/postgresql/data
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:16
     environment:
-      - POSTGRES_USER=${DB_ADMIN_USER} # defined in .env file
-      - POSTGRES_PASSWORD=${DB_ADMIN_PASSWORD} # defined in .env file
-      - POSTGRES_INITDB_ARGS=--encoding=SQL_ASCII
+      - TZ=Asia/Yekaterinburg
+      ###
+      - POSTGRES_USER=${POSTGRES_ADMIN_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1s
 
-  bareos-api:
-    container_name: bareos-api
-    image: barcus/bareos-api:21
-    ports:
-    - 8000:8000
-    environment:
-    - BAREOS_DIR_HOST=bareos-dir
+  # smtpd:
+  #   container_name: smtpd
+  #   image: namshi/smtp
 
-  smtpd:
-    container_name: smtpd
-    image: namshi/smtp
