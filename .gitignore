@@ -1,0 +1,6 @@
+.env
+
+services/bareos/data/backups/
+
+services/bareos/data/docker-fd-data/*
+!services/bareos/data/docker-fd-data/test-file

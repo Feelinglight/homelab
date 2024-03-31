@@ -7,7 +7,8 @@ from src.bareos_api import get_storage_device_name, get_volumes_folder,\
 from src.bareos import delete_all_chains_except_last, extract_chains
 
 
-def remove_expired_volumes(level: str, storage: str, pool: str, job: str, dry_run: bool) -> bool:
+def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: str, pool: str,
+                           dry_run: bool) -> bool:
     """
     Удаляет все лишние цепочки бэкапов. Лишними считаются все цепочки до последней успешной цепочки.
 
@@ -18,10 +19,11 @@ def remove_expired_volumes(level: str, storage: str, pool: str, job: str, dry_ru
     значение параметра в Run Script (
     https://docs.bareos.org/Configuration/Director.html#character-substitution)
 
+    :param job: Имя Job, запущенной в данный момент (%n)
+    :param current_jobid: Id Job, запущенной в данный момент (%n)
     :param level: Уровень Job, запущенной в данный момент (%l)
     :param storage: Storage Job, запущенной в данный момент (%w)
     :param pool: Pool Job, запущенной в данный момент (%p)
-    :param job: Имя Job, запущенной в данный момент (%n)
     :param dry_run: Если True, то будут выведены только логи, с указанием ресурсов которые должны
         быть удалены. Физически ничего удалено не будет
     :return: True, если удаление завершилось успешно, False иначе
@@ -31,11 +33,10 @@ def remove_expired_volumes(level: str, storage: str, pool: str, job: str, dry_ru
         # dry_run = True
         return True
 
-
     jobs_json: list[dict[str, str]] = get_jobs_list(job)
     jobsmedia_json: list[dict[str, str]] = get_jobmedia_list(job)
 
-    job_chains = extract_chains(jobs_json, jobsmedia_json)
+    job_chains = extract_chains(current_jobid, jobs_json, jobsmedia_json)
 
     device = get_storage_device_name(storage)
     volumes_folder = get_volumes_folder(storage, device)
@@ -46,17 +47,19 @@ def remove_expired_volumes(level: str, storage: str, pool: str, job: str, dry_ru
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Example script with required arguments")
+    parser.add_argument("-j", "--job", help="Specify the job", required=True)
+    parser.add_argument("-i", "--jobid", help="Specify the jobid", required=True)
     parser.add_argument("-l", "--level", help="Specify the level", required=True)
     parser.add_argument("-s", "--storage", help="Specify the storage", required=True)
-    parser.add_argument("-j", "--job", help="Specify the job", required=True)
     parser.add_argument("-p", "--pool", help="Specify the pool", required=True)
     parser.add_argument("-d", "--dry-run", help="Dry run", action='store_true')
 
     args = parser.parse_args()
 
+    job: str = args.job
+    jobid: int = int(args.jobid)
     level: str = args.level
     storage: str = args.storage
-    job: str = args.job
     pool: str = args.pool
     dry_run: bool = args.dry_run or False
 
@@ -83,7 +86,8 @@ def main() -> None:
         log_error("Pool (-p) - пустая строка")
         exit(1)
 
-    ok = remove_expired_volumes(level=level, storage=storage, pool=pool, job=job, dry_run=dry_run)
+    ok = remove_expired_volumes(current_jobid=jobid, level=level, storage=storage, pool=pool,
+                                job=job, dry_run=dry_run)
     if not ok:
         log_error('При удалении томов возникли ошибки')
         exit(1)

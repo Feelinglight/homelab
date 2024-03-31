@@ -39,7 +39,7 @@ Job {
     FailJobOnError = Yes
     Runs On Client = No
     Command = "bash -c 'cd /usr/local/bin/remove_expired_volumes && "
-              "PYTHONPATH=PYTHONPATH:${PWD} python3 -m src -l %l -s %w -p %p -j %n'"
+              "PYTHONPATH=PYTHONPATH:${PWD} python3 -m src -j %n -i %i -l %l -s %w -p %p'"
   }
 }
 ```

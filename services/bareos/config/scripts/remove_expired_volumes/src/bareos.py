@@ -53,18 +53,18 @@ def _find_job_chains(jobs: list[Job]) -> list[list[Job]]:
         f"Полученные из bareos job-ы не отсортированы: {jobs}"
 
     chains: list[list[Job]] = []
-    if len(jobs) != 0:
-        for j in jobs:
-            if j.level == "F" or len(chains) == 0:
-                chains.append([j])
-            else:
-                chains[-1].append(j)
+    for j in jobs:
+        if j.level == "F" or len(chains) == 0:
+            chains.append([j])
+        else:
+            chains[-1].append(j)
 
     return chains
 
 
-def extract_chains(jobs_json: list[dict[str, str]], jobmedias_json: list[dict[str, str]]) -> \
-        list[list[Job]]:
+def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
+                   jobmedias_json: list[dict[str, str]]) \
+        -> list[list[Job]]:
     """
     Извлекает из списков jobs_json и jobmedias_json цепочки бэкапов, влючая тома, в которых эти
     бэкапы хранятся.
@@ -72,6 +72,7 @@ def extract_chains(jobs_json: list[dict[str, str]], jobmedias_json: list[dict[st
     Цепочкой считается полный бэкап и любое количество последующих за ним бэкапов с
     другими уровнями (не полными).
 
+    :param current_jobid: Id job-ы, запущенной в данный момент
     :param jobs_json: Список бэкапов, полученный из команды bconsole llist job=...
     :param jobmedias_json: Список jobmedia, полученный из команды bconsole llist jobmedia job=...
     :return: Список цепочек Job, отсортированный по времени
@@ -85,6 +86,9 @@ def extract_chains(jobs_json: list[dict[str, str]], jobmedias_json: list[dict[st
             'Все бэкапы должны быть полными, либо инкрементальными'
 
         jobid = job_json['jobid']
+        if int(jobid) == current_jobid:
+            continue
+
         # Найти все jobmedia для jobid
         jobmedias: list[dict[str, str]] = []
         for jm in jobmedias_json:
@@ -255,7 +259,8 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
     if len(job_chains) != 0:
         assert len(chains_to_leave) > 0, f'{len(chains_to_leave)} == 0'
         assert chains_to_leave[0][0].level == 'F', str(chains_to_leave[0][0])
-        assert not chains_to_leave[0][0].failed, str(chains_to_leave[0][0])
+        assert not chains_to_leave[0][0].failed or all(c[0].failed for c in chains_to_leave), \
+            str(chains_to_leave[0][0])
         assert len(chains_to_leave) + len(chains_to_remove) == len(job_chains), \
             f'{len(chains_to_leave)} + {len(chains_to_remove)} != {len(job_chains)}'
 
