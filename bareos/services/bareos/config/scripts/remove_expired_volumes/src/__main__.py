@@ -58,6 +58,7 @@ def main():
         log_error("Pool (-p) - пустая строка")
         exit(1)
 
+    # dry_run = True
     remove_expired_volumes(level=level, storage=storage, pool=pool, job=job, dry_run=dry_run)
 
 

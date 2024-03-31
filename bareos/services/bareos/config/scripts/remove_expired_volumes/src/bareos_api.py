@@ -101,6 +101,9 @@ def get_volumes_folder(storage, device) -> Path:
 
 
 def delete_jobs(job_ids: list[int]) -> bool:
+    if not job_ids:
+        return True
+
     job_ids_str: str = ','.join(map(str, job_ids))
     delete_result = run_bconsole_command(f'delete job jobid={job_ids_str}')
     if 'error' in delete_result:
