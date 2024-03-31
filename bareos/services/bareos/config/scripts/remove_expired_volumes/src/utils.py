@@ -1,5 +1,4 @@
 from typing import Any
-import subprocess
 
 
 def log_info(msg: Any):
