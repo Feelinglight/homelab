@@ -3,7 +3,7 @@ services:
 
   bareos-dir:
     container_name: bareos-dir
-    image: bareos-dir
+    image: feelinglight/bareos-dir:23.0.3
     restart: unless-stopped
     environment:
       - TZ=Asia/Yekaterinburg
@@ -45,7 +45,7 @@ services:
 
   bareos-sd:
     container_name: bareos-sd
-    image: bareos-sd
+    image: feelinglight/bareos-sd:23.0.3
     restart: unless-stopped
     ports:
       - 9103:9103
@@ -60,7 +60,7 @@ services:
 
   bareos-fd:
     container_name: bareos-fd
-    image: bareos-fd
+    image: feelinglight/bareos-fd:23.0.3
     restart: unless-stopped
     environment:
       - TZ=Asia/Yekaterinburg
@@ -73,7 +73,7 @@ services:
 
   bareos-webui:
     container_name: bareos-webui
-    image: bareos-web
+    image: feelinglight/bareos-webui:23.0.3
     restart: unless-stopped
     ports:
       - 9100:9100
@@ -96,8 +96,8 @@ services:
     healthcheck:
       test: pg_isready -U postgres
       interval: 1s
-    volumes:
-      - ${PWD}/services/postgres/data/:/var/lib/postgresql/data
+    # volumes:
+      # - ${PWD}/services/postgres/data/:/var/lib/postgresql/data
 
   # smtpd:
   #   container_name: smtpd
