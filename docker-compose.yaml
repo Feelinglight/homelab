@@ -36,9 +36,9 @@ services:
       - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
       ###
     volumes:
-      - ${PWD}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
-      - ${PWD}/services/bareos/data/backups:/backups
-      - ${PWD}/services/bareos/config/scripts:/usr/local/bin/
+      - ${DOCKERDIR}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
+      - ${DOCKERDIR}/services/bareos/data/backups:/backups
+      - ${DOCKERDIR}/services/bareos/config/scripts:/usr/local/bin/
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -55,21 +55,21 @@ services:
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
     volumes:
-      - ${PWD}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
-      - ${PWD}/services/bareos/data/backups:/backups
+      - ${DOCKERDIR}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
+      - ${DOCKERDIR}/services/bareos/data/backups:/backups
 
-  bareos-fd:
-    container_name: bareos-fd
-    image: bareos-fd
-    restart: unless-stopped
-    environment:
-      - TZ=Asia/Yekaterinburg
-      ###
-      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
-      - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
-    volumes:
-      - ${PWD}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
-      - ${PWD}/services/bareos/data/docker-fd-data:/docker-fd-data
+  # bareos-fd:
+  #   container_name: bareos-fd
+  #   image: bareos-fd
+  #   restart: unless-stopped
+  #   environment:
+  #     - TZ=Asia/Yekaterinburg
+  #     ###
+  #     - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+  #     - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+  #   volumes:
+  #     - ${DOCKERDIR}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
+  #     - ${DOCKERDIR}/services/bareos/data/docker-fd-data:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
@@ -82,7 +82,7 @@ services:
       ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
-      - ${PWD}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+      - ${DOCKERDIR}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
 
   postgres-db:
     container_name: postgres-db
@@ -96,8 +96,8 @@ services:
     healthcheck:
       test: pg_isready -U postgres
       interval: 1s
-    volumes:
-      - ${PWD}/services/postgres/data/:/var/lib/postgresql/data
+    # volumes:
+      # - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
 
   # smtpd:
   #   container_name: smtpd

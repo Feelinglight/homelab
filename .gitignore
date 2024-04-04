@@ -1,5 +1,7 @@
 .env
 
+services/postgres/data
+
 services/bareos/data/backups/
 
 services/bareos/data/docker-fd-data/*
