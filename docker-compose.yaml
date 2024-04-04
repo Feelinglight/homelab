@@ -9,7 +9,7 @@ services:
       - TZ=Asia/Yekaterinburg
       ###
       # Нужно только при первом запуске
-      - DB_INIT=true
+      # - DB_INIT=true
       # Нужно только при обновлении bareos
       # - DB_UPDATE=true
       ###
@@ -97,8 +97,8 @@ services:
       test: pg_isready -U postgres
       interval: 1s
       retries: 20
-    # volumes:
-      # - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
+    volumes:
+      - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
 
   # smtpd:
   #   container_name: smtpd
