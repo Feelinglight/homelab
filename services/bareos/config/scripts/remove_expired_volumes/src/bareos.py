@@ -212,6 +212,7 @@ def _remove_job_chains(job_chains: list[list[Job]], volumes_pool: str, job_files
     ok = True
     for path in job_files:
         try:
+            log_error(f'Удаление файла "{path}" ...')
             path.unlink()
         except FileNotFoundError as err:
             log_error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
