@@ -58,18 +58,18 @@ services:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
       - ${DOCKERDIR}/services/bareos/data/backups:/backups
 
-  bareos-fd:
-    container_name: bareos-fd
-    image: feelinglight/bareos-fd:23.0.3
-    restart: unless-stopped
-    environment:
-      - TZ=Asia/Yekaterinburg
-      ###
-      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
-      - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
-    volumes:
-      - ${DOCKERDIR}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
-      - ${DOCKERDIR}/services/bareos/data/docker-fd-data:/docker-fd-data
+  # bareos-fd:
+  #   container_name: bareos-fd
+  #   image: feelinglight/bareos-fd:23.0.3
+  #   restart: unless-stopped
+  #   environment:
+  #     - TZ=Asia/Yekaterinburg
+  #     ###
+  #     - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+  #     - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+  #   volumes:
+  #     - ${DOCKERDIR}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
+  #     - ${DOCKERDIR}/services/bareos/data/docker-fd-data:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
@@ -96,6 +96,7 @@ services:
     healthcheck:
       test: pg_isready -U postgres
       interval: 1s
+      retries: 20
     # volumes:
       # - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
 
