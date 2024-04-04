@@ -68,8 +68,8 @@ services:
       - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
       - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
     volumes:
-      - ${PWD}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
-      - ${PWD}/services/bareos/data/docker-fd-data:/docker-fd-data
+      - ${DOCKERDIR}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
+      - ${DOCKERDIR}/services/bareos/data/docker-fd-data:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
