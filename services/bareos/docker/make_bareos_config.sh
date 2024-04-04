@@ -25,5 +25,3 @@ find "$bareos_configs_folder" -type f | while read -r file; do
     done
 done
 
-env
-
