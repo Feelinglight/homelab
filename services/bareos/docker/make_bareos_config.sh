@@ -18,7 +18,12 @@ find "$bareos_configs_folder" -type f | while read -r file; do
     for var in $(printenv | grep "^BAREOS__"); do
         var_name=$(echo "$var" | cut -d= -f1)
         var_value=$(echo "$var" | cut -d= -f2-)
-        sed -i "s/{{$var_name}}/$var_value/g" "$file"
+
+        # echo "sed -i "s/{{$var_name}}/$var_value/g" "$file""
+        # Каракули после var_value для правильного экранирования слэшей
+        sed -i "s/{{$var_name}}/${var_value//\//\\/}/g" "$file"
     done
 done
+
+env
 
