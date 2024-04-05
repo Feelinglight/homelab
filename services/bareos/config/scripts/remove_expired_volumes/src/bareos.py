@@ -4,6 +4,7 @@ from pathlib import Path
 
 from src.logger import logger
 from src.bareos_api import delete_jobs, delete_volume
+from src import constants
 
 
 @dataclass(kw_only=True)
@@ -30,7 +31,9 @@ class Job:
         """
         job_level = "Full" if self.level == "F" else "Incremental"
         # TODO: Брать шаблон bsr файла из ресурса Job автоматически
-        return f'{self.unique_id}-{self.jobid}-0-{job_level}.bsr'
+        return constants.BSR_FILE_TEMPLATE.format(
+            unique_jobid=self.unique_id, jobid=self.jobid, job_level=job_level
+        )
 
     def __str__(self):
         volumes_str = '\n'.join([f'├─ {vol}' if (idx != len(self.volumes) - 1) else f'└─ {vol}'

@@ -5,6 +5,7 @@ from src.bareos_api import get_storage_device_name, get_volumes_folder,\
     get_jobs_list, get_jobmedia_list
 from src.bareos import delete_all_chains_except_last, extract_chains
 from src.logger import logger, set_up_logging_stdout, set_up_logging_file
+from src import constants
 
 
 def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: str, pool: str,
@@ -41,7 +42,11 @@ def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: st
     device = get_storage_device_name(storage)
     volumes_folder = get_volumes_folder(storage, device)
 
-    set_up_logging_file(volumes_folder / f'{job}-{current_jobid}-{level}.log')
+    set_up_logging_file(
+        volumes_folder / constants.LOG_FILE_TEMPLATE.format(
+            job=job, jobid=current_jobid, job_level=level
+        )
+    )
     logger.info(f'Папка с томами для job = "{job}": "{volumes_folder}"')
 
     return delete_all_chains_except_last(job_chains, volumes_folder, pool, print_only=dry_run)
