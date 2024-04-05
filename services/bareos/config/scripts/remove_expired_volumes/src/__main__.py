@@ -41,7 +41,7 @@ def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: st
     device = get_storage_device_name(storage)
     volumes_folder = get_volumes_folder(storage, device)
 
-    set_up_logging_file(volumes_folder)
+    set_up_logging_file(volumes_folder / f'{job}-{current_jobid}-{level}.log')
     logger.info(f'Папка с томами для job = "{job}": "{volumes_folder}"')
 
     return delete_all_chains_except_last(job_chains, volumes_folder, pool, print_only=dry_run)
