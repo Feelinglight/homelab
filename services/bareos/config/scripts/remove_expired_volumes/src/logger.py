@@ -1,8 +1,11 @@
 from logging import FileHandler
 from pathlib import Path
 import logging
+import sys
 
+logging.getLogger().setLevel(logging.NOTSET)
 logger = logging.getLogger('before-job')
+
 
 class BareosWebuiFormatter(logging.Formatter):
 
@@ -22,7 +25,7 @@ class BareosWebuiFormatter(logging.Formatter):
 
 
 def set_up_logging_stdout() -> None:
-    stdout_log = logging.StreamHandler()
+    stdout_log = logging.StreamHandler(sys.stdout)
     stdout_log.setLevel(logging.INFO)
     stdout_log.setFormatter(BareosWebuiFormatter('%(message)s'))
     logger.addHandler(stdout_log)
