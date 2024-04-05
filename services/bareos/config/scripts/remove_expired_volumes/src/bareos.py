@@ -155,22 +155,6 @@ def _separate_chains_to_remove(job_chains: list[list[Job]]) -> \
     return chains_to_leave, chains_to_remove
 
 
-def _get_volume_path(jobid: int, volume: Volume, volumes_folder: Path) -> Optional[Path]:
-    """
-    :param jobid: Id бэкапа, который находится в томе.
-    :param volume: Том, для которого нужно составить путь.
-    :param volumes_folder: Папка пула, к которому относится том (Archive Type девайса пула)
-    :return: Путь к файлу тома, если он существует, иначе None
-    """
-    volume_path = volumes_folder / volume.name
-    if volume_path.is_file():
-        return volume_path
-    else:
-        logger.warning(f'Файл тома "{volume_path} "'
-                       f'(jobid = {jobid}, mediaid={volume.mediaid}) не найден')
-        return None
-
-
 def _get_volume_files_of_jobs(jobs: list[Job], volumes_folder: Path, failed_only: bool) \
         -> list[Path]:
     """
@@ -184,9 +168,13 @@ def _get_volume_files_of_jobs(jobs: list[Job], volumes_folder: Path, failed_only
     files = []
     for job in jobs_:
         for vol in job.volumes:
-            volume_path = _get_volume_path(job.jobid, vol, volumes_folder)
-            if volume_path is not None:
+            volume_path = volumes_folder / vol.name
+            if volume_path.is_file():
                 files.append(volume_path)
+            elif not job.failed:
+                # Для заваленных job нормально отсутствие файлов томов
+                logger.warning(f'Файл тома "{volume_path} "'
+                               f'(jobid = {job.jobid}, mediaid={vol.mediaid}) не найден')
 
     return files
 
