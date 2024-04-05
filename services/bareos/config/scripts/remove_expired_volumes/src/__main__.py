@@ -42,6 +42,7 @@ def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: st
     device = get_storage_device_name(storage)
     volumes_folder = get_volumes_folder(storage, device)
 
+    # TODO: Сделать автоматическое удаление файлов логов
     set_up_logging_file(
         volumes_folder / constants.LOG_FILE_TEMPLATE.format(
             job=job, jobid=current_jobid, job_level=level

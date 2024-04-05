@@ -115,6 +115,8 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
     # assert ???, f'В томе "{jm_volumename}" mediaid = "{jm_mediaid}" '
     #             f'записано несколько job (jobids = {volumes_jobs[jm_mediaid]})')
 
+    # TODO: Добавить проверку, что все тома в папке томов относятся к какой-то из существующих job
+
     chains = _find_job_chains(jobs)
     for idx, jobs_chain in enumerate(chains, start=1):
         job_status = 'failed' if jobs_chain[0].failed else 'successed'
