@@ -16,7 +16,7 @@ def _run_bconsole_subproccess(command: str) -> tuple[str, str]:
     :return: Кортеж (stdout, stderr) процесса bconsole
     """
     command_print = command.replace('\n', ' \\n ')
-    logger.info(f'Запуск команды "{command_print}"')
+    logger.debug(f'Запуск команды "{command_print}"')
     process = subprocess.Popen("bconsole", stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE, shell=True)
     stdout, stderr = process.communicate(command.encode())

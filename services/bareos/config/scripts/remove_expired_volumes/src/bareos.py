@@ -117,8 +117,9 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
         job_status = 'failed' if jobs_chain[0].failed else 'successed'
         logger.info(f"Цепочка №{idx} ({job_status}):")
         for j in jobs_chain:
+            logger.info(f'Job: {j.jobid} ({j.level})')
             job_vols = [v.name for v in j.volumes]
-            logger.info(f'{j.jobid} ({j.level}): {job_vols}')
+            logger.debug(f'Volumes: {job_vols}')
 
     return chains
 
@@ -166,7 +167,7 @@ def _get_volume_path(jobid: int, volume: Volume, volumes_folder: Path) -> Option
         return volume_path
     else:
         logger.warning(f'Файл тома "{volume_path} "'
-                    f'(jobid = {jobid}, mediaid={volume.mediaid}) не найден')
+                       f'(jobid = {jobid}, mediaid={volume.mediaid}) не найден')
         return None
 
 
@@ -203,7 +204,7 @@ def _get_bsr_files_of_jobs(jobs: list[Job], volumes_folder: Path) -> list[Path]:
         if bsr_path.is_file():
             files.append(bsr_path)
         elif not job.failed:
-            logger.error(f'Bsr файл "{bsr_path}" (jobid = {job.jobid}) не найден')
+            logger.debug(f'Bsr файл "{bsr_path}" (jobid = {job.jobid}) не найден')
 
     return files
 
@@ -212,7 +213,7 @@ def _remove_job_chains(job_chains: list[list[Job]], volumes_pool: str, job_files
     ok = True
     for path in job_files:
         try:
-            logger.error(f'Удаление файла "{path}" ...')
+            logger.debug(f'Удаление файла "{path}" ...')
             path.unlink()
         except FileNotFoundError as err:
             logger.error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
