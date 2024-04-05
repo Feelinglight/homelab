@@ -4,7 +4,7 @@ import subprocess
 import json
 import re
 
-from src.utils import log_error, log_info
+from src.logger import logger
 
 
 def _run_bconsole_subproccess(command: str) -> tuple[str, str]:
@@ -16,7 +16,7 @@ def _run_bconsole_subproccess(command: str) -> tuple[str, str]:
     :return: Кортеж (stdout, stderr) процесса bconsole
     """
     command_print = command.replace('\n', ' \\n ')
-    log_info(f'Запуск команды "{command_print}"')
+    logger.info(f'Запуск команды "{command_print}"')
     process = subprocess.Popen("bconsole", stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE, shell=True)
     stdout, stderr = process.communicate(command.encode())
@@ -76,7 +76,7 @@ def run_bconsole_command(command: str) -> dict[str, Any]:
 
         return command_output
     except Exception as err:
-        log_error(f"Не удалось выполнить команду {command} ({err})")
+        logger.error(f"Не удалось выполнить команду {command} ({err})")
         raise
 
 
@@ -188,8 +188,8 @@ def delete_jobs(job_ids: list[int]) -> bool:
     job_ids_str: str = ','.join(map(str, job_ids))
     delete_result = run_bconsole_command(f'delete job jobid={job_ids_str}')
     if 'error' in delete_result:
-        log_error(f'Не удалось удалить job-ы с id = "{job_ids_str}"')
-        log_error(delete_result['error'])
+        logger.error(f'Не удалось удалить job-ы с id = "{job_ids_str}"')
+        logger.error(delete_result['error'])
         return False
     else:
         return True
@@ -205,8 +205,8 @@ def delete_volume(volume_name: str, pool: str) -> bool:
     """
     delete_result = run_bconsole_command(f'delete volume={volume_name} pool={pool}')
     if 'error' in delete_result:
-        log_error(f'Не удалось удалить volume с именем = "{volume_name}" (pool = "{pool}")')
-        log_error(delete_result['error'])
+        logger.error(f'Не удалось удалить volume с именем = "{volume_name}" (pool = "{pool}")')
+        logger.error(delete_result['error'])
         return False
     else:
         return True

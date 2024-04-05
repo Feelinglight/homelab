@@ -1,7 +1,6 @@
-import logging
-from logging.handlers import FileHandler
+from logging import FileHandler
 from pathlib import Path
-from typing import Optional
+import logging
 
 logger = logging.getLogger('before-job')
 
@@ -32,6 +31,6 @@ def set_up_logging_stdout() -> None:
 def set_up_logging_file(log_path: Path):
     file_log = FileHandler(log_path)
     file_log.setLevel(logging.DEBUG)
-    file_log.setFormatter('%(levelname)s | %(asctime)s: %(message)s')
+    file_log.setFormatter(logging.Formatter('%(levelname)s | %(asctime)s: %(message)s'))
     logger.addHandler(file_log)
 

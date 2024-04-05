@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 from pathlib import Path
 
-from src.utils import log_info, log_warning, log_error
+from src.logger import logger
 from src.bareos_api import delete_jobs, delete_volume
 
 
@@ -115,10 +115,10 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
     chains = _find_job_chains(jobs)
     for idx, jobs_chain in enumerate(chains, start=1):
         job_status = 'failed' if jobs_chain[0].failed else 'successed'
-        log_info(f"Цепочка №{idx} ({job_status}):")
+        logger.info(f"Цепочка №{idx} ({job_status}):")
         for j in jobs_chain:
             job_vols = [v.name for v in j.volumes]
-            log_info(f'{j.jobid} ({j.level}): {job_vols}')
+            logger.info(f'{j.jobid} ({j.level}): {job_vols}')
 
     return chains
 
@@ -140,15 +140,15 @@ def _separate_chains_to_remove(job_chains: list[list[Job]]) -> \
 
         if not chain[0].failed:
             success_chain_idx = len(job_chains) - idx - 1
-            log_info(f'Последняя успешная цепочка - №{success_chain_idx + 1}')
+            logger.info(f'Последняя успешная цепочка - №{success_chain_idx + 1}')
             break
 
     chains_to_leave = job_chains[success_chain_idx:]
     chains_to_remove = job_chains[:success_chain_idx]
 
-    log_info(f"Цепочки, которые будут оставлены:\n"
+    logger.info(f"Цепочки, которые будут оставлены:\n"
              f"{[[(j.jobid, j.level) for j in chain] for chain in chains_to_leave]}")
-    log_info(f"Цепочки, которые будут удалены:\n"
+    logger.info(f"Цепочки, которые будут удалены:\n"
              f"{[[(j.jobid, j.level) for j in chain] for chain in chains_to_remove]}")
 
     return chains_to_leave, chains_to_remove
@@ -165,7 +165,7 @@ def _get_volume_path(jobid: int, volume: Volume, volumes_folder: Path) -> Option
     if volume_path.is_file():
         return volume_path
     else:
-        log_warning(f'Файл тома "{volume_path} "'
+        logger.warning(f'Файл тома "{volume_path} "'
                     f'(jobid = {jobid}, mediaid={volume.mediaid}) не найден')
         return None
 
@@ -203,7 +203,7 @@ def _get_bsr_files_of_jobs(jobs: list[Job], volumes_folder: Path) -> list[Path]:
         if bsr_path.is_file():
             files.append(bsr_path)
         elif not job.failed:
-            log_error(f'Bsr файл "{bsr_path}" (jobid = {job.jobid}) не найден')
+            logger.error(f'Bsr файл "{bsr_path}" (jobid = {job.jobid}) не найден')
 
     return files
 
@@ -212,10 +212,10 @@ def _remove_job_chains(job_chains: list[list[Job]], volumes_pool: str, job_files
     ok = True
     for path in job_files:
         try:
-            log_error(f'Удаление файла "{path}" ...')
+            logger.error(f'Удаление файла "{path}" ...')
             path.unlink()
         except FileNotFoundError as err:
-            log_error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
+            logger.error(f'Не удалось удалить файл "{path}"\nОшибка: {err}')
             ok = False
 
     job_delete_success = delete_jobs(
@@ -252,7 +252,7 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
     :return: True, если удаление прошло без ошибок, иначе False
     """
     if not job_chains:
-        log_info(f"Ни одной цепочки job не найдено")
+        logger.info(f"Ни одной цепочки job не найдено")
         return True
 
     chains_to_leave, chains_to_remove = _separate_chains_to_remove(job_chains)
@@ -283,6 +283,6 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
     if not print_only:
         return _remove_job_chains(chains_to_remove, volumes_pool, files_to_delete)
     else:
-        log_info("Скрипт запущен в режиме dry run. Тома не будут удалены")
+        logger.info("Скрипт запущен в режиме dry run. Тома не будут удалены")
         return True
 
