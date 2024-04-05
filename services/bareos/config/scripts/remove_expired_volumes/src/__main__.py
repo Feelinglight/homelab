@@ -1,7 +1,7 @@
 import traceback
 import argparse
+from logger import logger, set_up_logging_stdout
 
-from src.utils import log_info, log_error
 from src.bareos_api import get_storage_device_name, get_volumes_folder,\
     get_jobs_list, get_jobmedia_list
 from src.bareos import delete_all_chains_except_last, extract_chains
@@ -29,7 +29,7 @@ def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: st
     :return: True, если удаление завершилось успешно, False иначе
     """
     if level != 'Full':
-        log_info(f'При бэкапе с уровнем {level} тома не очищаются')
+        logger.info(f'При бэкапе с уровнем {level} тома не очищаются')
         # dry_run = True
         return True
 
@@ -40,7 +40,7 @@ def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: st
 
     device = get_storage_device_name(storage)
     volumes_folder = get_volumes_folder(storage, device)
-    log_info(f'Папка с томами для job = "{job}": "{volumes_folder}"')
+    logger.info(f'Папка с томами для job = "{job}": "{volumes_folder}"')
 
     return delete_all_chains_except_last(job_chains, volumes_folder, pool, print_only=dry_run)
 
@@ -63,48 +63,49 @@ def main() -> None:
     pool: str = args.pool
     dry_run: bool = args.dry_run or False
 
-    log_info(f'Job: "{job}"; Level: "{level}"; Storage: "{storage}"')
+    set_up_logging_stdout()
+    loger.info(f'Job: "{job}"; Level: "{level}"; Storage: "{storage}"')
 
     if level == "":
-        log_error("Level (-l) - пустая строка")
+        logger.error("Level (-l) - пустая строка")
         exit(1)
 
     if level not in ("Full", "Incremental"):
-        log_error(f"Скрипт рассчитан только на полные и инкрементальные бэкапы."
+        logger.error(f"Скрипт рассчитан только на полные и инкрементальные бэкапы."
                   f"(текущий - {level})")
         exit(1)
 
     if storage == "":
-        log_error("Storage (-s) - пустая строка")
+        logger.error("Storage (-s) - пустая строка")
         exit(1)
 
     if job == "":
-        log_error("Job (-j) - пустая строка")
+        logger.error("Job (-j) - пустая строка")
         exit(1)
 
     if job == "":
-        log_error("Pool (-p) - пустая строка")
+        logger.error("Pool (-p) - пустая строка")
         exit(1)
 
     ok = remove_expired_volumes(current_jobid=jobid, level=level, storage=storage, pool=pool,
                                 job=job, dry_run=dry_run)
     if not ok:
-        log_error('При удалении томов возникли ошибки')
+        logger.error('При удалении томов возникли ошибки')
         exit(1)
 
 
 if __name__ == "__main__":
-    log_info(f'Удаление лишних цепочек---------------------------------------')
+    logger.info(f'Удаление лишних цепочек---------------------------------------')
 
     error = False
     try:
         main()
     except Exception as err:
         for line in traceback.format_exc().split('\n'):
-            log_error(line)
+            logger.error(line)
         error = True
 
-    log_info(f'Удаление лишних цепочек завершено-----------------------------')
+    logger.info(f'Удаление лишних цепочек завершено-----------------------------')
 
     if error:
         exit(1)
