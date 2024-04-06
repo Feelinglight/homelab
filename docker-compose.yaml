@@ -71,7 +71,7 @@ services:
       - TZ=Asia/Yekaterinburg
       ###
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
-      - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
+      - BAREOS__SD_MONITOR_PASSWORD=${BAREOS__SD_MONITOR_PASSWORD}
     volumes:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
       - ${DOCKERDIR}/services/bareos/data/backups:/backups
