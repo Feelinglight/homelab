@@ -47,6 +47,8 @@ services:
       - BAREOS__SMTP_PASSWORD=${BAREOS__SMTP_PASSWORD}
       - BAREOS__SMTP_FROM=${BAREOS__SMTP_FROM}
       - BAREOS__SMTP_TO=${BAREOS__SMTP_TO}
+    ports:
+      - 9101:9101
     volumes:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
       - ${DOCKERDIR}/services/bareos/data/backups:/backups
