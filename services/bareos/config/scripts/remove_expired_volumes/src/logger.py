@@ -32,6 +32,7 @@ def set_up_logging_stdout() -> None:
 
 
 def set_up_logging_file(log_path: Path):
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     file_log = FileHandler(log_path)
     file_log.setLevel(logging.DEBUG)
     file_log.setFormatter(logging.Formatter('%(levelname)s | %(asctime)s: %(message)s'))
