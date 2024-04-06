@@ -9,6 +9,9 @@ services:
     environment:
       - TZ=Asia/Yekaterinburg
       ###
+      # !! После изменений этих переменных не забыть закомментировать и
+      # сделать повторный docker-compose up -d
+
       # Нужно только при первом запуске
       # - DB_INIT=true
       # Нужно только при обновлении bareos
