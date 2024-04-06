@@ -71,7 +71,6 @@ def main() -> None:
     pool: str = args.pool
     dry_run: bool = args.dry_run or False
 
-    set_up_logging_stdout()
     logger.info(f'Job: "{job}"; Level: "{level}"; Storage: "{storage}"')
 
     if level == "":
@@ -103,6 +102,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    set_up_logging_stdout()
     logger.info(f'Удаление лишних цепочек---------------------------------------')
 
     error = False

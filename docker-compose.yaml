@@ -5,6 +5,7 @@ services:
     container_name: bareos-dir
     image: feelinglight/bareos-dir:23.0.3
     restart: unless-stopped
+    # command: sleep 10000000
     environment:
       - TZ=Asia/Yekaterinburg
       ###
@@ -18,6 +19,8 @@ services:
       - BAREOS__DB_NAME=bareos
       - BAREOS__DB_USER=bareos
       - BAREOS__DB_PASSWORD=${BAREOS__DB_PASSWORD}
+
+      - BAREOS__OUTER_ADDRESS=${BAREOS__OUTER_ADDRESS}
       ###
       - POSTGRES_ADMIN_USER=${POSTGRES_ADMIN_USER}
       - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
@@ -35,10 +38,20 @@ services:
       - BAREOS__FD_DMITRY_ADDRESS=${BAREOS__FD_DMITRY_ADDRESS}
       - BAREOS__FD_DMITRY_PASSWORD=${BAREOS__FD_DMITRY_PASSWORD}
       ###
+      - BAREOS__SMTP_ADDRESS=${BAREOS__SMTP_ADDRESS}
+      - BAREOS__SMTP_PORT=${BAREOS__SMTP_PORT}
+      - BAREOS__SMTP_LOGIN=${BAREOS__SMTP_LOGIN}
+      - BAREOS__SMTP_PASSWORD=${BAREOS__SMTP_PASSWORD}
+      - BAREOS__SMTP_FROM=${BAREOS__SMTP_FROM}
+      - BAREOS__SMTP_TO=${BAREOS__SMTP_TO}
     volumes:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
       - ${DOCKERDIR}/services/bareos/data/backups:/backups
       - ${DOCKERDIR}/services/bareos/config/scripts:/usr/local/bin/
+
+      # Для отладки
+      # - ${DOCKERDIR}/services/bareos/docker/make_bareos_config.sh:/scripts/make_bareos_config.sh
+      # - ${DOCKERDIR}/services/bareos/docker/director-entrypoint.sh:/scripts/director-entrypoint.sh
     depends_on:
       postgres-db:
         condition: service_healthy
