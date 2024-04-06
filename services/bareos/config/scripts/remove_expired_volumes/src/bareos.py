@@ -261,13 +261,17 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
 
     files_to_delete: list[Path] = []
 
+    logger.debug(f'Сбор файлов цепочек, которые будут оставлены')
     # Файлы собираются заранее, чтобы видеть логи даже в print_only = True
     for chain in chains_to_leave:
+        logger.debug(chain)
         # Удаляем только файлы, если удалить том в bareos, то он автоматически удалит job
         files_of_failed_jobs = _get_volume_files_of_jobs(chain, volumes_folder, failed_only=True)
         files_to_delete.extend(files_of_failed_jobs)
 
+    logger.debug(f'Сбор файлов цепочек, которые будут удалены')
     for chain in chains_to_remove:
+        logger.debug(chain)
         bsr_files = _get_bsr_files_of_jobs(chain, volumes_folder)
         files_to_delete.extend(bsr_files)
 
