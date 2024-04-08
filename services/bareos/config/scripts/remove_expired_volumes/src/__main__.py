@@ -49,6 +49,10 @@ def remove_expired_volumes(job: str, current_jobid: int, level: str, storage: st
         )
     )
     logger.info(f'Папка с томами для job = "{job}": "{volumes_folder}"')
+    logger.debug(f'Список job из bconsole:\n'
+                 f'{jobs_json}\n\n\n')
+    logger.debug(f'Список jobmedia из bconsole:\n'
+                 f'{jobsmedia_json}\n\n\n')
 
     return delete_all_chains_except_last(job_chains, volumes_folder, pool, print_only=dry_run)
 
