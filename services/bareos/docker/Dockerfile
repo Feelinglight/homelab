@@ -13,7 +13,7 @@ RUN apt-get update && \
 RUN curl -Ls $ADD_BAREOS_REPO_URL -o $ADD_BAREOS_REPO_PATH && \
   chmod +x $ADD_BAREOS_REPO_PATH && \
   bash $ADD_BAREOS_REPO_PATH
-  
+
 
 COPY make_bareos_config.sh /scripts/make_bareos_config.sh
 
