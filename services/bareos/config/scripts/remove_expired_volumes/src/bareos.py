@@ -19,8 +19,8 @@ class Job:
     sched_time: str
     level: str
     """ Должно быть "F" (Full) или "I" (Incremental)"""
-    # Заменить на succeded, потому что failed сейчас это не правильно
-    failed: bool
+    is_ok: bool
+    status: str
     volumes: list[Volume]
 
     def bsr_name(self) -> str:
@@ -102,10 +102,10 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
             job_volumes.add(Volume(mediaid=int(jm['mediaid']), name=jm['volumename']))
 
         # https://docs.bareos.org/Appendix/CatalogTables.html#index-3
-        job_failed = False if job_json['jobstatus'] in ('T', 'e') else True
+        job_ok = True if job_json['jobstatus'] in ('T', 'e', 'W') else False
         jobs.append(
             Job(jobid=int(jobid), unique_id=job_json['job'], level=job_json['level'],
-                sched_time=job_json['schedtime'], failed=job_failed,
+                sched_time=job_json['schedtime'], is_ok=job_ok, status=job_json['jobstatus'],
                 volumes=sorted(list(job_volumes), key=lambda v: v.mediaid))
         )
     jobs.sort(key=lambda j: j.jobid)
@@ -118,8 +118,8 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
 
     chains = _find_job_chains(jobs)
     for idx, jobs_chain in enumerate(chains, start=1):
-        job_status = 'failed' if jobs_chain[0].failed else 'successed'
-        logger.info(f"Цепочка №{idx} ({job_status}):")
+        job_status = 'successed' if jobs_chain[0].is_ok else 'failed'
+        logger.info(f'Цепочка №{idx} ({job_status}, status: {jobs_chain[0].status}):')
         for j in jobs_chain:
             logger.info(f'Job: {j.jobid} ({j.level})')
             job_vols = [v.name for v in j.volumes]
@@ -143,7 +143,7 @@ def _separate_chains_to_remove(job_chains: list[list[Job]]) -> \
     for idx, chain in enumerate(reversed(job_chains)):
         assert len(chain) != 0
 
-        if not chain[0].failed:
+        if chain[0].is_ok:
             success_chain_idx = len(job_chains) - idx - 1
             logger.info(f'Последняя успешная цепочка - №{success_chain_idx + 1}')
             break
@@ -167,7 +167,7 @@ def _get_volume_files_of_jobs(jobs: list[Job], volumes_folder: Path, failed_only
     :param failed_only: Если True, то будут возвращены только файлы проваленных бэкапов.
     :return: Список файлов томов всех бэкапов (jobs)
     """
-    jobs_ = jobs if not failed_only else [j for j in jobs if j.failed]
+    jobs_ = jobs if not failed_only else [j for j in jobs if not j.is_ok]
 
     files = []
     for job in jobs_:
@@ -175,8 +175,8 @@ def _get_volume_files_of_jobs(jobs: list[Job], volumes_folder: Path, failed_only
             volume_path = volumes_folder / vol.name
             if volume_path.is_file():
                 files.append(volume_path)
-            elif not job.failed:
-                # Для заваленных job нормально отсутствие файлов томов
+            elif job.is_ok:
+                # Для заваленных job нормально отсутствие файлов томов, логируем только для успешных
                 logger.warning(f'Файл тома "{volume_path} "'
                                f'(jobid = {job.jobid}, mediaid={vol.mediaid}) не найден')
 
@@ -195,7 +195,7 @@ def _get_bsr_files_of_jobs(jobs: list[Job], volumes_folder: Path) -> list[Path]:
         bsr_path = volumes_folder / job.bsr_name()
         if bsr_path.is_file():
             files.append(bsr_path)
-        elif not job.failed:
+        elif job.is_ok:
             logger.debug(f'Bsr файл "{bsr_path}" (jobid = {job.jobid}) не найден')
 
     return files
@@ -253,7 +253,7 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
     if len(job_chains) != 0:
         assert len(chains_to_leave) > 0, f'{len(chains_to_leave)} == 0'
         assert chains_to_leave[0][0].level == 'F', str(chains_to_leave[0][0])
-        assert not chains_to_leave[0][0].failed or all(c[0].failed for c in chains_to_leave), \
+        assert chains_to_leave[0][0].is_ok or all(not c[0].is_ok for c in chains_to_leave), \
             str(chains_to_leave[0][0])
         assert len(chains_to_leave) + len(chains_to_remove) == len(job_chains), \
             f'{len(chains_to_leave)} + {len(chains_to_remove)} != {len(job_chains)}'
