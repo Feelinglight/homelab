@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import NamedTuple
 from pathlib import Path
 
 from src.logger import logger
@@ -7,8 +7,7 @@ from src.bareos_api import delete_jobs, delete_volume
 from src import constants
 
 
-@dataclass(kw_only=True)
-class Volume:
+class Volume(NamedTuple):
     mediaid: int
     name: str
 
@@ -98,16 +97,16 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
             if jm['jobid'] == jobid:
                 jobmedias.append(jm)
 
-        job_volumes: list[Volume] = []
+        job_volumes: set[Volume] = set()
         for jm in jobmedias:
-            job_volumes.append(Volume(mediaid=int(jm['mediaid']), name=jm['volumename']))
-        job_volumes.sort(key=lambda v: v.mediaid)
+            job_volumes.add(Volume(mediaid=int(jm['mediaid']), name=jm['volumename']))
 
         # https://docs.bareos.org/Appendix/CatalogTables.html#index-3
         job_failed = False if job_json['jobstatus'] in ('T', 'e') else True
         jobs.append(
             Job(jobid=int(jobid), unique_id=job_json['job'], level=job_json['level'],
-                sched_time=job_json['schedtime'], failed=job_failed, volumes=job_volumes)
+                sched_time=job_json['schedtime'], failed=job_failed,
+                volumes=sorted(list(job_volumes), key=lambda v: v.mediaid))
         )
     jobs.sort(key=lambda j: j.jobid)
 
