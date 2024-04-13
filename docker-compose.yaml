@@ -43,6 +43,9 @@ services:
 
       - BAREOS__FD_TANYA_ADDRESS=${BAREOS__FD_TANYA_ADDRESS}
       - BAREOS__FD_TANYA_PASSWORD=${BAREOS__FD_TANYA_PASSWORD}
+
+      - BAREOS__FD_TANYA_LINUX_ADDRESS=${BAREOS__FD_TANYA_LINUX_ADDRESS}
+      - BAREOS__FD_TANYA_LINUX_PASSWORD=${BAREOS__FD_TANYA_LINUX_PASSWORD}
       ###
       - BAREOS__SMTP_ADDRESS=${BAREOS__SMTP_ADDRESS}
       - BAREOS__SMTP_PORT=${BAREOS__SMTP_PORT}
@@ -56,6 +59,7 @@ services:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
       - ${DOCKERDIR}/services/bareos/data/backups:/backups
       - ${DOCKERDIR}/services/bareos/config/scripts:/usr/local/bin/
+      - ${DOCKERDIR}/services/bareos/logs:/var/log/bareos
 
       # Для отладки
       # - ${DOCKERDIR}/services/bareos/docker/make_bareos_config.sh:/scripts/make_bareos_config.sh
