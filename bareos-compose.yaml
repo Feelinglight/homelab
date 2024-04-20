@@ -5,6 +5,8 @@ services:
     container_name: bareos-dir
     image: feelinglight/bareos-dir:23.0.3
     restart: unless-stopped
+    networks:
+      - homelab
     # command: sleep 10000000
     environment:
       - TZ=Asia/Yekaterinburg
@@ -72,6 +74,8 @@ services:
     container_name: bareos-sd
     image: feelinglight/bareos-sd:23.0.3
     restart: unless-stopped
+    networks:
+      - homelab
     ports:
       - 9103:9103
     environment:
@@ -87,6 +91,8 @@ services:
   #   container_name: bareos-fd
   #   image: feelinglight/bareos-fd:23.0.3
   #   restart: unless-stopped
+  #   networks:
+  #     - homelab
   #   environment:
   #     - TZ=Asia/Yekaterinburg
   #     ###
@@ -100,6 +106,8 @@ services:
     container_name: bareos-webui
     image: feelinglight/bareos-webui:23.0.3
     restart: unless-stopped
+    networks:
+      - homelab
     ports:
       - 9100:9100
     environment:
@@ -108,24 +116,4 @@ services:
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
-
-  postgres-db:
-    container_name: postgres-db
-    image: postgres:16
-    restart: unless-stopped
-    environment:
-      - TZ=Asia/Yekaterinburg
-      ###
-      - POSTGRES_USER=${POSTGRES_ADMIN_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
-    healthcheck:
-      test: pg_isready -U postgres
-      interval: 1s
-      retries: 20
-    volumes:
-      - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
-
-  # smtpd:
-  #   container_name: smtpd
-  #   image: namshi/smtp
 

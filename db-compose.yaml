@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  postgres-db:
+    container_name: postgres-db
+    networks:
+      - homelab
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Yekaterinburg
+      ###
+      - POSTGRES_USER=${POSTGRES_ADMIN_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1s
+      retries: 20
+    volumes:
+      - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
+

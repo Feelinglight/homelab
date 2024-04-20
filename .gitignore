@@ -3,6 +3,11 @@
 services/postgres/data
 
 services/bareos/data/backups/
+services/bareos/logs/
 
 services/bareos/data/docker-fd-data/*
 !services/bareos/data/docker-fd-data/test-file
+
+# Конфигурация pihole бэкапится через pihole teleport
+services/pihole/config
+
