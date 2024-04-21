@@ -8,6 +8,9 @@ services/bareos/logs/
 services/bareos/data/docker-fd-data/*
 !services/bareos/data/docker-fd-data/test-file
 
-# Конфигурация pihole бэкапится через pihole teleport
-services/pihole/config
+# Остальная конфигурация pihole бэкапится через pihole teleport
+services/pihole/config/*
+!services/pihole/config/etc-pihole
+services/pihole/config/etc-pihole/*
+!services/pihole/config/etc-pihole/custom.list
 

@@ -14,9 +14,9 @@ services:
       - "8088:80/tcp"
     environment:
       TZ: 'Asia/Yekaterinburg'
-      # WEBPASSWORD: ${PIHOLE_WEB_PASSWORD}
-      FTLCONF_LOCAL_IPV4: 192.168.5.55
-      WEBPASSWORD: 123
+      VIRTUAL_HOST: pihole.home
+      FTLCONF_LOCAL_IPV4: $SERVER_IP
+      WEBPASSWORD: $PIHOLE_WEB_PASSWORD
     volumes:
       - ./services/pihole/config/etc-pihole:/etc/pihole
       - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
