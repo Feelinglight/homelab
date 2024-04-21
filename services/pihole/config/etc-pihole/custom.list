@@ -1,3 +1,5 @@
 192.168.5.55 bareos.home
 192.168.5.55 pihole.home
 192.168.5.55 homelab.home
+192.168.5.105 503-home
+192.168.5.104 107-home
