@@ -12,6 +12,11 @@
 - Работает: https://askubuntu.com/questions/15520/how-can-i-tell-ubuntu-to-do-nothing-when-i-close-my-laptop-lid
 - Не пробовал: https://askubuntu.com/questions/473037/how-to-permanently-disable-sleep-suspend
 
+# Сервер и все клиенты
+
+- Включить Cache=no-negative в /etc/systemd/resolved.conf, чтобы избежать глюков с локальными доменами pi-hole
+- Потом sudo systemctl restart systemd-resolved.service
+
 # pihole
 
 - Как найти сервисы, которые используют 53 порт:
