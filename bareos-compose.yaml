@@ -108,12 +108,18 @@ services:
     restart: unless-stopped
     networks:
       - homelab
-    ports:
-      - 9100:9100
+    # ports:
+      # - 9100:9100
     environment:
       - TZ=Asia/Yekaterinburg
       ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
       - ${DOCKERDIR}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.bareos.rule=Host(`bareos.home`)
+      - traefik.http.routers.bareos.entrypoints=http
+      - "traefik.http.services.bareos.loadbalancer.server.port=9100"
+
 

@@ -36,6 +36,20 @@ services:
       # The Web UI (enabled by --api.insecure=true)
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
+  homer:
+    image: b4bz/homer:v24.04.1
+    container_name: homer
+    restart: unless-stopped
+    networks:
+      - homelab
+    volumes:
+      - ./services/homer/assets:/www/assets
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homer.rule=Host(`homer.home`)
+      - traefik.http.routers.homer.entrypoints=http
+      - "traefik.http.services.homer.loadbalancer.server.port=8080"
+
   pihole:
     container_name: pihole
     image: pihole/pihole:2024.03.2
