@@ -2,6 +2,29 @@ version: "3.4"
 
 services:
 
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    hostname: traefik.home.localhost
+    restart: unless-stopped
+    command:
+      - "--providers.docker"
+      # Enables the web UI
+      - "--api.insecure=true"
+      - "--entrypoints.http.address=:80"
+      # - "--entrypoints.https.address=:443"
+      # - "--entrypoints.ssh.address=:22"
+      - "--log=true"
+      # - "--log.level=DEBUG"
+      - "--log.filePath=/var/log/traefik.log"
+    ports:
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./services/traefik/traefik.log:/var/log/traefik.log
+
   pihole:
     container_name: pihole
     image: pihole/pihole:2024.03.2
