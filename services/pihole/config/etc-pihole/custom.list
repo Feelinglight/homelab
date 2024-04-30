@@ -3,3 +3,4 @@
 192.168.5.55 homelab.home
 192.168.5.104 107-home.home
 192.168.5.105 503-home.home
+192.168.5.55 traefik.home

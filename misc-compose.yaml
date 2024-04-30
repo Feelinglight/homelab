@@ -20,17 +20,21 @@ services:
       # - "--entrypoints.ssh.address=:22"
 
       - "--log=true"
-      - "--log.level=DEBUG"
+      # - "--log.level=DEBUG"
       - "--log.filePath=/var/log/traefik.log"
       - "--accessLog.filePath=/var/log/access_traefik.log"
     ports:
       - "80:80"
       - "443:443"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./services/traefik/:/var/log/
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.home`)
+      - traefik.http.routers.traefik.entrypoints=http
+      # The Web UI (enabled by --api.insecure=true)
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
   pihole:
     container_name: pihole
