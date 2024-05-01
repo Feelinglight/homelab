@@ -15,6 +15,7 @@ class Volume(NamedTuple):
 @dataclass(kw_only=True)
 class Job:
     jobid: int
+    name: str
     unique_id: str
     sched_time: str
     level: str
@@ -34,10 +35,19 @@ class Job:
             unique_jobid=self.unique_id, jobid=self.jobid, job_level=job_level
         )
 
+    def log_name(self) -> str:
+        """
+        :return: Имя log-файла этого скрипта для этой Job
+        """
+        return constatnts.LOG_FILE_TEMPLATE.format(
+            job=self.name, jobid=self.jobid, job_level=self.level
+        )
+
     def __str__(self):
         volumes_str = '\n'.join([f'├─ {vol}' if (idx != len(self.volumes) - 1) else f'└─ {vol}'
                                  for idx, vol in enumerate(self.volumes)])
         return f'---> Job(jobid="{self.jobid}", ' \
+               f'name="{self.name}", ' \
                f'unique_id="{self.unique_id}", ' \
                f'sched_time="{self.sched_time}", ' \
                f'level="{self.level}", ' \
@@ -104,8 +114,9 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
         # https://docs.bareos.org/Appendix/CatalogTables.html#index-3
         job_ok = True if job_json['jobstatus'] in ('T', 'e', 'W') else False
         jobs.append(
-            Job(jobid=int(jobid), unique_id=job_json['job'], level=job_json['level'],
-                sched_time=job_json['schedtime'], is_ok=job_ok, status=job_json['jobstatus'],
+            Job(jobid=int(jobid), name=job_json['name'], unique_id=job_json['job'],
+                level=job_json['level'], sched_time=job_json['schedtime'], is_ok=job_ok,
+                status=constants.BAREOS_STATUS[job_json['jobstatus']],
                 volumes=sorted(list(job_volumes), key=lambda v: v.mediaid))
         )
     jobs.sort(key=lambda j: j.jobid)
@@ -201,6 +212,22 @@ def _get_bsr_files_of_jobs(jobs: list[Job], volumes_folder: Path) -> list[Path]:
     return files
 
 
+def _get_log_files_of_jobs(jobs: list[Job], volumes_folder: Path) -> list[Path]:
+    """
+    :param jobs: Список бэкапов, log-файлы которых нужно вернуть.
+    :param volumes_folder: Папка пула, к которому относятся тома бэкапов
+        (Archive Type девайса пула).
+    :return: Список log файлов всех бэкапов (jobs)
+    """
+    files = []
+    for job in jobs:
+        log_name = volumes_folder / job.log_name()
+        if log_name.is_file():
+            files.append(log_name)
+        elif job.is_ok:
+            logger.debug(f'Log файл "{log_name}" (jobid = {job.jobid}) не найден')
+
+
 def _remove_job_chains(job_chains: list[list[Job]], volumes_pool: str, job_files: list[Path]) -> bool:
     ok = True
     for path in job_files:
@@ -273,6 +300,9 @@ def delete_all_chains_except_last(job_chains: list[list[Job]], volumes_folder: P
         logger.debug(chain)
         bsr_files = _get_bsr_files_of_jobs(chain, volumes_folder)
         files_to_delete.extend(bsr_files)
+
+        log_files = _get_log_files_of_jobs(chain, volumes_folder)
+        files_to_delete.extend(log_files)
 
         volume_files = _get_volume_files_of_jobs(chain, volumes_folder, failed_only=False)
         files_to_delete.extend(volume_files)
