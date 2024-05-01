@@ -5,3 +5,4 @@
 192.168.5.105 503-home.home
 192.168.5.55 traefik.home
 192.168.5.55 homer.home
+192.168.5.55 gitea.home

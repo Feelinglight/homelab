@@ -108,8 +108,6 @@ services:
     restart: unless-stopped
     networks:
       - homelab
-    # ports:
-      # - 9100:9100
     environment:
       - TZ=Asia/Yekaterinburg
       ###
