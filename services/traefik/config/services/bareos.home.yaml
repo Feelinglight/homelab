@@ -10,5 +10,5 @@ http:
     bareos:
       loadBalancer:
         servers:
-          - url: http://bareos:9100
+          - url: http://bareos-webui:9100
 
