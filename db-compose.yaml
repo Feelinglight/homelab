@@ -17,5 +17,5 @@ services:
       interval: 1s
       retries: 20
     volumes:
-      - ${DOCKERDIR}/services/postgres/data/:/var/lib/postgresql/data
+      - ./services/postgres/data/:/var/lib/postgresql/data
 

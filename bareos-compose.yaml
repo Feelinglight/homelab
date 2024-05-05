@@ -58,14 +58,14 @@ services:
     ports:
       - 9101:9101
     volumes:
-      - ${DOCKERDIR}/services/bareos/config/etc_bareos/dir:/etc_bareos:ro
-      - ${DOCKERDIR}/services/bareos/data/backups:/backups
-      - ${DOCKERDIR}/services/bareos/config/scripts:/usr/local/bin/
-      - ${DOCKERDIR}/services/bareos/logs:/var/log/bareos
+      - ./services/bareos/config/etc_bareos/dir:/etc_bareos:ro
+      - ./services/bareos/data/backups:/backups
+      - ./services/bareos/config/scripts:/usr/local/bin/
+      - ./services/bareos/logs:/var/log/bareos
 
       # Для отладки
-      # - ${DOCKERDIR}/services/bareos/docker/make_bareos_config.sh:/scripts/make_bareos_config.sh
-      # - ${DOCKERDIR}/services/bareos/docker/director-entrypoint.sh:/scripts/director-entrypoint.sh
+      # - ./services/bareos/docker/make_bareos_config.sh:/scripts/make_bareos_config.sh
+      # - ./services/bareos/docker/director-entrypoint.sh:/scripts/director-entrypoint.sh
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -84,8 +84,8 @@ services:
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__SD_MONITOR_PASSWORD=${BAREOS__SD_MONITOR_PASSWORD}
     volumes:
-      - ${DOCKERDIR}/services/bareos/config/etc_bareos/sd:/etc_bareos:ro
-      - ${DOCKERDIR}/services/bareos/data/backups:/backups
+      - ./services/bareos/config/etc_bareos/sd:/etc_bareos:ro
+      - ./services/bareos/data/backups:/backups
 
   # bareos-fd:
   #   container_name: bareos-fd
@@ -99,8 +99,8 @@ services:
   #     - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
   #     - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
   #   volumes:
-  #     - ${DOCKERDIR}/services/bareos/config/etc_bareos/fd:/etc_bareos:ro
-  #     - ${DOCKERDIR}/services/bareos/data/docker-fd-data:/docker-fd-data
+  #     - ./services/bareos/config/etc_bareos/fd:/etc_bareos:ro
+  #     - ./services/bareos/data/docker-fd-data:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
@@ -115,7 +115,7 @@ services:
       ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
-      - ${DOCKERDIR}/services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+      - ./services/bareos/config/etc_bareos/webui:/etc_bareos:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.bareos.rule=Host(`bareos.home`)
