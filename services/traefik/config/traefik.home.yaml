@@ -1,0 +1,7 @@
+services:
+  traefik:
+    loadBalancer:
+      servers:
+        - url: traefik:8080
+      # passHostHeader: true
+

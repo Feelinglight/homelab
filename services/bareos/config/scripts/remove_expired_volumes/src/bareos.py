@@ -39,7 +39,7 @@ class Job:
         """
         :return: Имя log-файла этого скрипта для этой Job
         """
-        return constatnts.LOG_FILE_TEMPLATE.format(
+        return constants.LOG_FILE_TEMPLATE.format(
             job=self.name, jobid=self.jobid, job_level=self.level
         )
 
@@ -130,7 +130,7 @@ def extract_chains(current_jobid: int, jobs_json: list[dict[str, str]],
     chains = _find_job_chains(jobs)
     for idx, jobs_chain in enumerate(chains, start=1):
         job_status = 'successed' if jobs_chain[0].is_ok else 'failed'
-        logger.info(f'Цепочка №{idx} ({job_status}, status: {jobs_chain[0].status}):')
+        logger.info(f'Цепочка №{idx} ({job_status}: {jobs_chain[0].status}):')
         for j in jobs_chain:
             logger.info(f'Job: {j.jobid} ({j.level})')
             job_vols = [v.name for v in j.volumes]
@@ -226,6 +226,8 @@ def _get_log_files_of_jobs(jobs: list[Job], volumes_folder: Path) -> list[Path]:
             files.append(log_name)
         elif job.is_ok:
             logger.debug(f'Log файл "{log_name}" (jobid = {job.jobid}) не найден')
+
+    return files
 
 
 def _remove_job_chains(job_chains: list[list[Job]], volumes_pool: str, job_files: list[Path]) -> bool:

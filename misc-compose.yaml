@@ -11,29 +11,20 @@ services:
     networks:
       - homelab
     command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --api.insecure=true
-
-      - --entrypoints.http.address=:80
-      - --entrypoints.https.address=:443
-      - --entrypoints.ssh.address=:22
-
-      - --log=true
-      - "--log.level=DEBUG"
-      - --log.filePath=/var/log/traefik.log
-      - --accessLog.filePath=/var/log/access_traefik.log
+      - --providers.docker=false
+      - --providers.file.directory=/traefik_config
     ports:
       - 80:80
       - 443:443
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/run/docker.sock:/var/run/docker.sock
       - ./services/traefik/logs/:/var/log/
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.home`)
-      - traefik.http.routers.traefik.entrypoints=http
-      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - ./services/traefik/config:/traefik_config
+    # labels:
+      # - traefik.enable=true
+      # - traefik.http.routers.traefik.rule=Host(`traefik.home`)
+      # - traefik.http.routers.traefik.entrypoints=http
+      # - traefik.http.services.traefik.loadbalancer.server.port=8080
 
   homer:
     image: b4bz/homer:v24.04.1
