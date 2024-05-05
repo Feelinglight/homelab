@@ -1,0 +1,14 @@
+http:
+  routers:
+    bareos:
+      entryPoints:
+        - web
+      rule: Host(`bareos.home`)
+      service: bareos
+
+  services:
+    bareos:
+      loadBalancer:
+        servers:
+          - url: http://bareos:9100
+

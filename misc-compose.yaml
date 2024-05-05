@@ -75,8 +75,3 @@ services:
   #     # - traefik.tcp.routers.gitea-ssh.service=gitea-ssh
   #     # - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
 
-
-networks:
-  traefik-servicenet:
-    name: traefik-servicenet
-

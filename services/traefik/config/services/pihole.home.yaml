@@ -1,0 +1,14 @@
+http:
+  routers:
+    pihole:
+      entryPoints:
+        - web
+      rule: Host(`pihole.home`)
+      service: pihole
+
+  services:
+    pihole:
+      loadBalancer:
+        servers:
+          - url: http://pihole:80
+

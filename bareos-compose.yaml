@@ -106,8 +106,6 @@ services:
     container_name: bareos-webui
     image: feelinglight/bareos-webui:23.0.3
     restart: unless-stopped
-    ports:
-      - 9100:9100
     networks:
       - homelab
     environment:
@@ -116,9 +114,3 @@ services:
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
       - ./services/bareos/config/etc_bareos/webui:/etc_bareos:ro
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.bareos.rule=Host(`bareos.home`)
-      - traefik.http.routers.bareos.entrypoints=http
-      - traefik.http.services.bareos.loadbalancer.server.port=9100
-
