@@ -10,21 +10,12 @@ services:
       - TZ="Asia/Yekaterinburg"
     networks:
       - homelab
-    command:
-      - --providers.docker=false
-      - --providers.file.directory=/traefik_config
     ports:
       - 80:80
       - 443:443
     volumes:
-      # - /var/run/docker.sock:/var/run/docker.sock
-      - ./services/traefik/logs/:/var/log/
-      - ./services/traefik/config:/traefik_config
-    # labels:
-      # - traefik.enable=true
-      # - traefik.http.routers.traefik.rule=Host(`traefik.home`)
-      # - traefik.http.routers.traefik.entrypoints=http
-      # - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - ./services/traefik/config/:/etc/traefik:ro
+      - ./services/traefik/logs:/var/log/traefik
 
   homer:
     image: b4bz/homer:v24.04.1
@@ -36,11 +27,6 @@ services:
       - homelab
     volumes:
       - ./services/homer/assets:/www/assets
-    # labels:
-      # - traefik.enable=true
-      # - traefik.http.routers.homer.rule=Host(`homer.home`)
-      # - traefik.http.routers.homer.entrypoints=http
-      # - traefik.http.services.homer.loadbalancer.server.port=8080
 
   pihole:
     container_name: pihole
@@ -59,40 +45,38 @@ services:
     volumes:
       - ./services/pihole/config/etc-pihole:/etc/pihole
       - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.pihole.rule=Host(`pihole.home`)
-      - traefik.http.routers.pihole.entrypoints=http
-      - traefik.http.services.pihole.loadbalancer.server.port=80
 
-  gitea:
-    image: gitea/gitea:1.21.11
-    container_name: gitea
-    restart: unless-stopped
-    networks:
-      - homelab
-    environment:
-      - TZ="Asia/Yekaterinburg"
-      - LANG=ru_RU.UTF-8
-      - LANGUAGE=ru_RU.UTF-8
-      - LC_ALL=ru_RU.UTF-8
-    # volumes:
-      # - ./services/gitea/data:/data
-      # - /home/git/.ssh:/data/git/.ssh
-    # ports:
-      # - "2222:22"
-    # labels:
-      # - traefik.enable=true
-      # http
-      # - traefik.http.routers.gitea-http.rule=Host(`gitea.home`)
-      # - traefik.http.routers.gitea-http.entrypoints=http
-      # - traefik.http.routers.gitea-http.service=gitea-http
-      # - traefik.http.services.gitea-http.loadbalancer.server.port=3000
-      # ssh
-      # - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
-      # - traefik.tcp.routers.gitea-ssh.entrypoints=ssh
-      # - traefik.tcp.routers.gitea-ssh.service=gitea-ssh
-      # - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
+  # gitea:
+  #   image: gitea/gitea:1.21.11
+  #   container_name: gitea
+  #   restart: unless-stopped
+  #   networks:
+  #     - homelab
+  #   environment:
+  #     - TZ="Asia/Yekaterinburg"
+  #     - LANG=ru_RU.UTF-8
+  #     - LANGUAGE=ru_RU.UTF-8
+  #     - LC_ALL=ru_RU.UTF-8
+  #   # volumes:
+  #     # - ./services/gitea/data:/data
+  #     # - /home/git/.ssh:/data/git/.ssh
+  #   # ports:
+  #     # - "2222:22"
+  #   # labels:
+  #     # - traefik.enable=true
+  #     # http
+  #     # - traefik.http.routers.gitea-http.rule=Host(`gitea.home`)
+  #     # - traefik.http.routers.gitea-http.entrypoints=http
+  #     # - traefik.http.routers.gitea-http.service=gitea-http
+  #     # - traefik.http.services.gitea-http.loadbalancer.server.port=3000
+  #     # ssh
+  #     # - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
+  #     # - traefik.tcp.routers.gitea-ssh.entrypoints=ssh
+  #     # - traefik.tcp.routers.gitea-ssh.service=gitea-ssh
+  #     # - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
 
 
+networks:
+  traefik-servicenet:
+    name: traefik-servicenet
 

@@ -1,0 +1,14 @@
+http:
+  routers:
+    homer:
+      entryPoints:
+        - web
+      rule: Host(`homer.home`)
+      service: homer
+
+  services:
+    homer:
+      loadBalancer:
+        servers:
+          - url: http://homer:8080
+

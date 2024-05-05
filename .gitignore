@@ -1,18 +1,21 @@
 .env
 
+# postgres
 services/postgres/data
 
+# bareos
 services/bareos/data/backups/
 services/bareos/logs/
 
 services/bareos/data/docker-fd-data/*
 !services/bareos/data/docker-fd-data/test-file
 
+# pihole
 # Остальная конфигурация pihole бэкапится через pihole teleport
 services/pihole/config/*
 !services/pihole/config/etc-pihole
 services/pihole/config/etc-pihole/*
 !services/pihole/config/etc-pihole/custom.list
 
-services/traefik/traefik.log
-services/traefik/access_traefik.log
+# traefik
+services/traefik/logs
