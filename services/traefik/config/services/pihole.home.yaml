@@ -2,7 +2,7 @@ http:
   routers:
     pihole:
       service: pihole
-      rule: Host(`pihole.home`)
+      rule: Host(`pihole.feelinglight.homes`)
       entryPoints:
         - web
         - web-secure

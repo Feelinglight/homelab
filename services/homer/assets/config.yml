@@ -42,22 +42,23 @@ colors:
     background-image: "../assets/wallpaper.jpeg"
 
 services:
+
   - name: "💾 Storage"
     items:
       - name: "Bareos"
         logo: "assets/icons/bareos.png"
         subtitle: "Backups"
-        url: "http://bareos.home"
+        url: "https://bareos.feelinglight.homes"
 
   - name: "💻 Home Lab"
     items:
       - name: "Traefik"
         logo: "assets/icons/traefik.png"
         subtitle: "Reverse Proxy"
-        url: "http://traefik.home"
+        url: "https://traefik.feelinglight.homes"
 
       - name: "PiHole"
         logo: "assets/icons/pihole.svg"
         subtitle: "DNS Server"
-        url: "http://pihole.home"
+        url: "https://pihole.feelinglight.homes"
 
