@@ -1,10 +1,13 @@
 http:
   routers:
     homer:
+      service: homer
+      rule: Host(`homer.feelinglight.homes`)
       entryPoints:
         - web
-      rule: Host(`homer.home`)
-      service: homer
+        - web-secure
+      tls:
+        certResolver: letsencrypt_regru
 
   services:
     homer:

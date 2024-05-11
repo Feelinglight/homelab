@@ -19,3 +19,4 @@ services/pihole/config/etc-pihole/*
 
 # traefik
 services/traefik/logs
+services/traefik/data/acme

@@ -1,9 +1,12 @@
 http:
   routers:
     traefik:
+      service: api@internal
+      rule: Host(`traefik.feelinglight.homes`)
       entryPoints:
         - web
-      rule: Host(`traefik.home`)
-      service: api@internal
+        - web-secure
+      tls:
+        certResolver: letsencrypt_regru
 
 

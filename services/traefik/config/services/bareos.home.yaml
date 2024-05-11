@@ -1,10 +1,13 @@
 http:
   routers:
     bareos:
+      service: bareos
+      rule: Host(`bareos.home`)
       entryPoints:
         - web
-      rule: Host(`bareos.home`)
-      service: bareos
+        - web-secure
+      tls:
+        certResolver: letsencrypt_regru
 
   services:
     bareos:

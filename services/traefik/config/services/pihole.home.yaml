@@ -1,10 +1,13 @@
 http:
   routers:
     pihole:
+      service: pihole
+      rule: Host(`pihole.home`)
       entryPoints:
         - web
-      rule: Host(`pihole.home`)
-      service: pihole
+        - web-secure
+      tls:
+        certResolver: letsencrypt_regru
 
   services:
     pihole:

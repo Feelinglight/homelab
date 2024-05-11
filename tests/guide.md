@@ -17,6 +17,16 @@
 - Включить Cache=no-negative в /etc/systemd/resolved.conf, чтобы избежать глюков с локальными доменами pi-hole
 - Потом sudo systemctl restart systemd-resolved.service
 
+# traefik
+
+- В .env должны лежать логин и пароль от аккаунта reg.ru.
+
+- В [личном кабинете reg.ru](https://www.reg.ru/user/account/#/settings/api/) ip-адрес (или
+  диапазон ip-адресов), с которого выполняются API-запросы к reg.ru (т. е. белый адрес
+  маршрутизатора), должен быть добавлен в список разрешенных API-адресов, для автоматического
+  обновления сертификатов letsencrypt.
+
+
 # pihole
 
 - Как найти сервисы, которые используют 53 порт:
