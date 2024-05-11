@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     environment:
       - TZ="Asia/Yekaterinburg"
+      - REGRU_USERNAME=${REGRU_USERNAME}
+      - REGRU_PASSWORD=${REGRU_PASSWORD}
     networks:
       - homelab
     ports:
@@ -16,6 +18,8 @@ services:
     volumes:
       - ./services/traefik/config/:/etc/traefik:ro
       - ./services/traefik/logs:/var/log/traefik
+      - ./services/traefik/data/acme:/letsencrypt
+
 
   homer:
     image: b4bz/homer:v24.04.1
@@ -27,6 +31,7 @@ services:
       - homelab
     volumes:
       - ./services/homer/assets:/www/assets
+
 
   pihole:
     container_name: pihole
