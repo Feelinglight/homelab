@@ -34,8 +34,8 @@ services:
 
 
   pihole:
-    container_name: pihole
     image: pihole/pihole:2024.03.2
+    container_name: pihole
     restart: unless-stopped
     networks:
       - homelab
