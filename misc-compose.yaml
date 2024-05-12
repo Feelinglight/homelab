@@ -15,6 +15,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 2222:2222
     volumes:
       - ./services/traefik/config/:/etc/traefik:ro
       - ./services/traefik/logs:/var/log/traefik
@@ -57,8 +58,6 @@ services:
     restart: unless-stopped
     networks:
       - homelab
-    ports:
-      - "2222:22"
     environment:
       - TZ="Asia/Yekaterinburg"
       - LANG=ru_RU.UTF-8

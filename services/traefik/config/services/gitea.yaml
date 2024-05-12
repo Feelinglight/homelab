@@ -9,20 +9,23 @@ http:
       tls:
         certResolver: letsencrypt_regru
 
-    # gitea-ssh:
-    #   service: gitea-ssh
-    #   rule: HostSNI(`*`)
-    #   entryPoints:
-    #     - ssh
-
   services:
     gitea-web:
       loadBalancer:
         servers:
           - url: http://gitea:3000
 
-    # gitea-ssh:
-    #   loadBalancer:
-    #     server:
-    #       - port: 22
+tcp:
+  routers:
+    gitea-ssh:
+      service: gitea-ssh
+      rule: HostSNI(`*`)
+      entryPoints:
+        - ssh
+
+  services:
+    gitea-ssh:
+      loadBalancer:
+        servers:
+        - address: gitea:22
 

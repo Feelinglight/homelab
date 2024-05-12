@@ -31,7 +31,7 @@ entryPoints:
     address: :443
 
   ssh:
-    address: :22
+    address: :2222
 
 
 certificatesResolvers:
