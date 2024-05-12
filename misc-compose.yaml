@@ -44,7 +44,7 @@ services:
       - "53:53/udp"
     environment:
       - TZ='Asia/Yekaterinburg'
-      - VIRTUAL_HOST=pihole.home
+      - VIRTUAL_HOST=pihole.feelinglight.homes
       - FTLCONF_LOCAL_IPV4=${SERVER_IP}
       - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
     volumes:

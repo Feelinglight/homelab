@@ -1,8 +1,8 @@
-192.168.5.55 bareos.home
-192.168.5.55 pihole.home
-192.168.5.55 homelab.home
+192.168.5.55 bareos.feelinglight.homes
+192.168.5.55 pihole.feelinglight.homes
+192.168.5.55 homelab.feelinglight.homes
 192.168.5.104 107-home.home
 192.168.5.105 503-home.home
-192.168.5.55 traefik.home
-192.168.5.55 homer.home
-192.168.5.55 gitea.home
+192.168.5.55 traefik.feelinglight.homes
+192.168.5.55 homer.feelinglight.homes
+192.168.5.55 gitea.feelinglight.homes
