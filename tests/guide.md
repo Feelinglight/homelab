@@ -12,6 +12,58 @@
 - Работает: https://askubuntu.com/questions/15520/how-can-i-tell-ubuntu-to-do-nothing-when-i-close-my-laptop-lid
 - Не пробовал: https://askubuntu.com/questions/473037/how-to-permanently-disable-sleep-suspend
 
+---
+
+По гайдам:
+
+1. https://docs.gitea.com/next/installation/install-with-docker#sshing-shim-with-authorized_keys
+2. https://docs.gitea.com/next/installation/install-with-docker#ssh-shell-with-authorizedkeyscommand
+
+- Создать пользователя git
+
+- Сгенерировать ключ пользователю git
+
+  ```
+  sudo -u git ssh-keygen -t rsa -b 4096 -C "Gitea Host Key"
+  ```
+
+- Добавить ключ пользователя git в свой же authorized_keys
+
+  ```
+  sudo -u git cat /home/git/.ssh/id_rsa.pub | sudo -u git tee -a /home/git/.ssh/authorized_keys
+  sudo -u git chmod 600 /home/git/.ssh/authorized_keys
+  ```
+
+
+- Выполнить
+
+  ```bash
+  cat <<"EOF" | sudo tee /usr/local/bin/gitea
+  #!/bin/sh
+  ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
+  EOF
+  sudo chmod +x /usr/local/bin/gitea
+  ```
+
+  Этот скрипт будет выполняться при подключении пользователя git к хосту контейнеров по ssh.
+  Он перенаправляет команду на 2222 порт. Это нужно, чтобы не занимать 22 порт хоста.
+
+
+- В **/etc/ssh/sshd_config** дописать:
+
+  ```
+  Match User git
+    AuthorizedKeysCommandUser git
+    AuthorizedKeysCommand /usr/bin/ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 /usr/local/bin/gitea keys -c /data/gitea/conf/app.ini -e git -u %u -t %t -k %k
+  ```
+
+- Перезапустить sshd:
+
+  ```
+  sudo systemctl restart sshd
+  ```
+
+
 # Сервер и все клиенты
 
 - Включить Cache=no-negative в /etc/systemd/resolved.conf, чтобы избежать глюков с локальными доменами pi-hole

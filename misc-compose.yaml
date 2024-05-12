@@ -51,32 +51,34 @@ services:
       - ./services/pihole/config/etc-pihole:/etc/pihole
       - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
 
-  # gitea:
-  #   image: gitea/gitea:1.21.11
-  #   container_name: gitea
-  #   restart: unless-stopped
-  #   networks:
-  #     - homelab
-  #   environment:
-  #     - TZ="Asia/Yekaterinburg"
-  #     - LANG=ru_RU.UTF-8
-  #     - LANGUAGE=ru_RU.UTF-8
-  #     - LC_ALL=ru_RU.UTF-8
-  #   # volumes:
-  #     # - ./services/gitea/data:/data
-  #     # - /home/git/.ssh:/data/git/.ssh
-  #   # ports:
-  #     # - "2222:22"
-  #   # labels:
-  #     # - traefik.enable=true
-  #     # http
-  #     # - traefik.http.routers.gitea-http.rule=Host(`gitea.home`)
-  #     # - traefik.http.routers.gitea-http.entrypoints=http
-  #     # - traefik.http.routers.gitea-http.service=gitea-http
-  #     # - traefik.http.services.gitea-http.loadbalancer.server.port=3000
-  #     # ssh
-  #     # - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
-  #     # - traefik.tcp.routers.gitea-ssh.entrypoints=ssh
-  #     # - traefik.tcp.routers.gitea-ssh.service=gitea-ssh
-  #     # - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
+  gitea:
+    image: gitea/gitea:1.21.11
+    container_name: gitea
+    restart: unless-stopped
+    networks:
+      - homelab
+    ports:
+      - "2222:22"
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - LANG=ru_RU.UTF-8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+
+      # Нужно для разрешения записи в /home/git/.ssh
+      - USER_UID=${GIT_USER_UID}
+      - USER_GID=${GIT_USER_GID}
+
+      # app.ini
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__database__PATH=/data/gitea/gitea.db
+
+      - GITEA__server__DOMAIN="${GITEA_DOMAIN}"
+      - GITEA__server__ROOT_URL="https://${GITEA_DOMAIN}/"
+      - GITEA__server__HTTP_PORT=3000
+
+      - GITEA__log__ROOT_PATH="/data/gitea/log"
+    volumes:
+      - ./services/gitea/data:/data
+      - /home/git/.ssh:/data/git/.ssh
 

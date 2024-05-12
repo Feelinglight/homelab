@@ -1,0 +1,28 @@
+http:
+  routers:
+    gitea-web:
+      service: gitea-web
+      rule: Host(`gitea.feelinglight.homes`)
+      entryPoints:
+        - web
+        - web-secure
+      tls:
+        certResolver: letsencrypt_regru
+
+    # gitea-ssh:
+    #   service: gitea-ssh
+    #   rule: HostSNI(`*`)
+    #   entryPoints:
+    #     - ssh
+
+  services:
+    gitea-web:
+      loadBalancer:
+        servers:
+          - url: http://gitea:3000
+
+    # gitea-ssh:
+    #   loadBalancer:
+    #     server:
+    #       - port: 22
+

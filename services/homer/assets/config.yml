@@ -31,7 +31,7 @@ colors:
     highlight-secondary: "#181C3A"
     highlight-hover: "#1F2347"
     background: "#12152B"
-    card-background: "rgba(24, 28, 58, 0.8)"
+    card-background: "rgba(24, 28, 58, 0.5)"
     text: "#eaeaea"
     text-header: "#7C71DD"
     text-title: "#fafafa"
