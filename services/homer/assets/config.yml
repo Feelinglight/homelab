@@ -62,3 +62,8 @@ services:
         subtitle: "DNS Server"
         url: "https://pihole.feelinglight.homes"
 
+      - name: "Gitea"
+        logo: "assets/icons/gitea.svg"
+        subtitle: "Git remote server"
+        url: "https://gitea.feelinglight.homes"
+
