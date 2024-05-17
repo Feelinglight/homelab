@@ -2,10 +2,11 @@
 
 set -e
 
-echo "Backup started"
+echo "Backup postgres started"
 
-backup_path="$1"
-docker exec -t postgres pg_dumpall -U postgres > "$backup_path"
+container_name="$1"
+backup_path="$2"
+docker exec -t "$container_name" pg_dumpall -U postgres > "$backup_path"
 
-echo "Backup finished"
+echo "Backup postgres finished"
 

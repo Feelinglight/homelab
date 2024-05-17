@@ -51,6 +51,7 @@ services:
     volumes:
       - ./services/pihole/config/etc-pihole:/etc/pihole
       - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./services/pihole/backup:/backup
 
   gitea:
     image: gitea/gitea:1.21.11

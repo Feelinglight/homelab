@@ -1,5 +1,7 @@
 .env
 
+services/*/backup
+
 # postgres
 services/postgres/data
 
