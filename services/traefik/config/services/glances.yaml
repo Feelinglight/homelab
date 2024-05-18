@@ -1,0 +1,17 @@
+http:
+  routers:
+    glances:
+      service: glances
+      rule: Host(`glances.feelinglight.homes`)
+      entryPoints:
+        - web
+        - web-secure
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    glances:
+      loadBalancer:
+        servers:
+          - url: http://glances.feelinglight.homes:61208
+

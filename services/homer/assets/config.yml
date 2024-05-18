@@ -67,3 +67,8 @@ services:
         subtitle: "Git remote server"
         url: "https://gitea.feelinglight.homes"
 
+      - name: "Glances"
+        logo: "assets/icons/glances.svg"
+        subtitle: "Server monitoring"
+        url: "https://glances.feelinglight.homes"
+

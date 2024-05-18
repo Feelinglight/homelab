@@ -34,6 +34,21 @@ services:
       - ./services/homer/assets:/www/assets
 
 
+  glances:
+    image: nicolargo/glances:dev
+    container_name: glances
+    restart: unless-stopped
+    network_mode: "host"
+    pid: host
+    privileged: true
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./services/glances/glances.conf:/glances/conf/glances.conf"
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
+
+
   pihole:
     image: pihole/pihole:2024.03.2
     container_name: pihole

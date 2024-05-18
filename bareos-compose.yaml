@@ -120,7 +120,7 @@ services:
 
   smtp-relay:
     container_name: smtp-relay
-    image: juanluisbaptiste/postfix:1.7.0
+    image: juanluisbaptiste/postfix:1.7.1
     restart: unless-stopped
     networks:
       - homelab
@@ -128,6 +128,6 @@ services:
       - SMTP_SERVER=${BAREOS__SMTP_ADDRESS}
       - SMTP_USERNAME=${BAREOS__SMTP_LOGIN}
       - SMTP_PASSWORD=${BAREOS__SMTP_PASSWORD}
-      # Не знаю зачем это, но параметр обязательный
+      # Указывается в заголовке email-сообщения, в поле Received, не важно что тут будет
       - SERVER_HOSTNAME=smtp.feelinglight.homes
 
