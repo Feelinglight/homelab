@@ -117,3 +117,17 @@ services:
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
       - ./services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+
+  smtp-relay:
+    container_name: smtp-relay
+    image: juanluisbaptiste/postfix:1.7.0
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      - SMTP_SERVER=${BAREOS__SMTP_ADDRESS}
+      - SMTP_USERNAME=${BAREOS__SMTP_LOGIN}
+      - SMTP_PASSWORD=${BAREOS__SMTP_PASSWORD}
+      # Не знаю зачем это, но параметр обязательный
+      - SERVER_HOSTNAME=smtp.feelinglight.homes
+
