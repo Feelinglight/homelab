@@ -1,0 +1,36 @@
+version: "3.4"
+
+services:
+
+  homer:
+    image: b4bz/homer:v24.04.1
+    container_name: homer
+    restart: unless-stopped
+    environment:
+      - TZ="Asia/Yekaterinburg"
+    networks:
+      - homelab
+    volumes:
+      - ./services/homer/assets:/www/assets
+
+
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    restart: unless-stopped
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - REGRU_USERNAME=${REGRU_USERNAME}
+      - REGRU_PASSWORD=${REGRU_PASSWORD}
+    networks:
+      - homelab
+    ports:
+      - 80:80
+      - 443:443
+      - 2222:2222
+    volumes:
+      - ./services/traefik/config/:/etc/traefik:ro
+      - ./services/traefik/logs:/var/log/traefik
+      - ./services/traefik/data/acme:/letsencrypt
+
+
