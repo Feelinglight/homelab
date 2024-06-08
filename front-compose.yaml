@@ -34,3 +34,16 @@ services:
       - ./services/traefik/data/acme:/letsencrypt
 
 
+  # authelia:
+  #   image: authelia/authelia:4.38.8
+  #   container_name: authelia
+  #   restart: unless-stopped
+  #   user: homelab
+  #   environment:
+  #     - TZ='Asia/Yekaterinburg'
+  #   networks:
+  #     - homelab
+  #   volumes:
+  #     - ./services/authelia/config:/config
+  #     - ./services/authelia/secrets:/secrets
+

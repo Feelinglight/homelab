@@ -23,5 +23,12 @@ services/pihole/config/etc-pihole/*
 # traefik
 services/traefik/data/acme
 
+# authelia
+
+services/authelia/secrets/*
+services/authelia/config/db.sqlite3
+!services/authelia/secrets/template_*
+
+
 # gitea
 services/gitea/data

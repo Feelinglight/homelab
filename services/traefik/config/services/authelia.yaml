@@ -1,0 +1,19 @@
+http:
+  routers:
+    authelia:
+      service: authelia
+      rule: Host(`authelia.feelinglight.homes`)
+      entryPoints:
+        - web
+        - web-secure
+      middlewares:
+        - 'authelia@file'
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    authelia:
+      loadBalancer:
+        servers:
+          - url: http://authelia:9091
+
