@@ -4,7 +4,7 @@ http:
   middlewares:
     authelia:
       forwardAuth:
-        address: 'https://authelia.feelinglight.homes/api/authz/forward-auth'
+        address: 'https://authelia.{{ env "SERVICES_DOMAIN" }}/api/authz/forward-auth'
         trustForwardHeader: true
         authResponseHeaders:
           - 'Remote-User'

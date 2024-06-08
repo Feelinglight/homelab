@@ -2,7 +2,7 @@ http:
   routers:
     traefik:
       service: api@internal
-      rule: Host(`traefik.feelinglight.homes`)
+      rule: Host(`traefik.{{ env "SERVICES_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

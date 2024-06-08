@@ -2,7 +2,7 @@ http:
   routers:
     authelia:
       service: authelia
-      rule: Host(`authelia.feelinglight.homes`)
+      rule: Host(`authelia.{{ env "SERVICES_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

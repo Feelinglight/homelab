@@ -2,7 +2,7 @@ http:
   routers:
     glances:
       service: glances
-      rule: Host(`glances.feelinglight.homes`)
+      rule: Host(`glances.{{ env "SERVICES_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

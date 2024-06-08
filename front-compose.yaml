@@ -23,6 +23,7 @@ services:
       - TZ="Asia/Yekaterinburg"
       - REGRU_USERNAME=${REGRU_USERNAME}
       - REGRU_PASSWORD=${REGRU_PASSWORD}
+      - SERVICES_DOMAIN=${SERVICES_DOMAIN}
     networks:
       - homelab
     ports:

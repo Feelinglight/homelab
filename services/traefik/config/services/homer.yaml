@@ -2,7 +2,7 @@ http:
   routers:
     homer:
       service: homer
-      rule: Host(`homer.feelinglight.homes`)
+      rule: Host(`homer.{{ env "SERVICES_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

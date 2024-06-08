@@ -2,7 +2,7 @@ http:
   routers:
     bareos:
       service: bareos
-      rule: Host(`bareos.feelinglight.homes`)
+      rule: Host(`bareos.{{ env "SERVICES_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure
