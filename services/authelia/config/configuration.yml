@@ -1,6 +1,4 @@
-###############################################################
-#                   Authelia configuration                    #
-###############################################################
+---
 
 server:
   address: 'tcp://:9091'
@@ -8,12 +6,9 @@ server:
 log:
   level: 'debug'
 
-# totp:
-  # disable: true
-
 identity_validation:
   reset_password:
-    jwt_secret: 'a_very_important_secret'
+    jwt_secret: {{ mustEnv "JWT_SECRET" }}
 
 authentication_backend:
   file:
@@ -22,23 +17,22 @@ authentication_backend:
 access_control:
   default_policy: 'deny'
   rules:
-    - domain: 'public.example.com'
-      policy: 'bypass'
-    - domain: 'traefik.example.com'
+    # - domain: '{{ mustEnv "TRAEFIK_DOMAIN" }}'
+      # policy: 'one_factor'
+    - domain: '{{ mustEnv "GLANCES_DOMAIN" }}'
       policy: 'one_factor'
-    - domain: 'secure.example.com'
-      policy: 'two_factor'
+    - domain: '{{ mustEnv "BAREOS_DOMAIN" }}'
+      policy: 'bypass'
 
 session:
   # secret: 'insecure_session_secret'
 
   cookies:
     - name: 'authelia_session'
-      domain: 'example.com'
-      authelia_url: 'https://authelia.example.com'
-      expiration: '1 hour'  # 1 hour
-      inactivity: '5 minutes'  # 5 minutes
-      default_redirection_url: 'https://public.example.com'
+      domain: '{{ mustEnv "SERVICES_DOMAIN" }}'
+      authelia_url: 'https://{{ mustEnv "AUTHELIA_DOMAIN" }}'
+      expiration: '1 hour'
+      inactivity: '5 minutes'
 
 regulation:
   max_retries: 10
@@ -46,10 +40,13 @@ regulation:
   ban_time: '5 minutes'
 
 storage:
-  encryption_key: 'you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this'
+  encryption_key: {{ mustEnv "STORAGE_ENCRYPTION_KEY" }}
   local:
     path: '/config/db.sqlite3'
 
 notifier:
   filesystem:
     filename: '/config/notification.txt'
+
+...
+

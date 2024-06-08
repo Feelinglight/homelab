@@ -25,7 +25,6 @@ services/traefik/data/acme
 
 # authelia
 
-services/authelia/secrets/*
 services/authelia/config/db.sqlite3
 services/authelia/config/users_database.yml
 

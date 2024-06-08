@@ -52,6 +52,21 @@ services:
     user: ${SERVER_USER_UID_GID}
     environment:
       - TZ='Asia/Yekaterinburg'
+
+      - X_AUTHELIA_CONFIG_FILTERS=template
+      - JWT_SECRET=${JWT_SECRET}
+      - STORAGE_ENCRYPTION_KEY=${STORAGE_ENCRYPTION_KEY}
+
+      - SERVICES_DOMAIN=${SERVICES_DOMAIN}
+      - AUTHELIA_DOMAIN=${AUTHELIA_DOMAIN}
+      - TRAEFIK_DOMAIN=${TRAEFIK_DOMAIN}
+      - PIHOLE_DOMAIN=${PIHOLE_DOMAIN}
+      - HOMER_DOMAIN=${HOMER_DOMAIN}
+      - BAREOS_DOMAIN=${BAREOS_DOMAIN}
+      - GLANCES_DOMAIN=${GLANCES_DOMAIN}
+      - GITEA_DOMAIN=${GITEA_DOMAIN}
+
+
     networks:
       - homelab
     volumes:

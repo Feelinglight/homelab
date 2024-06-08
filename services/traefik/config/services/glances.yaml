@@ -8,6 +8,8 @@ http:
       entryPoints:
         # - web
         - web-secure
+      middlewares:
+        - authelia@file
       tls:
         certResolver: letsencrypt_regru
 
@@ -15,7 +17,8 @@ http:
     glances:
       loadBalancer:
         servers:
-          - url: http://glances.feelinglight.homes:61208
+          # glances работает в режиме network_mode: host
+          - url: http://{{ env "GLANCES_DOMAIN" }}:61208
 
 ...
 
