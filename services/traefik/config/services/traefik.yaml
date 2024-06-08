@@ -2,7 +2,7 @@ http:
   routers:
     traefik:
       service: api@internal
-      rule: Host(`traefik.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "TRAEFIK_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

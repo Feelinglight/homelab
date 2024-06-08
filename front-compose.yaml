@@ -21,9 +21,18 @@ services:
     restart: unless-stopped
     environment:
       - TZ="Asia/Yekaterinburg"
+
       - REGRU_USERNAME=${REGRU_USERNAME}
       - REGRU_PASSWORD=${REGRU_PASSWORD}
-      - SERVICES_DOMAIN=${SERVICES_DOMAIN}
+
+      - TRAEFIK_DOMAIN=${TRAEFIK_DOMAIN}
+      - AUTHELIA_DOMAIN=${AUTHELIA_DOMAIN}
+      - PIHOLE_DOMAIN=${PIHOLE_DOMAIN}
+      - HOMER_DOMAIN=${HOMER_DOMAIN}
+      - BAREOS_DOMAIN=${BAREOS_DOMAIN}
+      - GLANCES_DOMAIN=${GLANCES_DOMAIN}
+      - GITEA_DOMAIN=${GITEA_DOMAIN}
+
     networks:
       - homelab
     ports:
@@ -48,6 +57,26 @@ services:
     volumes:
       - ./services/authelia/config:/config
       - ./services/authelia/secrets:/secrets
+
+
+  pihole:
+    image: pihole/pihole:2024.03.2
+    container_name: pihole
+    restart: unless-stopped
+    networks:
+      - homelab
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      - TZ='Asia/Yekaterinburg'
+      - VIRTUAL_HOST=${PIHOLE_DOMAIN}
+      - FTLCONF_LOCAL_IPV4=${SERVER_IP}
+      - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
+    volumes:
+      - ./services/pihole/config/etc-pihole:/etc/pihole
+      - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./services/pihole/backup:/backup
 
 ...
 

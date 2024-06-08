@@ -2,7 +2,7 @@ http:
   routers:
     gitea-web:
       service: gitea-web
-      rule: Host(`gitea.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "GITEA_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

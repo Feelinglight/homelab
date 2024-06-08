@@ -1,8 +1,10 @@
+---
+
 http:
   routers:
     glances:
       service: glances
-      rule: Host(`glances.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "GLANCES_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure
@@ -14,4 +16,6 @@ http:
       loadBalancer:
         servers:
           - url: http://glances.feelinglight.homes:61208
+
+...
 

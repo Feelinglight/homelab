@@ -2,7 +2,7 @@ http:
   routers:
     homer:
       service: homer
-      rule: Host(`homer.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "HOMER_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

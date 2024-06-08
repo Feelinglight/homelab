@@ -2,7 +2,7 @@ http:
   routers:
     bareos:
       service: bareos
-      rule: Host(`bareos.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "BAREOS_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

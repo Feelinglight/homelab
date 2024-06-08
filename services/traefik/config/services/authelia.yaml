@@ -2,7 +2,7 @@ http:
   routers:
     authelia:
       service: authelia
-      rule: Host(`authelia.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "AUTHELIA_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

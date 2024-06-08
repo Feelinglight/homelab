@@ -2,7 +2,7 @@ http:
   routers:
     pihole:
       service: pihole
-      rule: Host(`pihole.{{ env "SERVICES_DOMAIN" }}`)
+      rule: Host(`{{ env "PIHOLE_DOMAIN" }}`)
       entryPoints:
         # - web
         - web-secure

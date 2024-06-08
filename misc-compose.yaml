@@ -17,25 +17,6 @@ services:
       - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
 
 
-  pihole:
-    image: pihole/pihole:2024.03.2
-    container_name: pihole
-    restart: unless-stopped
-    networks:
-      - homelab
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-    environment:
-      - TZ='Asia/Yekaterinburg'
-      - VIRTUAL_HOST=pihole.feelinglight.homes
-      - FTLCONF_LOCAL_IPV4=${SERVER_IP}
-      - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
-    volumes:
-      - ./services/pihole/config/etc-pihole:/etc/pihole
-      - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
-      - ./services/pihole/backup:/backup
-
   gitea:
     image: gitea/gitea:1.21.11
     container_name: gitea
