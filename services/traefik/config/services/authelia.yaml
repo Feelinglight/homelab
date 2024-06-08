@@ -4,10 +4,8 @@ http:
       service: authelia
       rule: Host(`authelia.feelinglight.homes`)
       entryPoints:
-        - web
+        # - web
         - web-secure
-      middlewares:
-        - 'authelia@file'
       tls:
         certResolver: letsencrypt_regru
 

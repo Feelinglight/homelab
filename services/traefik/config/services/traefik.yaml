@@ -4,7 +4,7 @@ http:
       service: api@internal
       rule: Host(`traefik.feelinglight.homes`)
       entryPoints:
-        - web
+        # - web
         - web-secure
       tls:
         certResolver: letsencrypt_regru

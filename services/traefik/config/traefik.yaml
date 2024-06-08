@@ -1,11 +1,13 @@
+---
+
 global:
   checkNewVersion: false
   sendAnonymousUsage: false
 
 
 log:
-  level: DEBUG
-  # level: INFO
+  # level: DEBUG
+  level: INFO
   filePath: /var/log/traefik/traefik.log
 
 accessLog:
@@ -15,25 +17,6 @@ accessLog:
 api:
   dashboard: true
   # debug: true
-
-
-# http:
-#   middlewares:
-#     authelia:
-#       forwardAuth:
-#         address: 'https://authelia.feelinglight.com/api/authz/forward-auth'
-#         trustForwardHeader: true
-#         authResponseHeaders:
-#           - 'Remote-User'
-#           - 'Remote-Groups'
-#           - 'Remote-Email'
-#           - 'Remote-Name'
-#         tls:
-#           certResolver: letsencrypt_regru
-#           # ca: '/certificates/ca.public.crt'
-#           # cert: '/certificates/traefik.public.crt'
-#           # key: '/certificates/traefik.private.pem'
-
 
 entryPoints:
   web:
@@ -73,4 +56,5 @@ providers:
     directory: /etc/traefik/services
     watch: true
 
+...
 

@@ -27,7 +27,7 @@ services/traefik/data/acme
 
 services/authelia/secrets/*
 services/authelia/config/db.sqlite3
-!services/authelia/secrets/template_*
+services/authelia/config/users_database.yml
 
 
 # gitea

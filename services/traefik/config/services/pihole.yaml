@@ -4,7 +4,7 @@ http:
       service: pihole
       rule: Host(`pihole.feelinglight.homes`)
       entryPoints:
-        - web
+        # - web
         - web-secure
       tls:
         certResolver: letsencrypt_regru

@@ -4,7 +4,7 @@ http:
       service: bareos
       rule: Host(`bareos.feelinglight.homes`)
       entryPoints:
-        - web
+        # - web
         - web-secure
       tls:
         certResolver: letsencrypt_regru

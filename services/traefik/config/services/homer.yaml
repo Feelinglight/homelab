@@ -4,7 +4,7 @@ http:
       service: homer
       rule: Host(`homer.feelinglight.homes`)
       entryPoints:
-        - web
+        # - web
         - web-secure
       tls:
         certResolver: letsencrypt_regru
