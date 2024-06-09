@@ -65,13 +65,10 @@ services:
       - BAREOS_DOMAIN=${BAREOS_DOMAIN}
       - GLANCES_DOMAIN=${GLANCES_DOMAIN}
       - GITEA_DOMAIN=${GITEA_DOMAIN}
-
-
     networks:
       - homelab
     volumes:
       - ./services/authelia/config:/config
-      - ./services/authelia/secrets:/secrets
 
 
   pihole:
@@ -85,9 +82,9 @@ services:
       - "53:53/udp"
     environment:
       - TZ='Asia/Yekaterinburg'
+
       - VIRTUAL_HOST=${PIHOLE_DOMAIN}
       - FTLCONF_LOCAL_IPV4=${SERVER_IP}
-      - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
     volumes:
       - ./services/pihole/config/etc-pihole:/etc/pihole
       - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d

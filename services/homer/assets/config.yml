@@ -68,7 +68,7 @@ services:
         url: "https://gitea.feelinglight.homes"
 
       - name: "Glances"
-        logo: "assets/icons/glances.svg"
+        logo: "assets/icons/glances.png"
         subtitle: "Server monitoring"
         url: "https://glances.feelinglight.homes"
 

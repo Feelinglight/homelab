@@ -6,6 +6,8 @@ http:
       entryPoints:
         # - web
         - web-secure
+      middlewares:
+        - authelia@file
       tls:
         certResolver: letsencrypt_regru
 
