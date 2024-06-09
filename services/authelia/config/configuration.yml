@@ -8,7 +8,7 @@ log:
 
 identity_validation:
   reset_password:
-    jwt_secret: {{ mustEnv "JWT_SECRET" }}
+    jwt_secret: '{{ secret "/run/secrets/JWT_SECRET" }}'
 
 authentication_backend:
   file:
@@ -52,7 +52,7 @@ regulation:
   ban_time: '5 minutes'
 
 storage:
-  encryption_key: {{ mustEnv "STORAGE_ENCRYPTION_KEY" }}
+  encryption_key: '{{ secret "/run/secrets/STORAGE_ENCRYPTION_KEY" }}'
   local:
     path: '/config/db.sqlite3'
 

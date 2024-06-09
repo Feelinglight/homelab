@@ -1,6 +1,12 @@
 ---
 version: "3.4"
 
+secrets:
+  JWT_SECRET:
+    file: ./services/authelia/secrets/JWT_SECRET
+  STORAGE_ENCRYPTION_KEY:
+    file: ./services/authelia/secrets/STORAGE_ENCRYPTION_KEY
+
 services:
 
   homer:
@@ -32,7 +38,6 @@ services:
       - BAREOS_DOMAIN=${BAREOS_DOMAIN}
       - GLANCES_DOMAIN=${GLANCES_DOMAIN}
       - GITEA_DOMAIN=${GITEA_DOMAIN}
-
     networks:
       - homelab
     ports:
@@ -44,18 +49,18 @@ services:
       - ./services/traefik/logs:/var/log/traefik
       - ./services/traefik/data/acme:/letsencrypt
 
-
   authelia:
     image: authelia/authelia:4.38.8
     container_name: authelia
     restart: unless-stopped
     user: ${SERVER_USER_UID_GID}
+    secrets:
+      - JWT_SECRET
+      - STORAGE_ENCRYPTION_KEY
     environment:
       - TZ='Asia/Yekaterinburg'
 
       - X_AUTHELIA_CONFIG_FILTERS=template
-      - JWT_SECRET=${JWT_SECRET}
-      - STORAGE_ENCRYPTION_KEY=${STORAGE_ENCRYPTION_KEY}
 
       - SERVICES_DOMAIN=${SERVICES_DOMAIN}
       - AUTHELIA_DOMAIN=${AUTHELIA_DOMAIN}
