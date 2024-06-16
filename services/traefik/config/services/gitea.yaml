@@ -29,5 +29,5 @@ tcp:
     gitea-ssh:
       loadBalancer:
         servers:
-        - address: gitea:22
+          - address: gitea:22
 
