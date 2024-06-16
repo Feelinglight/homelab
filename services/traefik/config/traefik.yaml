@@ -8,7 +8,6 @@ global:
 log:
   # level: DEBUG
   level: INFO
-  filePath: /var/log/traefik/traefik.log
 
 accessLog:
   filePath: /var/log/traefik/access_traefik.log
