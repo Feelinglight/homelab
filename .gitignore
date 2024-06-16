@@ -27,7 +27,7 @@ services/traefik/data/acme
 
 services/authelia/config/db.sqlite3
 services/authelia/config/users_database.yml
-services/authelia/config/notifications.txt
+services/authelia/config/notification.txt
 services/authelia/secrets
 
 
