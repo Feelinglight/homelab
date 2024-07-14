@@ -62,9 +62,13 @@ services:
       - 9101:9101
     volumes:
       - ./services/bareos/config/etc_bareos/dir:/etc_bareos:ro
-      - ./services/bareos/data/backups:/backups
       - ./services/bareos/config/scripts:/usr/local/bin/
       - ./services/bareos/logs:/var/log/bareos
+      # Важно биндить, потому что если сделать обычный проброс, то докер автоматически создаст
+      # папку и будет писать туда бэкапы.
+      - type: bind
+        source: /mnt/home/homelab/data/homelab/services/bareos/data/backups
+        target: /backups
 
       # Для отладки
       # - ./services/bareos/docker/make_bareos_config.sh:/scripts/make_bareos_config.sh
@@ -88,7 +92,10 @@ services:
       - BAREOS__SD_MONITOR_PASSWORD=${BAREOS__SD_MONITOR_PASSWORD}
     volumes:
       - ./services/bareos/config/etc_bareos/sd:/etc_bareos:ro
-      - ./services/bareos/data/backups:/backups
+      - type: bind
+        source: /mnt/home/homelab/data/homelab/services/bareos/data/backups
+        target: /backups
+
 
   # bareos-fd:
   #   container_name: bareos-fd
