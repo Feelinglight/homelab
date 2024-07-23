@@ -13,6 +13,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./services/glances/glances.conf:/glances/conf/glances.conf"
+      - /:/rootfs:ro
     environment:
       - TZ="Asia/Yekaterinburg"
       - "GLANCES_OPT=-C /glances/conf/glances.conf -w"

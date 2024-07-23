@@ -67,7 +67,7 @@ services:
       # Важно биндить, потому что если сделать обычный проброс, то докер автоматически создаст
       # папку и будет писать туда бэкапы.
       - type: bind
-        source: /mnt/home/homelab/data/homelab/services/bareos/data/backups
+        source: /mnt/backups
         target: /backups
 
       # Для отладки
@@ -93,7 +93,7 @@ services:
     volumes:
       - ./services/bareos/config/etc_bareos/sd:/etc_bareos:ro
       - type: bind
-        source: /mnt/home/homelab/data/homelab/services/bareos/data/backups
+        source: /mnt/backups
         target: /backups
 
 
