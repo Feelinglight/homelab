@@ -20,7 +20,6 @@ services:
     volumes:
       - ./services/homer/assets:/www/assets
 
-
   traefik:
     image: traefik:v3.0
     container_name: traefik
