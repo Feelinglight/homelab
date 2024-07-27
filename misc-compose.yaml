@@ -46,6 +46,7 @@ services:
       - GITEA__log__ROOT_PATH="/data/gitea/log"
     volumes:
       - ./services/gitea/data:/data
+      - ./services/gitea/backup:/backup
       - /home/git/.ssh:/data/git/.ssh
 
 ...

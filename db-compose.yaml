@@ -18,4 +18,5 @@ services:
       retries: 20
     volumes:
       - ./services/postgres/data/:/var/lib/postgresql/data
+      - ./services/postgres/backup/:/backup
 
