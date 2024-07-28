@@ -53,8 +53,23 @@ done
 
 # ------------------------------ single files ------------------------------
 
-upload_file_as_package \
-  "https://download.bareos.org/current/windows/winbareos-23.0.4~pre113.6ea98eb40-release-64-bit.exe" \
-  "bareos-windows-fd" \
-  "23.0.4"
+# Перенесено в bareos
+# upload_file_as_package \
+#   "https://download.bareos.org/current/windows/winbareos-23.0.4~pre113.6ea98eb40-release-64-bit.exe" \
+#   "bareos-windows-fd" \
+#   "23.0.4"
+
+
+# ------------------------------ bareos ------------------------------
+
+bareos_resources=(
+  "https://download.bareos.org/current/BareosMainReference/"
+  "https://download.bareos.org/current/Debian_12/"
+  "https://download.bareos.org/current/windows/"
+  "https://download.bareos.org/current/xUbuntu_22.04/"
+)
+
+for res in "${bareos_resources[@]}"; do
+  wget -r --no-parent "$res" -P "$BAREOS_MIRROR_DIR/23.0.4~pre113"
+done
 
