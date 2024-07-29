@@ -24,12 +24,14 @@ services/pihole/config/etc-pihole/*
 services/traefik/data/acme
 
 # authelia
-
 services/authelia/config/db.sqlite3
 services/authelia/config/users_database.yml
 services/authelia/config/notification.txt
 services/authelia/secrets
 
-
 # gitea
 services/gitea/data
+
+# mirrors
+services/mirrors/data
+

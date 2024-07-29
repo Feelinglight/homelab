@@ -30,6 +30,21 @@ upload_file_as_package() {
   rm -rf $tmp_folder
 }
 
+# ------------------------------ apt-mirror ------------------------------
+
+# Конфигурация apt-mirror составляется каждый раз заново. Каждый сервис может дописать в
+# конфигурацию адреса deb-репозиториев. apt-mirror запускается в конце этого скрипта.
+apt_mirror_dir="$MIRRORS_DIR/apt-mirror"
+
+mkdir -p "$apt_mirror_dir"
+mkdir -p "$apt_mirror_dir/mirror"
+mkdir -p "$apt_mirror_dir/var"
+mkdir -p "$apt_mirror_dir/skel"
+
+echo "set base_path $apt_mirror_dir"    | sudo tee /etc/apt/mirror.list
+echo "set nthreads     20"              | sudo tee -a /etc/apt/mirror.list
+echo "set _tilde 0"                     | sudo tee -a /etc/apt/mirror.list
+
 # ------------------------------ docker images ------------------------------
 
 docker login "$GITEA_DOMAIN"
@@ -70,6 +85,16 @@ bareos_resources=(
 )
 
 for res in "${bareos_resources[@]}"; do
-  wget -r --no-parent "$res" -P "$BAREOS_MIRROR_DIR/23.0.4~pre113"
+  wget -r --no-parent "$res" -P "$MIRRORS_DIR/bareos/site-23.0.4~pre113"
 done
+
+echo "deb-src https://download.bareos.org/current/xUbuntu_22.04 / "     | sudo tee -a /etc/apt/mirror.list
+echo "deb https://download.bareos.org/current/xUbuntu_22.04 / "         | sudo tee -a /etc/apt/mirror.list
+echo "deb-src https://download.bareos.org/current/Debian_12/ / "        | sudo tee -a /etc/apt/mirror.list
+echo "deb https://download.bareos.org/current/Debian_12/ / "            | sudo tee -a /etc/apt/mirror.list
+
+
+# ------------------------------ apt-mirror run ------------------------------
+
+apt-mirror
 
