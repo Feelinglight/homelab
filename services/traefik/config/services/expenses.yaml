@@ -1,0 +1,19 @@
+http:
+  routers:
+    expenses:
+      service: expenses
+      rule: Host(`{{ env "EXPENSES_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    expenses:
+      loadBalancer:
+        servers:
+          - url: http://expenses:80
+

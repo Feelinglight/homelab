@@ -37,6 +37,7 @@ services:
       - BAREOS_DOMAIN=${BAREOS_DOMAIN}
       - GLANCES_DOMAIN=${GLANCES_DOMAIN}
       - GITEA_DOMAIN=${GITEA_DOMAIN}
+      - EXPENSES_DOMAIN=${EXPENSES_DOMAIN}
     networks:
       - homelab
     ports:
@@ -69,6 +70,7 @@ services:
       - BAREOS_DOMAIN=${BAREOS_DOMAIN}
       - GLANCES_DOMAIN=${GLANCES_DOMAIN}
       - GITEA_DOMAIN=${GITEA_DOMAIN}
+      - EXPENSES_DOMAIN=${EXPENSES_DOMAIN}
     networks:
       - homelab
     volumes:

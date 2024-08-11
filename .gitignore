@@ -32,6 +32,9 @@ services/authelia/secrets
 # gitea
 services/gitea/data
 
+# expenses
+services/expenses/data
+
 # mirrors
 services/mirrors/data
 

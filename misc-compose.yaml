@@ -48,5 +48,20 @@ services:
       - ./services/gitea/backup:/backup
       - /home/git/.ssh:/data/git/.ssh
 
+  expenses:
+    image: nginx:1.27-otel
+    container_name: expenses
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - LANG=ru_RU.UTF-8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+    volumes:
+      # Папка expenses - это git репозиторий с расходами
+      - ./services/expenses/data/expenses/results:/usr/share/nginx/html:ro
+
 ...
 

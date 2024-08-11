@@ -35,6 +35,8 @@ access_control:
       policy: 'one_factor'
       subject:
         - ['group:admins']
+    - domain: '{{ mustEnv "EXPENSES_DOMAIN" }}'
+      policy: 'one_factor'
 
 session:
   # secret: 'insecure_session_secret'

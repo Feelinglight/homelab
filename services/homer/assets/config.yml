@@ -74,3 +74,10 @@ services:
         subtitle: "Server monitoring"
         url: "https://glances.feelinglight.homes"
 
+  - name: "Services"
+    items:
+      - name: "Расходы"
+        logo: "assets/icons/expenses.png"
+        subtitle: "Графики расходов"
+        url: "https://expenses.feelinglight.homes"
+
