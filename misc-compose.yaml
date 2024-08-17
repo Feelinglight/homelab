@@ -10,13 +10,17 @@ services:
     network_mode: "host"
     pid: host
     privileged: true
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
+
+    labels:
+      - dev.dozzle.group=misc
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./services/glances/glances.conf:/glances/conf/glances.conf"
       - /:/rootfs:ro
-    environment:
-      - TZ="Asia/Yekaterinburg"
-      - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
+
 
   gitea:
     image: gitea/gitea:1.22.1
@@ -43,6 +47,8 @@ services:
       - GITEA__server__HTTP_PORT=3000
 
       - GITEA__log__ROOT_PATH="/data/gitea/log"
+    labels:
+      - dev.dozzle.group=misc
     volumes:
       - ./services/gitea/data:/data
       - ./services/gitea/backup:/backup
@@ -59,9 +65,52 @@ services:
       - LANG=ru_RU.UTF-8
       - LANGUAGE=ru_RU.UTF-8
       - LC_ALL=ru_RU.UTF-8
+    labels:
+      - dev.dozzle.group=misc
     volumes:
       # Папка expenses - это git репозиторий с расходами
       - ./services/expenses/data/expenses/results:/usr/share/nginx/html:ro
 
+  dozzle:
+    image: amir20/dozzle:v8.2.1
+    container_name: dozzle
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - LANG=ru_RU.UTF-8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+
+      - DOZZLE_ENABLE_ACTIONS=true
+      - DOZZLE_NO_ANALYTICS=true
+    labels:
+      - dev.dozzle.group=misc
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  wikijs:
+    image: requarks/wiki:2.5
+    container_name: wikijs
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      TZ: "Asia/Yekaterinburg"
+      LANG: ru_RU.UTF-8
+      LANGUAGE: ru_RU.UTF-8
+      LC_ALL: ru_RU.UTF-8
+
+      DB_TYPE: postgres
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: ${PG_WIKIJS_USER}
+      DB_PASS: ${PG_WIKIJS_PASSWORD}
+      DB_NAME: ${PG_WIKIJS_DB}
+    labels:
+      - dev.dozzle.group=misc
+
 ...
+
 

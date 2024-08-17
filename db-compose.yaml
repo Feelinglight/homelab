@@ -16,6 +16,8 @@ services:
       test: pg_isready -U postgres
       interval: 1s
       retries: 20
+    labels:
+      - dev.dozzle.group=db
     volumes:
       - ./services/postgres/data/:/var/lib/postgresql/data
       - ./services/postgres/backup/:/backup

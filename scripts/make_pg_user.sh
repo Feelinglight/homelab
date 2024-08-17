@@ -2,7 +2,7 @@
 
 set -e
 
-# Скрипт для удобного создания пользователей и баз данных в контейнере postgres для
+# Скрипт для удобного создания пользователей и баз данных в контейнере postgres-db для
 # других приложений в контейнерах
 #
 # Использование:
@@ -14,17 +14,19 @@ set -e
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$script_dir/../.env"
 
-NEW_USER="$PG_GITEA_USER"
-NEW_USER_PASSWORD="$PG_GITEA_PASSWORD"
-NEW_USER_DB="$PG_GITEA_DB"
+NEW_USER="$PG_WIKIJS_USER"
+NEW_USER_PASSWORD="$PG_WIKIJS_PASSWORD"
+NEW_USER_DB="$PG_WIKIJS_DB"
 
 # Просто, чтобы скрипт отпал, если есть проблемы с postgres
-docker exec -i postgres psql -U postgres -V
+docker exec -i postgres-db psql -U postgres -V
 
-docker exec -i postgres psql -U postgres <<-EOSQL
+docker exec -i postgres-db psql -U postgres <<-EOSQL
     CREATE USER $NEW_USER WITH PASSWORD '$NEW_USER_PASSWORD';
     CREATE DATABASE $NEW_USER_DB;
     GRANT ALL PRIVILEGES ON DATABASE $NEW_USER_DB TO $NEW_USER;
     ALTER DATABASE $NEW_USER_DB OWNER TO $NEW_USER;
 EOSQL
+
+echo "Пользователь и БД созданы"
 

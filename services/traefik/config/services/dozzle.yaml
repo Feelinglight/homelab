@@ -1,0 +1,19 @@
+http:
+  routers:
+    dozzle:
+      service: dozzle
+      rule: Host(`{{ env "DOZZLE_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    dozzle:
+      loadBalancer:
+        servers:
+          - url: http://dozzle:8080
+

@@ -60,6 +60,8 @@ services:
       - BAREOS__SMTP_TO=${BAREOS__SMTP_TO}
     ports:
       - 9101:9101
+    labels:
+      - dev.dozzle.group=bareos
     volumes:
       - ./services/bareos/config/etc_bareos/dir:/etc_bareos:ro
       - ./services/bareos/config/scripts:/usr/local/bin/
@@ -90,6 +92,8 @@ services:
       ###
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__SD_MONITOR_PASSWORD=${BAREOS__SD_MONITOR_PASSWORD}
+    labels:
+      - dev.dozzle.group=bareos
     volumes:
       - ./services/bareos/config/etc_bareos/sd:/etc_bareos:ro
       - type: bind
@@ -108,6 +112,8 @@ services:
   #     ###
   #     - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
   #     - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
+  #   labels:
+  #     - dev.dozzle.group=bareos
   #   volumes:
   #     - ./services/bareos/config/etc_bareos/fd:/etc_bareos:ro
   #     - ./services/bareos/data/docker-fd-data:/docker-fd-data
@@ -122,6 +128,8 @@ services:
       - TZ=Asia/Yekaterinburg
       ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
+    labels:
+      - dev.dozzle.group=bareos
     volumes:
       - ./services/bareos/config/etc_bareos/webui:/etc_bareos:ro
 
@@ -136,4 +144,5 @@ services:
       - SMTP_USERNAME=${BAREOS__SMTP_LOGIN}
       - SMTP_PASSWORD=${BAREOS__SMTP_PASSWORD}
       - SERVER_HOSTNAME=${BAREOS__SMTP_SENDER}
-
+    labels:
+      - dev.dozzle.group=bareos

@@ -64,20 +64,30 @@ services:
         subtitle: "DNS Server"
         url: "https://pihole.feelinglight.homes"
 
-      - name: "Gitea"
-        logo: "assets/icons/gitea.svg"
-        subtitle: "Git remote server"
-        url: "https://gitea.feelinglight.homes"
-
       - name: "Glances"
         logo: "assets/icons/glances.png"
         subtitle: "Server monitoring"
         url: "https://glances.feelinglight.homes"
 
+      - name: "Dozzle"
+        logo: "assets/icons/dozzle.svg"
+        subtitle: "Логи контейнеров"
+        url: "https://dozzle.feelinglight.homes"
+
   - name: "Services"
     items:
+      - name: "Gitea"
+        logo: "assets/icons/gitea.svg"
+        subtitle: "Git remote server"
+        url: "https://gitea.feelinglight.homes"
+
       - name: "Расходы"
         logo: "assets/icons/expenses.png"
         subtitle: "Графики расходов"
         url: "https://expenses.feelinglight.homes"
+
+      - name: "WikiJs"
+        logo: "assets/icons/wikijs-butterfly.svg"
+        subtitle: "База знаний"
+        url: "https://wikijs.feelinglight.homes"
 

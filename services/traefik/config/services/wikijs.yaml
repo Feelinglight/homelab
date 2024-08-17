@@ -1,0 +1,19 @@
+http:
+  routers:
+    wikijs:
+      service: wikijs
+      rule: Host(`{{ env "WIKIJS_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    wikijs:
+      loadBalancer:
+        servers:
+          - url: http://wikijs:3000
+

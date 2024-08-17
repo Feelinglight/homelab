@@ -37,6 +37,12 @@ access_control:
         - ['group:admins']
     - domain: '{{ mustEnv "EXPENSES_DOMAIN" }}'
       policy: 'one_factor'
+    - domain: '{{ mustEnv "DOZZLE_DOMAIN" }}'
+      policy: 'one_factor'
+      subject:
+        - ['group:admins']
+    - domain: '{{ mustEnv "WIKIJS_DOMAIN" }}'
+      policy: 'bypass'
 
 session:
   # secret: 'insecure_session_secret'
