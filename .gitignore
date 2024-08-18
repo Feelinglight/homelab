@@ -16,9 +16,9 @@ services/bareos/data/docker-fd-data/*
 # pihole
 # Остальная конфигурация pihole бэкапится через pihole teleport
 services/pihole/config/*
-!services/pihole/config/etc-pihole
-services/pihole/config/etc-pihole/*
-!services/pihole/config/etc-pihole/custom.list
+!services/pihole/config/etc-dnsmasq.d
+services/pihole/config/etc-dnsmasq.d/*
+!services/pihole/config/etc-dnsmasq.d/02-local-wildcard.conf
 
 # traefik
 services/traefik/data/acme
@@ -34,6 +34,9 @@ services/gitea/data
 
 # expenses
 services/expenses/data
+
+# calibre
+services/calibre-web/data
 
 # mirrors
 services/mirrors/data

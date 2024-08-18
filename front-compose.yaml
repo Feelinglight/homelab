@@ -42,6 +42,7 @@ services:
       - EXPENSES_DOMAIN=${EXPENSES_DOMAIN}
       - DOZZLE_DOMAIN=${DOZZLE_DOMAIN}
       - WIKIJS_DOMAIN=${WIKIJS_DOMAIN}
+      - CALIBRE_DOMAIN=${CALIBRE_DOMAIN}
     networks:
       - homelab
     ports:
@@ -59,7 +60,7 @@ services:
     image: authelia/authelia:4.38.8
     container_name: authelia
     restart: unless-stopped
-    user: ${SERVER_USER_UID_GID}
+    user: ${SERVER_UID}:${SERVER_GID}
     secrets:
       - JWT_SECRET
       - STORAGE_ENCRYPTION_KEY
@@ -79,6 +80,7 @@ services:
       - EXPENSES_DOMAIN=${EXPENSES_DOMAIN}
       - DOZZLE_DOMAIN=${DOZZLE_DOMAIN}
       - WIKIJS_DOMAIN=${WIKIJS_DOMAIN}
+      - CALIBRE_DOMAIN=${CALIBRE_DOMAIN}
     networks:
       - homelab
     labels:

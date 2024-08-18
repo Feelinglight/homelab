@@ -16,6 +16,12 @@ docker exec -t gitea bash -c 'sqlite3 /data/gitea/gitea.db ".backup /backup/gite
 echo "Backup gitea finished"
 
 
+# echo "Backup calibre started"
+# docker exec -t calibre-web bash -c 'rm -rf /backup/*'
+# docker exec -t calibre-web bash -c 'sqlite3 /data/gitea/gitea.db ".backup /backup/gitea.db"'
+# echo "Backup calibre finished"
+
+
 echo "Backup postgres started"
 docker exec -t postgres-db bash -c 'rm -rf /backup/*'
 docker exec -t postgres-db bash -c 'pg_dumpall -U postgres > "/backup/postgres_dump.sql"'

@@ -52,7 +52,7 @@ services:
         subtitle: "Backups"
         url: "https://bareos.feelinglight.homes"
 
-  - name: "💻 Home Lab"
+  - name: "💻 Server"
     items:
       - name: "Traefik"
         logo: "assets/icons/traefik.png"
@@ -90,4 +90,9 @@ services:
         logo: "assets/icons/wikijs-butterfly.svg"
         subtitle: "База знаний"
         url: "https://wikijs.feelinglight.homes"
+
+      - name: "Calibre"
+        logo: "assets/icons/calibre.png"
+        subtitle: "Электронная библиотека"
+        url: "https://calibre.feelinglight.homes"
 

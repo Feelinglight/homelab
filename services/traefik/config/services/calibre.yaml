@@ -1,0 +1,19 @@
+http:
+  routers:
+    calibre:
+      service: calibre
+      rule: Host(`{{ env "CALIBRE_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    calibre:
+      loadBalancer:
+        servers:
+          - url: http://calibre-web:8083
+
