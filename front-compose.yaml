@@ -17,8 +17,6 @@ services:
       - TZ="Asia/Yekaterinburg"
     networks:
       - homelab
-    labels:
-      - dev.dozzle.group=front
     volumes:
       - ./services/homer/assets:/www/assets
 
@@ -49,8 +47,6 @@ services:
       - 80:80
       - 443:443
       - 2222:2222
-    labels:
-      - dev.dozzle.group=front
     volumes:
       - ./services/traefik/config/:/etc/traefik:ro
       - ./services/traefik/logs:/var/log/traefik
@@ -83,8 +79,6 @@ services:
       - CALIBRE_DOMAIN=${CALIBRE_DOMAIN}
     networks:
       - homelab
-    labels:
-      - dev.dozzle.group=front
     volumes:
       - ./services/authelia/config:/config
 
@@ -103,8 +97,6 @@ services:
 
       - VIRTUAL_HOST=${PIHOLE_DOMAIN}
       - FTLCONF_LOCAL_IPV4=${SERVER_IP}
-    labels:
-      - dev.dozzle.group=front
     volumes:
       - ./services/pihole/config/etc-pihole:/etc/pihole
       - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d

@@ -13,9 +13,6 @@ services:
     environment:
       - TZ="Asia/Yekaterinburg"
       - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
-
-    labels:
-      - dev.dozzle.group=misc
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./services/glances/glances.conf:/glances/conf/glances.conf"
@@ -47,8 +44,6 @@ services:
       - GITEA__server__HTTP_PORT=3000
 
       - GITEA__log__ROOT_PATH="/data/gitea/log"
-    labels:
-      - dev.dozzle.group=misc
     volumes:
       - ./services/gitea/data:/data
       - ./services/gitea/backup:/backup
@@ -65,8 +60,6 @@ services:
       - LANG=ru_RU.UTF-8
       - LANGUAGE=ru_RU.UTF-8
       - LC_ALL=ru_RU.UTF-8
-    labels:
-      - dev.dozzle.group=misc
     volumes:
       # Папка expenses - это git репозиторий с расходами
       - ./services/expenses/data/expenses/results:/usr/share/nginx/html:ro
@@ -85,8 +78,6 @@ services:
 
       - DOZZLE_ENABLE_ACTIONS=true
       - DOZZLE_NO_ANALYTICS=true
-    labels:
-      - dev.dozzle.group=misc
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -108,8 +99,6 @@ services:
       DB_USER: ${PG_WIKIJS_USER}
       DB_PASS: ${PG_WIKIJS_PASSWORD}
       DB_NAME: ${PG_WIKIJS_DB}
-    labels:
-      - dev.dozzle.group=misc
 
   calibre-web:
     image: lscr.io/linuxserver/calibre-web:0.6.23
@@ -120,8 +109,6 @@ services:
     environment:
       - PUID=${SERVER_UID}
       - PGID=${SERVER_GID}
-    labels:
-      - dev.dozzle.group=misc
     volumes:
       - ./services/calibre-web/data:/config
 

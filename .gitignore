@@ -6,6 +6,9 @@ services/*/logs
 # postgres
 services/postgres/data
 
+# mariadb
+services/mariadb/data
+
 # bareos
 services/bareos/data/backups/*
 !services/bareos/data/backups/.nobackup
