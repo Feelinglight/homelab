@@ -14,18 +14,18 @@ set -e
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$script_dir/../.env"
 
-NEW_USER="$PG_WIKIJS_USER"
-NEW_USER_PASSWORD="$PG_WIKIJS_PASSWORD"
-NEW_USER_DB="$PG_WIKIJS_DB"
+NEW_USER="$PG_PHOTOPRISM_USER"
+NEW_USER_PASSWORD="$PG_PHOTOPRISM_PASSWORD"
+NEW_USER_DB="$PG_PHOTOPRISM_DB"
 
-# Просто, чтобы скрипт отпал, если есть проблемы с postgres
-docker exec -i mariadb psql -U postgres -V
+# Просто, чтобы скрипт отпал, если есть проблемы с mariadb
+docker exec -i mariadb mariadb -u root -p "${MARIADB_ROOT_PASSWORD}" -V
 
-docker exec -i mariadb psql -U postgres <<-EOSQL
-    CREATE USER $NEW_USER WITH PASSWORD '$NEW_USER_PASSWORD';
-    CREATE DATABASE $NEW_USER_DB;
-    GRANT ALL PRIVILEGES ON DATABASE $NEW_USER_DB TO $NEW_USER;
-    ALTER DATABASE $NEW_USER_DB OWNER TO $NEW_USER;
+docker exec -i mariadb mariadb -u root -p"${MARIADB_ROOT_PASSWORD}" <<-EOSQL
+    CREATE USER IF NOT EXISTS '${NEW_USER}'@'%' IDENTIFIED BY '${NEW_USER_PASSWORD}';
+    CREATE DATABASE IF NOT EXISTS ${NEW_USER_DB};
+    GRANT ALL ON ${NEW_USER_DB}.* TO '${NEW_USER}'@'%';
+    SELECT User FROM mysql.user;
 EOSQL
 
 echo "Пользователь и БД созданы"
