@@ -45,28 +45,28 @@ colors:
 
 services:
 
-  - name: "💾 Storage"
-    items:
-      - name: "Bareos"
-        logo: "assets/icons/bareos.png"
-        subtitle: "Backups"
-        url: "https://bareos.feelinglight.homes"
-
-  - name: "💻 Server"
+  - name: "Доступ"
     items:
       - name: "Traefik"
         logo: "assets/icons/traefik.png"
-        subtitle: "Reverse Proxy"
+        subtitle: "Обратный прокси сервер"
         url: "https://traefik.feelinglight.homes"
 
       - name: "PiHole"
         logo: "assets/icons/pihole.svg"
-        subtitle: "DNS Server"
+        subtitle: "DNS сервер"
         url: "https://pihole.feelinglight.homes"
 
+      - name: "Authelia"
+        logo: "assets/icons/authelia.svg"
+        subtitle: "Сервер авторизации"
+        url: "https://pihole.feelinglight.homes"
+
+  - name: "Обслуживание и мониторинг"
+    items:
       - name: "Glances"
         logo: "assets/icons/glances.png"
-        subtitle: "Server monitoring"
+        subtitle: "Панель мониторинга сервера"
         url: "https://glances.feelinglight.homes"
 
       - name: "Dozzle"
@@ -74,11 +74,21 @@ services:
         subtitle: "Логи контейнеров"
         url: "https://dozzle.feelinglight.homes"
 
-  - name: "Services"
+      - name: "Bareos"
+        logo: "assets/icons/bareos.png"
+        subtitle: "Backups"
+        url: "https://bareos.feelinglight.homes"
+
+  - name: "Сервисы"
     items:
+      - name: "Photoprism"
+        logo: "assets/icons/photoprism.svg"
+        subtitle: "Хранилище фотографий"
+        url: "https://photoprism.feelinglight.homes"
+
       - name: "Gitea"
         logo: "assets/icons/gitea.svg"
-        subtitle: "Git remote server"
+        subtitle: "Удаленный git сервер"
         url: "https://gitea.feelinglight.homes"
 
       - name: "Расходы"

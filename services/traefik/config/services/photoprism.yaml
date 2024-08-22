@@ -1,0 +1,19 @@
+http:
+  routers:
+    photoprism:
+      service: photoprism
+      rule: Host(`{{ env "PHOTOPRISM_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    photoprism:
+      loadBalancer:
+        servers:
+          - url: http://photoprism:2342
+

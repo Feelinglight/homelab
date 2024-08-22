@@ -41,6 +41,9 @@ services/expenses/data
 # calibre
 services/calibre-web/data
 
+# photoprism
+services/photoprism/data
+
 # mirrors
 services/mirrors/data
 

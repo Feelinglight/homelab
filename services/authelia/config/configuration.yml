@@ -45,6 +45,8 @@ access_control:
       policy: 'bypass'
     - domain: '{{ mustEnv "CALIBRE_DOMAIN" }}'
       policy: 'bypass'
+    - domain: '{{ mustEnv "PHOTOPRISM_DOMAIN" }}'
+      policy: 'bypass'
 
 session:
   # secret: 'insecure_session_secret'

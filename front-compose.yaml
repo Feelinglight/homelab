@@ -41,6 +41,7 @@ services:
       - DOZZLE_DOMAIN=${DOZZLE_DOMAIN}
       - WIKIJS_DOMAIN=${WIKIJS_DOMAIN}
       - CALIBRE_DOMAIN=${CALIBRE_DOMAIN}
+      - PHOTOPRISM_DOMAIN=${PHOTOPRISM_DOMAIN}
     networks:
       - homelab
     ports:
@@ -77,6 +78,7 @@ services:
       - DOZZLE_DOMAIN=${DOZZLE_DOMAIN}
       - WIKIJS_DOMAIN=${WIKIJS_DOMAIN}
       - CALIBRE_DOMAIN=${CALIBRE_DOMAIN}
+      - PHOTOPRISM_DOMAIN=${PHOTOPRISM_DOMAIN}
     networks:
       - homelab
     volumes:
