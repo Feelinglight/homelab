@@ -1,0 +1,8 @@
+BackupSchedule: daily
+DefaultLocale: ru
+DefaultTimezone: Asia/Yekaterinburg
+LogLevel: info
+DetectNSFW: true
+UploadNSFW: true
+OriginalsLimit: 5000
+

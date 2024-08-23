@@ -42,7 +42,11 @@ services/expenses/data
 services/calibre-web/data
 
 # photoprism
-services/photoprism/data
+services/photoprism/data/*
+!services/photoprism/data/config
+services/photoprism/data/config/*
+!services/photoprism/data/config/options.yml
+!services/photoprism/data/config/settings.yml
 
 # mirrors
 services/mirrors/data
