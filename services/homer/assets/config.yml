@@ -45,7 +45,7 @@ colors:
 
 services:
 
-  - name: "Доступ"
+  - name: "Access"
     items:
       - name: "Traefik"
         logo: "assets/icons/traefik.png"
@@ -62,11 +62,11 @@ services:
         subtitle: "Сервер авторизации"
         url: "https://pihole.feelinglight.homes"
 
-  - name: "Обслуживание и мониторинг"
+  - name: "Monitoring"
     items:
       - name: "Glances"
         logo: "assets/icons/glances.png"
-        subtitle: "Панель мониторинга сервера"
+        subtitle: "Панель мониторинга linux сервера"
         url: "https://glances.feelinglight.homes"
 
       - name: "Dozzle"
@@ -74,12 +74,12 @@ services:
         subtitle: "Логи контейнеров"
         url: "https://dozzle.feelinglight.homes"
 
-      - name: "Bareos"
-        logo: "assets/icons/bareos.png"
-        subtitle: "Backups"
-        url: "https://bareos.feelinglight.homes"
+      - name: "Scrutiny"
+        logo: "assets/icons/scrutiny.png"
+        subtitle: "S.M.A.R.T"
+        url: "https://scrutiny.feelinglight.homes"
 
-  - name: "Сервисы"
+  - name: "Applications"
     items:
       - name: "Photoprism"
         logo: "assets/icons/photoprism.svg"
@@ -105,4 +105,9 @@ services:
         logo: "assets/icons/calibre.png"
         subtitle: "Электронная библиотека"
         url: "https://calibre.feelinglight.homes"
+
+      - name: "Bareos"
+        logo: "assets/icons/bareos.png"
+        subtitle: "Резервное копирование"
+        url: "https://bareos.feelinglight.homes"
 

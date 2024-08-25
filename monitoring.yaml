@@ -1,0 +1,63 @@
+---
+version: "3.4"
+
+services:
+
+  glances:
+    image: nicolargo/glances:4.1.2.1
+    container_name: glances
+    restart: unless-stopped
+    network_mode: "host"
+    pid: host
+    privileged: true
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./services/glances/glances.conf:/glances/conf/glances.conf"
+      - /:/rootfs:ro
+
+
+  dozzle:
+    image: amir20/dozzle:v8.2.1
+    container_name: dozzle
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - LANG=ru_RU.UTF-8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+
+      - DOZZLE_ENABLE_ACTIONS=true
+      - DOZZLE_NO_ANALYTICS=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  scrutiny:
+    container_name: scrutiny
+    image: ghcr.io/analogj/scrutiny:v0.8.1-omnibus
+    restart: unless-stopped
+    networks:
+      - homelab
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - LANG=ru_RU.UTF-8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+    volumes:
+      - /run/udev:/run/udev:ro
+      - ./services/scrutiny/config:/opt/scrutiny/config
+      - ./services/scrutiny/data/influxdb:/opt/scrutiny/influxdb
+    devices:
+      - "/dev/sda"
+      - "/dev/nvme0"
+
+...
+
+

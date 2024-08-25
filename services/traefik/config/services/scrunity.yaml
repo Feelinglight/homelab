@@ -1,0 +1,21 @@
+http:
+  routers:
+    scrutiny:
+      service: scrutiny
+      rule: Host(`{{ env "SCRUTINY_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    scrutiny:
+      loadBalancer:
+        servers:
+          - url: http://scrutiny:8080
+          # influxdb admin
+          # - url: http://scrutiny:8086
+

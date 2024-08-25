@@ -41,6 +41,10 @@ services/expenses/data
 # calibre
 services/calibre-web/data
 
+# scrutiny
+services/scrutiny/data
+services/scrutiny/config
+
 # photoprism
 services/photoprism/data/*
 !services/photoprism/data/config

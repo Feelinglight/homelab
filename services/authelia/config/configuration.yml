@@ -47,6 +47,10 @@ access_control:
       policy: 'bypass'
     - domain: '{{ mustEnv "PHOTOPRISM_DOMAIN" }}'
       policy: 'bypass'
+    - domain: '{{ mustEnv "SCRUTINY_DOMAIN" }}'
+      policy: 'one_factor'
+      subject:
+        - ['group:admins']
 
 session:
   # secret: 'insecure_session_secret'

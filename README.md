@@ -9,4 +9,5 @@ Homelab - набор сервисов и их конфигураций. Все �
 - bareos-compose.yaml
 - db-compose.yaml
 - misc-compose.yaml
+- monitoring.yaml
 

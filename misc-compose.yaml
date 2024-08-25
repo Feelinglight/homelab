@@ -3,22 +3,6 @@ version: "3.4"
 
 services:
 
-  glances:
-    image: nicolargo/glances:dev
-    container_name: glances
-    restart: unless-stopped
-    network_mode: "host"
-    pid: host
-    privileged: true
-    environment:
-      - TZ="Asia/Yekaterinburg"
-      - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./services/glances/glances.conf:/glances/conf/glances.conf"
-      - /:/rootfs:ro
-
-
   gitea:
     image: gitea/gitea:1.22.1
     container_name: gitea
@@ -63,23 +47,6 @@ services:
     volumes:
       # Папка expenses - это git репозиторий с расходами
       - ./services/expenses/data/expenses/results:/usr/share/nginx/html:ro
-
-  dozzle:
-    image: amir20/dozzle:v8.2.1
-    container_name: dozzle
-    restart: unless-stopped
-    networks:
-      - homelab
-    environment:
-      - TZ="Asia/Yekaterinburg"
-      - LANG=ru_RU.UTF-8
-      - LANGUAGE=ru_RU.UTF-8
-      - LC_ALL=ru_RU.UTF-8
-
-      - DOZZLE_ENABLE_ACTIONS=true
-      - DOZZLE_NO_ANALYTICS=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
   wikijs:
     image: requarks/wiki:2.5
