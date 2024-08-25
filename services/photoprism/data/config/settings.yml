@@ -39,7 +39,7 @@ Features:
   Videos: true
 Import:
   Path: /
-  Move: false
+  Move: true
 Index:
   Path: /
   Convert: true

@@ -14,9 +14,9 @@ set -e
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$script_dir/../.env"
 
-NEW_USER="$PG_PHOTOPRISM_USER"
-NEW_USER_PASSWORD="$PG_PHOTOPRISM_PASSWORD"
-NEW_USER_DB="$PG_PHOTOPRISM_DB"
+NEW_USER="$MARIADB_PHOTOPRISM_USER"
+NEW_USER_PASSWORD="$MARIADB_PHOTOPRISM_PASSWORD"
+NEW_USER_DB="$MARIADB_PHOTOPRISM_DB"
 
 # Просто, чтобы скрипт отпал, если есть проблемы с mariadb
 docker exec -i mariadb mariadb -u root -p "${MARIADB_ROOT_PASSWORD}" -V
