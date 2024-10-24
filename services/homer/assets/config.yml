@@ -86,6 +86,11 @@ services:
         subtitle: "Хранилище фотографий"
         url: "https://photoprism.feelinglight.homes"
 
+      - name: "Nextcloud"
+        logo: "assets/icons/nextcloud.svg"
+        subtitle: "Файловое хранилище"
+        url: "https://nextcloud.feelinglight.homes"
+
       - name: "Gitea"
         logo: "assets/icons/gitea.svg"
         subtitle: "Удаленный git сервер"

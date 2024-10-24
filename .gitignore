@@ -52,6 +52,12 @@ services/photoprism/data/config/*
 !services/photoprism/data/config/options.yml
 !services/photoprism/data/config/settings.yml
 
+# nextcloud
+services/nextcloud/data
+
+# nextcloud
+services/redis/data
+
 # mirrors
 services/mirrors/data
 

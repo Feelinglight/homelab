@@ -14,9 +14,9 @@ set -e
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$script_dir/../.env"
 
-NEW_USER="$PG_WIKIJS_USER"
-NEW_USER_PASSWORD="$PG_WIKIJS_PASSWORD"
-NEW_USER_DB="$PG_WIKIJS_DB"
+NEW_USER="$POSTGRES_NEXTCLOUD_USER"
+NEW_USER_PASSWORD="$POSTGRES_NEXTCLOUD_PASSWORD"
+NEW_USER_DB="$POSTGRES_NEXTCLOUD_DB"
 
 # Просто, чтобы скрипт отпал, если есть проблемы с postgres
 docker exec -i postgres-db psql -U postgres -V

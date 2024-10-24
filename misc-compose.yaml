@@ -127,6 +127,34 @@ services:
       - ./services/photoprism/data/originals:/photoprism/originals
       - ./services/photoprism/backup:/photoprism/backup
 
+  nextcloud:
+    image: nextcloud:30-apache
+    container_name: nextcloud
+    restart: unless-stopped
+    networks:
+      - homelab
+    user: ${SERVER_UID}:${SERVER_GID}
+    volumes:
+      - ./services/nextcloud/data/:/var/www/html
+      # Без этого контейнер nextcloud не запускается от обычного пользователя
+      - ./services/nextcloud/config/redis-session.ini:/usr/local/etc/php/conf.d/redis-session.ini
+    environment:
+      - TZ=Asia/Yekaterinburg
+      - REDIS_HOST=redis
+
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_NEXTCLOUD_DB}
+      - POSTGRES_USER=${POSTGRES_NEXTCLOUD_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_NEXTCLOUD_PASSWORD}
+
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_DOMAIN}
+    depends_on:
+      - redis
+      - postgres-db
+
 ...
 
 

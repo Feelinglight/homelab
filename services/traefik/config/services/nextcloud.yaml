@@ -1,0 +1,19 @@
+http:
+  routers:
+    nextcloud:
+      service: nextcloud
+      rule: Host(`{{ env "NEXTCLOUD_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    nextcloud:
+      loadBalancer:
+        servers:
+          - url: http://nextcloud:80
+

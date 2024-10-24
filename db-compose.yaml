@@ -51,3 +51,15 @@ services:
     volumes:
       - ./services/mariadb/data:/var/lib/mysql
 
+  redis:
+    image: redis:7.4.1
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - homelab
+    user: ${SERVER_UID}:${SERVER_GID}
+    environment:
+      TZ: Asia/Yekaterinburg
+    volumes:
+      - ./services/redis/data:/data
+
