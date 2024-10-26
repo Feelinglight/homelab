@@ -17,3 +17,7 @@ onlyoffice все равно должен быть виден клиенту nex
 
 Для traefik нужно также
 [настроить http-заголовки](https://forum.onlyoffice.com/t/adding-documentserver-to-existing-traefik-proxy-works-halfway-but-cannot-open-documents/3239/12).
+
+В trusted_domains nextcloud должно быть добавлено доменное имя, по которому onlyoffice обращается
+к nextcloud (имя контейнера в docker compose)
+

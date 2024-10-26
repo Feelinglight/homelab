@@ -11,6 +11,9 @@ log:
 
 accessLog:
   filePath: /var/log/traefik/access_traefik.log
+  # fields:
+    # headers:
+      # defaultMode: keep
 
 
 api:

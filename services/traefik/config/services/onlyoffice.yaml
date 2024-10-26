@@ -14,6 +14,13 @@ http:
       tls:
         certResolver: letsencrypt_regru
 
+  middlewares:
+    ohlyoffice-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+        accessControlAllowOriginList: "*"
+
   services:
     onlyoffice:
       loadBalancer:
