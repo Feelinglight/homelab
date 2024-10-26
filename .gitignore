@@ -55,8 +55,12 @@ services/photoprism/data/config/*
 # nextcloud
 services/nextcloud/data
 
-# nextcloud
+# redis
 services/redis/data
+
+# onlyoffice
+services/onlyoffice/log
+services/onlyoffice/data
 
 # mirrors
 services/mirrors/data

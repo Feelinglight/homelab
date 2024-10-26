@@ -12,5 +12,11 @@ http:
           - 'Remote-Email'
           - 'Remote-Name'
 
+    ohlyoffice-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+        accessControlAllowOriginList: "*"
+
 ...
 

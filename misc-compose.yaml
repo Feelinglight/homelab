@@ -155,6 +155,19 @@ services:
       - redis
       - postgres-db
 
+  onlyoffice:
+    container_name: onlyoffice
+    image: onlyoffice/documentserver:8.2
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      - TZ=Asia/Yekaterinburg
+      - JWT_SECRET=${ONLYOFFICE_SECRET}
+    volumes:
+      - ./services/onlyoffice/data:/var/www/onlyoffice/Data
+      - ./services/onlyoffice/log:/var/log/onlyoffice
+
 ...
 
 

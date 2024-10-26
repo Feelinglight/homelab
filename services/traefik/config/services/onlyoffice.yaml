@@ -1,0 +1,25 @@
+---
+
+http:
+  routers:
+    onlyoffice:
+      service: onlyoffice
+      rule: Host(`{{ env "ONLYOFFICE_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+        - ohlyoffice-headers@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    onlyoffice:
+      loadBalancer:
+        servers:
+          # onlyoffice работает в режиме network_mode: host
+          - url: http://onlyoffice:80
+
+...
+
