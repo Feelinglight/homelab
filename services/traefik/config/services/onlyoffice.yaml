@@ -10,12 +10,12 @@ http:
         - web-secure
       middlewares:
         - authelia@file
-        - ohlyoffice-headers@file
+        - onlyoffice-headers@file
       tls:
         certResolver: letsencrypt_regru
 
   middlewares:
-    ohlyoffice-headers:
+    onlyoffice-headers:
       headers:
         customRequestHeaders:
           X-Forwarded-Proto: "https"

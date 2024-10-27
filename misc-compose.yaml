@@ -151,6 +151,13 @@ services:
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
 
       - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_DOMAIN}
+      # В этой сети должен находиться адрес traefik!
+      # Иначе nextcloud будет выдавать ошибки безопасноси
+      - TRUSTED_PROXIES=172.0.0.0/24
+      - OVERWRITEHOST=${NEXTCLOUD_DOMAIN}
+      - OVERWRITEPROTOCOL=https
+      - OVERWRITECLIURL=https://${NEXTCLOUD_DOMAIN}
+
     depends_on:
       - redis
       - postgres-db

@@ -1,3 +1,5 @@
+---
+
 http:
   routers:
     nextcloud:
@@ -8,12 +10,37 @@ http:
         - web-secure
       middlewares:
         - authelia@file
+        - nextcloud-headers@file
+        - nextcloud-redirect@file
+        - nextcloud-redirectregex@file
       tls:
         certResolver: letsencrypt_regru
+
+  middlewares:
+    nextcloud-redirect:
+      redirectscheme:
+        scheme: https
+
+    nextcloud-redirectregex:
+      redirectregex:
+        permanent: "true"
+        regex: 'https://(.*)/.well-known/(?:card|cal)dav'
+        replacement: 'https://$${1}/remote.php/dav'
+
+    nextcloud-headers:
+      headers:
+        stsSeconds: "15552000"
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        referrerPolicy: "same-origin"
 
   services:
     nextcloud:
       loadBalancer:
+        passHostHeader: true
         servers:
           - url: http://nextcloud:80
 
