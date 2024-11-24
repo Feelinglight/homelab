@@ -36,6 +36,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+
   scrutiny:
     container_name: scrutiny
     image: ghcr.io/analogj/scrutiny:v0.8.1-omnibus

@@ -50,6 +50,7 @@ services:
       - --innodb-lock-wait-timeout=120
     volumes:
       - ./services/mariadb/data:/var/lib/mysql
+      - ./services/mariadb/backup/:/backup
 
   redis:
     image: redis:7.4.1
