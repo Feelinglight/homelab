@@ -1,0 +1,19 @@
+http:
+  routers:
+    photoprism_tanya:
+      service: photoprism_tanya
+      rule: Host(`{{ env "PHOTOPRISM_TANYA_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        - authelia@file
+      tls:
+        certResolver: letsencrypt_regru
+
+  services:
+    photoprism_tanya:
+      loadBalancer:
+        servers:
+          - url: http://photoprism_tanya:2342
+

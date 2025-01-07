@@ -85,7 +85,7 @@ services:
     ## Don't enable automatic restarts until PhotoPrism has been properly configured and tested!
     ## If the service gets stuck in a restart loop, this points to a memory, filesystem, network, or database issue:
     ## https://docs.photoprism.app/getting-started/troubleshooting/#fatal-server-errors
-    # restart: unless-stopped
+    restart: unless-stopped
     stop_grace_period: 10s
     user: ${SERVER_UID}:${SERVER_GID}
     networks:
@@ -126,6 +126,48 @@ services:
       - ./services/photoprism/data/import:/photoprism/import
       - ./services/photoprism/data/originals:/photoprism/originals
       - ./services/photoprism/backup:/photoprism/backup
+
+  photoprism_tanya:
+    image: photoprism/photoprism:240711
+    container_name: photoprism_tanya
+    restart: unless-stopped
+    stop_grace_period: 10s
+    user: ${SERVER_UID}:${SERVER_GID}
+    networks:
+      - homelab
+    depends_on:
+      - mariadb
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    # ports:
+      # - "2342:2342"
+    working_dir: "/photoprism"
+    environment:
+      TZ: "Asia/Yekaterinburg"
+      ###
+      PHOTOPRISM_SITE_URL: "http://${PHOTOPRISM_TANYA_DOMAIN}:2342/"
+      ###
+      PHOTOPRISM_ADMIN_USER: ${PHOTOPRISM_TANYA_ADMIN_USER}
+      PHOTOPRISM_ADMIN_PASSWORD: ${PHOTOPRISM_TANYA_ADMIN_PASSWORD}
+      ###
+      PHOTOPRISM_DATABASE_DRIVER: "mysql"
+      PHOTOPRISM_DATABASE_SERVER: "${MARIADB_HOST}:${MARIADB_PORT}"
+      PHOTOPRISM_DATABASE_NAME: ${MARIADB_PHOTOPRISM_TANYA_DB}
+      PHOTOPRISM_DATABASE_USER: ${MARIADB_PHOTOPRISM_TANYA_USER}
+      PHOTOPRISM_DATABASE_PASSWORD: ${MARIADB_PHOTOPRISM_TANYA_PASSWORD}
+      ###
+      PHOTOPRISM_CONFIG_PATH: /photoprism/config
+      PHOTOPRISM_DEFAULTS_YAML: /photoprism/config/defaults.yml
+      PHOTOPRISM_BACKUP_PATH: /photoprism/backup
+    devices:
+      - "/dev/dri:/dev/dri"
+    volumes:
+      - ./services/photoprism_tanya/data/config:/photoprism/config
+      - ./services/photoprism_tanya/data/storage:/photoprism/storage
+      - ./services/photoprism_tanya/data/import:/photoprism/import
+      - ./services/photoprism_tanya/data/originals:/photoprism/originals
+      - ./services/photoprism_tanya/backup:/photoprism/backup
 
   nextcloud:
     image: nextcloud:30.0.4-apache

@@ -52,6 +52,13 @@ services/photoprism/data/config/*
 !services/photoprism/data/config/options.yml
 !services/photoprism/data/config/settings.yml
 
+# photoprism_tanya
+services/photoprism_tanya/data/*
+!services/photoprism_tanya/data/config
+services/photoprism_tanya/data/config/*
+!services/photoprism_tanya/data/config/options.yml
+!services/photoprism_tanya/data/config/settings.yml
+
 # nextcloud
 services/nextcloud/data
 

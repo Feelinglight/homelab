@@ -81,10 +81,15 @@ services:
 
   - name: "Applications"
     items:
-      - name: "Photoprism"
+      - name: "Photoprism (Дима)"
         logo: "assets/icons/photoprism.svg"
         subtitle: "Хранилище фотографий"
         url: "https://photoprism.feelinglight.homes"
+
+      - name: "Photoprism (Таня)"
+        logo: "assets/icons/photoprism.svg"
+        subtitle: "Хранилище фотографий"
+        url: "https://photoprism_tanya.feelinglight.homes"
 
       - name: "Nextcloud"
         logo: "assets/icons/nextcloud.svg"
