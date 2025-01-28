@@ -21,7 +21,7 @@ services:
       - ./services/homer/assets:/www/assets
 
   traefik:
-    image: traefik:v3.0
+    image: traefik:v3.3.2
     container_name: traefik
     restart: unless-stopped
     environment:

@@ -89,7 +89,7 @@ services:
       - name: "Photoprism (Таня)"
         logo: "assets/icons/photoprism.svg"
         subtitle: "Хранилище фотографий"
-        url: "https://photoprism_tanya.feelinglight.homes"
+        url: "https://photoprism.tanya.feelinglight.homes"
 
       - name: "Nextcloud"
         logo: "assets/icons/nextcloud.svg"
