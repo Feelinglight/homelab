@@ -4,7 +4,7 @@ version: "3.4"
 services:
 
   glances:
-    image: nicolargo/glances:4.1.2.1
+    image: nicolargo/glances:4.3.1
     container_name: glances
     restart: unless-stopped
     network_mode: "host"
@@ -20,7 +20,7 @@ services:
 
 
   dozzle:
-    image: amir20/dozzle:v8.2.1
+    image: amir20/dozzle:v8.12.4
     container_name: dozzle
     restart: unless-stopped
     networks:

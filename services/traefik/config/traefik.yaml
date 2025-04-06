@@ -4,7 +4,6 @@ global:
   checkNewVersion: false
   sendAnonymousUsage: false
 
-
 log:
   # level: DEBUG
   level: INFO
@@ -49,8 +48,9 @@ certificatesResolvers:
       # certificatesDuration: 2
       dnsChallenge:
         provider: regru
-        # Задержка проверки DNS challenge после добавления TXT записи в reg.ru, в секундах
-        delayBeforeCheck: 900
+        propagation:
+          # Задержка проверки DNS challenge после добавления TXT записи в reg.ru, в секундах
+          delayBeforeChecks: 900
 
 
 providers:

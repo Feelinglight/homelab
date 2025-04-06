@@ -4,7 +4,7 @@ version: "3.4"
 services:
 
   gitea:
-    image: gitea/gitea:1.22.1
+    image: gitea/gitea:1.23.6
     container_name: gitea
     restart: unless-stopped
     networks:
@@ -68,7 +68,7 @@ services:
       DB_NAME: ${PG_WIKIJS_DB}
 
   calibre-web:
-    image: lscr.io/linuxserver/calibre-web:0.6.23
+    image: lscr.io/linuxserver/calibre-web:0.6.24
     container_name: calibre-web
     restart: unless-stopped
     networks:
@@ -80,7 +80,7 @@ services:
       - ./services/calibre-web/data:/config
 
   photoprism:
-    image: photoprism/photoprism:240711
+    image: photoprism/photoprism:250321
     container_name: photoprism
     ## Don't enable automatic restarts until PhotoPrism has been properly configured and tested!
     ## If the service gets stuck in a restart loop, this points to a memory, filesystem, network, or database issue:
@@ -128,7 +128,7 @@ services:
       - ./services/photoprism/backup:/photoprism/backup
 
   photoprism_tanya:
-    image: photoprism/photoprism:240711
+    image: photoprism/photoprism:250321
     container_name: photoprism_tanya
     restart: unless-stopped
     stop_grace_period: 10s
@@ -170,7 +170,10 @@ services:
       - ./services/photoprism_tanya/backup:/photoprism/backup
 
   nextcloud:
-    image: nextcloud:30.0.4-apache
+    # При обновлении нужно вручную запускать скрипт!
+    # docker exec nextcloud sh -c "cp /usr/src/nextcloud/config/*.php /var/www/html/config"
+    # https://github.com/nextcloud/docker/tree/c76fb1dc570919cbc8546b58284ba127f34cc478?tab=readme-ov-file#handling-warning-varwwwhtmlconfigcfgfile-differs-from-the-latest-version-of-this-image-at-usrsrcnextcloudconfigcfgfile-aka-auto-configuration-and-nextcloud-updates
+    image: nextcloud:31.0.2-apache
     container_name: nextcloud
     restart: unless-stopped
     networks:
@@ -206,7 +209,7 @@ services:
 
   onlyoffice:
     container_name: onlyoffice
-    image: onlyoffice/documentserver:8.2
+    image: onlyoffice/documentserver:8.3.2
     restart: unless-stopped
     networks:
       - homelab
