@@ -9,7 +9,7 @@ echo "Backup started"
 
 echo "Backup pihole started"
 docker exec -t pihole bash -c 'rm -rf /backup/*'
-docker exec -t pihole bash -c 'cd /backup && pihole -a -t'
+docker exec -t pihole bash -c 'cd /backup && pihole-FTL --teleporter'
 echo "Backup pihole finished"
 
 

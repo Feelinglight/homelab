@@ -94,7 +94,7 @@ services:
 
 
   pihole:
-    image: pihole/pihole:2024.03.2
+    image: pihole/pihole:2025.03.1
     container_name: pihole
     restart: unless-stopped
     networks:
@@ -103,13 +103,24 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     environment:
-      - TZ='Asia/Yekaterinburg'
+      TZ: 'Asia/Yekaterinburg'
 
-      - VIRTUAL_HOST=${PIHOLE_DOMAIN}
-      - FTLCONF_LOCAL_IPV4=${SERVER_IP}
+      PIHOLE_UID: ${SERVER_UID}
+      PIHOLE_GID: ${SERVER_GID}
+
+      FTLCONF_LOCAL_IPV4: ${SERVER_IP}
+
+      FTLCONF_webserver_api_password: ''
+      FTLCONF_dns_listeningMode: ALL
+      FTLCONF_dns_piholePTR: HOSTNAME
+      FTLCONF_dns_domain: ${PIHOLE_DNS_DOMAIN}
+      FTLCONF_dns_upstreams: ${PIHOLE_DNS_UPSTREAMS}
+      FTLCONF_dns_hosts: ${PIHOLE_LOCAL_DNS_RECORDS}
+
+      # Редиректить все поддомены SERVICES_DOMAIN на конкретный IP
+      FTLCONF_misc_dnsmasq_lines: 'address=/${SERVICES_DOMAIN}/${SERVER_IP}'
     volumes:
-      - ./services/pihole/config/etc-pihole:/etc/pihole
-      - ./services/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./services/pihole/config/:/etc/pihole
       - ./services/pihole/backup:/backup
 
 ...
