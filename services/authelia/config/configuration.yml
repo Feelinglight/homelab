@@ -51,6 +51,8 @@ access_control:
       policy: 'bypass'
     - domain: '{{ mustEnv "NEXTCLOUD_DOMAIN" }}'
       policy: 'bypass'
+    - domain: '{{ mustEnv "NEXTCLOUD_COMPAT_DOMAIN" }}'
+      policy: 'bypass'
     - domain: '{{ mustEnv "ONLYOFFICE_DOMAIN" }}'
       policy: 'bypass'
     - domain: '{{ mustEnv "SCRUTINY_DOMAIN" }}'

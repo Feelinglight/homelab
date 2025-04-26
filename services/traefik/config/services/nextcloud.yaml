@@ -16,6 +16,20 @@ http:
       tls:
         certResolver: letsencrypt_regru
 
+    nextcloud-compat:
+      service: nextcloud
+      rule: Host(`{{ env "NEXTCLOUD_COMPAT_DOMAIN" }}`)
+      entryPoints:
+        # - web
+        - web-secure
+      middlewares:
+        # - authelia@file
+        - nextcloud-headers@file
+        - nextcloud-redirect@file
+        - nextcloud-redirectregex@file
+      tls: {}
+
+
   middlewares:
     nextcloud-redirect:
       redirectscheme:

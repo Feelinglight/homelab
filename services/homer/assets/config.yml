@@ -50,61 +50,61 @@ services:
       - name: "Traefik"
         logo: "assets/icons/traefik.png"
         subtitle: "Обратный прокси сервер"
-        url: "https://traefik.feelinglight.homes"
+        url: "https://traefik.feelinglight.tech"
 
       - name: "PiHole"
         logo: "assets/icons/pihole.svg"
         subtitle: "DNS сервер"
-        url: "https://pihole.feelinglight.homes"
+        url: "https://pihole.feelinglight.tech/admin"
 
       - name: "Authelia"
         logo: "assets/icons/authelia.svg"
         subtitle: "Сервер авторизации"
-        url: "https://pihole.feelinglight.homes"
+        url: "https://pihole.feelinglight.tech"
 
   - name: "Monitoring"
     items:
       - name: "Glances"
         logo: "assets/icons/glances.png"
         subtitle: "Панель мониторинга linux сервера"
-        url: "https://glances.feelinglight.homes"
+        url: "https://glances.feelinglight.tech"
 
       - name: "Dozzle"
         logo: "assets/icons/dozzle.svg"
         subtitle: "Логи контейнеров"
-        url: "https://dozzle.feelinglight.homes"
+        url: "https://dozzle.feelinglight.tech"
 
       - name: "Scrutiny"
         logo: "assets/icons/scrutiny.png"
         subtitle: "S.M.A.R.T"
-        url: "https://scrutiny.feelinglight.homes"
+        url: "https://scrutiny.feelinglight.tech"
 
   - name: "Applications"
     items:
       - name: "Photoprism (Дима)"
         logo: "assets/icons/photoprism.svg"
         subtitle: "Хранилище фотографий"
-        url: "https://photoprism.feelinglight.homes"
+        url: "https://photoprism.feelinglight.tech"
 
       - name: "Photoprism (Таня)"
         logo: "assets/icons/photoprism.svg"
         subtitle: "Хранилище фотографий"
-        url: "https://photoprism.tanya.feelinglight.homes"
+        url: "https://photoprism.tanya.feelinglight.tech"
 
       - name: "Nextcloud"
         logo: "assets/icons/nextcloud.svg"
         subtitle: "Файловое хранилище"
-        url: "https://nextcloud.feelinglight.homes"
+        url: "https://nextcloud.feelinglight.tech"
 
       - name: "Gitea"
         logo: "assets/icons/gitea.svg"
         subtitle: "Удаленный git сервер"
-        url: "https://gitea.feelinglight.homes"
+        url: "https://gitea.feelinglight.tech"
 
       - name: "Расходы"
         logo: "assets/icons/expenses.png"
         subtitle: "Графики расходов"
-        url: "https://expenses.feelinglight.homes"
+        url: "https://expenses.feelinglight.tech"
 
       - name: "Syncthing"
         logo: "assets/icons/syncthing.png"
@@ -114,15 +114,15 @@ services:
       - name: "WikiJs"
         logo: "assets/icons/wikijs-butterfly.svg"
         subtitle: "База знаний"
-        url: "https://wikijs.feelinglight.homes"
+        url: "https://wikijs.feelinglight.tech"
 
       - name: "Calibre"
         logo: "assets/icons/calibre.png"
         subtitle: "Электронная библиотека"
-        url: "https://calibre.feelinglight.homes"
+        url: "https://calibre.feelinglight.tech"
 
       - name: "Bareos"
         logo: "assets/icons/bareos.png"
         subtitle: "Резервное копирование"
-        url: "https://bareos.feelinglight.homes"
+        url: "https://bareos.feelinglight.tech"
 
