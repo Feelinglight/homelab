@@ -38,6 +38,10 @@ services/gitea/data
 # expenses
 services/expenses/data
 
+# metabase
+
+services/metabase/data
+
 # calibre
 services/calibre-web/data
 
