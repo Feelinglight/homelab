@@ -37,6 +37,8 @@ access_control:
         - ['group:admins']
     - domain: '{{ mustEnv "EXPENSES_DOMAIN" }}'
       policy: 'one_factor'
+    - domain: '{{ mustEnv "METABASE_DOMAIN" }}'
+      policy: 'bypass'
     - domain: '{{ mustEnv "DOZZLE_DOMAIN" }}'
       policy: 'one_factor'
       subject:

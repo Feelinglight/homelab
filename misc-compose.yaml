@@ -48,6 +48,22 @@ services:
       # Папка expenses - это git репозиторий с расходами
       - ./services/expenses/data/expenses/results:/usr/share/nginx/html:ro
 
+  metabase:
+    image: metabase/metabase:v0.55.6.2
+    container_name: metabase
+    restart: unless-stopped
+    networks:
+      - homelab
+    environment:
+      - TZ="Asia/Yekaterinburg"
+      - LANG=ru_RU.UTF-8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+    volumes:
+      - ./services/metabase/data/metabase-data:/metabase-data
+      - ./services/metabase/data/metabase.db:/metabase.db
+      - ./services/metabase/data/databases/:/databases
+
   wikijs:
     image: requarks/wiki:2.5
     container_name: wikijs
