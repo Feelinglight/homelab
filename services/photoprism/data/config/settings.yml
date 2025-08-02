@@ -3,12 +3,16 @@ UI:
   Zoom: false
   Theme: lavender
   Language: ru
-  TimeZone: ""
+  TimeZone: Local
+  StartPage: default
 Search:
   BatchSize: 0
+  ListView: true
+  ShowTitles: true
+  ShowCaptions: true
 Maps:
   Animate: 0
-  Style: ""
+  Style: default
 Features:
   Account: true
   Albums: true
@@ -24,6 +28,7 @@ Features:
   Labels: true
   Library: true
   Logs: true
+  Calendar: true
   Moments: true
   People: true
   Places: true
@@ -43,7 +48,7 @@ Import:
 Index:
   Path: /
   Convert: true
-  Rescan: false
+  Rescan: true
   SkipArchived: false
 Stack:
   UUID: true
@@ -57,5 +62,18 @@ Download:
   Originals: true
   MediaRaw: false
   MediaSidecar: false
+Albums:
+  Download:
+    Name: share
+    Disabled: false
+    Originals: true
+    MediaRaw: false
+    MediaSidecar: false
+  Order:
+    Album: oldest
+    Folder: added
+    Moment: oldest
+    State: newest
+    Month: oldest
 Templates:
   Default: index.gohtml
