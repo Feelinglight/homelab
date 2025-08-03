@@ -60,9 +60,9 @@ services:
     ports:
       - 9101:9101
     volumes:
-      - ./services/bareos/config/etc_bareos/dir:/etc_bareos:ro
-      - ./services/bareos/config/scripts:/usr/local/bin/
-      - ./services/bareos/logs:/var/log/bareos
+      - ./services/bareos-dir/config/etc_bareos:/etc_bareos:ro
+      - ./services/bareos-dir/config/scripts:/usr/local/bin/
+      - ./services/bareos-dir/logs:/var/log/bareos
       # Важно биндить, потому что если сделать обычный проброс, то докер автоматически создаст
       # папку и будет писать туда бэкапы.
       - type: bind
@@ -90,7 +90,7 @@ services:
       - BAREOS__SD_PASSWORD=${BAREOS__SD_PASSWORD}
       - BAREOS__SD_MONITOR_PASSWORD=${BAREOS__SD_MONITOR_PASSWORD}
     volumes:
-      - ./services/bareos/config/etc_bareos/sd:/etc_bareos:ro
+      - ./services/bareos-sd/config/etc_bareos:/etc_bareos:ro
       - type: bind
         source: /media/backups_hdd/backups
         target: /backups
@@ -108,8 +108,8 @@ services:
   #     - BAREOS__MONITOR_CONSOLE_PASSWORD=${BAREOS__MONITOR_CONSOLE_PASSWORD}
   #     - BAREOS__FD_DOCKER_PASSWORD=${BAREOS__FD_DOCKER_PASSWORD}
   #   volumes:
-  #     - ./services/bareos/config/etc_bareos/fd:/etc_bareos:ro
-  #     - ./services/bareos/data/docker-fd-data:/docker-fd-data
+  #     - ./services/bareos-fd/config/etc_bareos:/etc_bareos:ro
+  #     - ./services/bareos-fd/data/:/docker-fd-data
 
   bareos-webui:
     container_name: bareos-webui
@@ -122,7 +122,7 @@ services:
       ###
       - BAREOS__DIRECTOR_HOST=bareos-dir
     volumes:
-      - ./services/bareos/config/etc_bareos/webui:/etc_bareos:ro
+      - ./services/bareos-webui/config/etc_bareos:/etc_bareos:ro
 
   smtp-relay:
     container_name: smtp-relay
