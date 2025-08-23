@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Скрипт запускается вручную!!
+
 set -e
 
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -47,6 +49,7 @@ echo "set _tilde 0"                     | sudo tee -a /etc/apt/mirror.list
 
 # ------------------------------ docker images ------------------------------
 
+echo "Вход в учетку gitea:"
 docker login "$GITEA_DOMAIN"
 
 docker_images=(
@@ -55,6 +58,10 @@ docker_images=(
   "feelinglight/bareos-sd:23.0.3"
   "feelinglight/bareos-fd:23.0.3"
   "feelinglight/bareos-webui:23.0.3"
+  "feelinglight/bareos-dir:24.0.5-pre32.7c5f79a1e"
+  "feelinglight/bareos-sd:24.0.5-pre32.7c5f79a1e"
+  "feelinglight/bareos-fd:24.0.5-pre32.7c5f79a1e"
+  "feelinglight/bareos-webui:24.0.5-pre32.7c5f79a1e"
 )
 
 for image in "${docker_images[@]}"; do
@@ -82,14 +89,19 @@ bareos_resources=(
   "https://download.bareos.org/current/Debian_12/"
   "https://download.bareos.org/current/windows/"
   "https://download.bareos.org/current/xUbuntu_22.04/"
+  "https://download.bareos.org/current/xUbuntu_24.04/"
 )
 
 for res in "${bareos_resources[@]}"; do
-  wget -r --no-parent "$res" -P "$MIRRORS_DIR/bareos/site-23.0.4~pre113"
+  wget -r --no-parent "$res" -P "$MIRRORS_DIR/bareos/site-24.0.5-pre32.7c5f79a1e"
 done
+
+echo "deb-src https://download.bareos.org/current/xUbuntu_24.04 / "     | sudo tee -a /etc/apt/mirror.list
+echo "deb https://download.bareos.org/current/xUbuntu_24.04 / "         | sudo tee -a /etc/apt/mirror.list
 
 echo "deb-src https://download.bareos.org/current/xUbuntu_22.04 / "     | sudo tee -a /etc/apt/mirror.list
 echo "deb https://download.bareos.org/current/xUbuntu_22.04 / "         | sudo tee -a /etc/apt/mirror.list
+
 echo "deb-src https://download.bareos.org/current/Debian_12/ / "        | sudo tee -a /etc/apt/mirror.list
 echo "deb https://download.bareos.org/current/Debian_12/ / "            | sudo tee -a /etc/apt/mirror.list
 
