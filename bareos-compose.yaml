@@ -66,7 +66,7 @@ services:
       # Важно биндить, потому что если сделать обычный проброс, то докер автоматически создаст
       # папку и будет писать туда бэкапы.
       - type: bind
-        source: /media/backups_hdd/backups/
+        source: /media/backups_hdd_new/backups/
         target: /backups
 
       # Для отладки
@@ -92,7 +92,7 @@ services:
     volumes:
       - ./services/bareos-sd/config/etc_bareos:/etc_bareos:ro
       - type: bind
-        source: /media/backups_hdd/backups
+        source: /media/backups_hdd_new/backups
         target: /backups
 
 

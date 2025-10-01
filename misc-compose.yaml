@@ -4,7 +4,7 @@ version: "3.4"
 services:
 
   gitea:
-    image: gitea/gitea:1.24.3
+    image: gitea/gitea:1.24.6
     container_name: gitea
     restart: unless-stopped
     networks:
@@ -84,7 +84,7 @@ services:
       DB_NAME: ${PG_WIKIJS_DB}
 
   calibre-web:
-    image: lscr.io/linuxserver/calibre-web:0.6.24
+    image: lscr.io/linuxserver/calibre-web:0.6.25
     container_name: calibre-web
     restart: unless-stopped
     networks:
@@ -189,7 +189,7 @@ services:
     # При обновлении нужно вручную запускать скрипт!
     # docker exec nextcloud sh -c "cp /usr/src/nextcloud/config/*.php /var/www/html/config"
     # https://github.com/nextcloud/docker/tree/c76fb1dc570919cbc8546b58284ba127f34cc478?tab=readme-ov-file#handling-warning-varwwwhtmlconfigcfgfile-differs-from-the-latest-version-of-this-image-at-usrsrcnextcloudconfigcfgfile-aka-auto-configuration-and-nextcloud-updates
-    image: nextcloud:31.0.7-apache
+    image: nextcloud:31.0.9-apache
     container_name: nextcloud
     restart: unless-stopped
     networks:
@@ -225,7 +225,7 @@ services:
 
   onlyoffice:
     container_name: onlyoffice
-    image: onlyoffice/documentserver:9.0.3.1
+    image: onlyoffice/documentserver:9.0.4.1
     restart: unless-stopped
     networks:
       - homelab

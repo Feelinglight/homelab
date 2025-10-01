@@ -10,7 +10,7 @@ secrets:
 services:
 
   homer:
-    image: b4bz/homer:v25.05.2
+    image: b4bz/homer:v25.09.1
     container_name: homer
     restart: unless-stopped
     environment:
@@ -21,7 +21,7 @@ services:
       - ./services/homer/assets:/www/assets
 
   traefik:
-    image: traefik:v3.4.5
+    image: traefik:v3.5.3
     container_name: traefik
     restart: unless-stopped
     environment:
@@ -60,7 +60,7 @@ services:
       - ./services/traefik/data/acme:/letsencrypt
 
   authelia:
-    image: authelia/authelia:4.39.5
+    image: authelia/authelia:4.39.11
     container_name: authelia
     restart: unless-stopped
     user: ${SERVER_UID}:${SERVER_GID}
